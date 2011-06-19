@@ -1,7 +1,7 @@
 Homework 3 - Lighting and Textures
 David Parker
 
-Total time spent on code: ~30 hours
+Total time spent on code: ~33 hours
 -research (2 hours)
 -layout (1 hours)
 -objects (4 hours)
@@ -10,6 +10,7 @@ Total time spent on code: ~30 hours
 -object selection (5 hours)
 -object deletion (3 hours)
 -refactoring, etc (3 hours)
+-debugging on Ubuntu (3 hours)
 
 Final notes:
 I spent four hours trying to use object selection via GL_RENDER and GL_SELECT, and 
@@ -20,18 +21,27 @@ way to select objects using color coding (thanks to lighthouse3d). After about o
 hour working with color coding, I was able to get the basics of it down (with it
 selecting the correct item).
 
+Once again, I was having some issues with Ubuntu. I thought gluUnProject was wrong
+as it was giving me bad values, but the thing was, it was perfectly okay. Turns out
+that Ubuntu has some issues with glutPostRedisplay being constantly called in the
+idle function, so I had to add a small delay (why it caused issues with the 
+coordinates, I have no idea).
+
 Some interesting things learned:
 -For lighting, calculating normals can be a pain (remembering trigonometry)
 -Taking a 2D texture and applying it to a 3D object takes work, too
 -Object selection is hard
+-Ubuntu has some issues with an glutPostRedisplay being constantly called in an
+ idle function, so I had to add a delay.
 
 The following interactions are provided:
 Keyboard interactions:
-Arrow Keys:
+Special Keys:
 Right      => +5 th angle
 Left       => -5 th angle
 Up         => +5 ph angle
 Down       => -5 ph angle
+F3         => Toggle light distance 5 or 2
 
 Regular Keys:
 Escape     => close the program

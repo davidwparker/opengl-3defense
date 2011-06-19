@@ -1390,10 +1390,15 @@ void redisplayAll(void)
  */
 void idle(void)
 {
-  double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-  if (move) lightTh = fmod(90*t,360.0);
-  if (topsRotate) towerTh = fmod(90*t,360.0);
-  if (move || topsRotate) redisplayAll();
+  static int lastTime = 0;
+  int time = glutGet(GLUT_ELAPSED_TIME);
+  double t = time/1000.0;
+  if (lastTime == 0 || time >= lastTime + 20) {
+    lastTime = time;
+    if (move) lightTh = fmod(90*t,360.0);
+    if (topsRotate) towerTh = fmod(90*t,360.0);
+    if (move || topsRotate) redisplayAll();
+  }
 }
 
 /*
