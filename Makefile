@@ -3,7 +3,7 @@ GCC_OPTIONS=-Wall -pedantic -std=c99
 GL_OPTIONS=-framework OpenGL -framework GLUT 
 OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
-TARGETS=hw3.c
+TARGETS=hw3
 
-.c: 
-	gcc $(TARGETS) $(OPTIONS) -o ./hw3
+default:
+	gcc $(TARGETS).c $(OPTIONS) -o ./$(TARGETS)

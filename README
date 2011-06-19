@@ -1,6 +1,106 @@
 Homework 3 - Lighting and Textures
 David Parker
 
-Total time spent on code: ~ 19.5 hours
+Total time spent on code: ~30 hours
+-research (2 hours)
+-layout (1 hours)
+-objects (4 hours)
+--lighting/normals (6 hours)
+--textures/material (6 hours)
+-object selection (5 hours)
+-object deletion (3 hours)
+-refactoring, etc (3 hours)
+
+Final notes:
+I spent four hours trying to use object selection via GL_RENDER and GL_SELECT, and 
+it wasn't working out. I was using the deprecated functionality, which involves
+the selection buffer, gluPickMatrix, glInitNames, etc, and I wasn't getting the 
+correct values returned to me. Using my mad Google skills, I discovered a different
+way to select objects using color coding (thanks to lighthouse3d). After about one
+hour working with color coding, I was able to get the basics of it down (with it
+selecting the correct item).
+
+Some interesting things learned:
+-For lighting, calculating normals can be a pain (remembering trigonometry)
+-Taking a 2D texture and applying it to a 3D object takes work, too
+-Object selection is hard
+
+The following interactions are provided:
+Keyboard interactions:
+Arrow Keys:
+Right      => +5 th angle
+Left       => -5 th angle
+Up         => +5 ph angle
+Down       => -5 ph angle
+
+Regular Keys:
+Escape     => close the program
+r or R     => reset to original parameters
+x or X     => toggle axes on/off (default off)
+p or P     => toggle display mode (default projection)
+f or F     => toggle draw default objects (must reset "r" after toggling)
+v or V     => toggle draw values on bottom of screen
+-          => decrease the field of view (for perspective) by 1
++          => increase the field of view (for perspective) by 1
+i          => decrease the dimensions by 0.2
+I          => increase the dimensions by 0.2
+l or L     => toggle light on/off (default on)
+m          => toggle light movement (default on)
+M          => toggle tops rotate movement (default on)
+<          => decrease the light th by 1
+>          => increase the light th by 1
+[          => decrease the light Y by 0.1
+]          => increase the light Y by 0.1
+a          => decrease the ambient by 5
+A          => increase the ambient by 5
+d          => decrease the diffuse by 5
+D          => increase the diffuse by 5
+s          => decrease the specular by 5
+S          => increase the specular by 5
+e          => decrease the emission by 5
+E          => increase the emission by 5
+n          => decrease the shininess by 5
+N          => increase the shininess by 5
+select tower to draw:
+0          => none
+1          => fire
+2          => advanced fire
+3          => ice
+4          => advanced ice
+5          => earth
+6          => advanced earth
+7          => poison
+8          => advanced poison
+9          => toggle through all non-elemental towers 
+t          => toggle through all the different textures
+w or W     => toggle preview mode (slightly buggy)
+delete or backspace  => if a tower is selected on screen, then delete it
+
+Mouse interactions:
+"Screen" side (left side):
+-if a tower is selected:
+--left-click:
+find the x,y,z position of the mouse and place the object in that position
+the object will be reset to 'none' after placing the object
+NOTE: only 20 objects may be placed. If you place more than 20, then it starts to 
+      replace item 1, 2, etc
+--shift+left-click:
+same as left click, but object will not be reset to 'none' after click
+
+-if tower selected is 'none', then select a tower on the left side:
+--left-click a tower
+---press 'delete' or 'backspace' and the tower should be deleted
+
+"Sidebar" side (right side):
+-left-click:
+--click on a tower name to select it.
+if selecting a non-elemental tower, also select a texture to apply:
+click on a texture name to select it
+
+NOTE: there are two ways to select a shape: 
+ 1) keyboard shortcuts
+ 2) mouse click on shape name
+
+
 
 

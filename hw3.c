@@ -1,7 +1,7 @@
 /*
  * Homework Assignment #3
  * David Parker
- * June 14-29, 2011
+ * June 14-20, 2011
  *
  * Eventually, I would like everything marked with ^ to be in its own file
  *
@@ -13,8 +13,8 @@
  * -for resets
  * -for lighting
  * -for textures
- * PROTOTYPES^
  * STRUCTS^
+ * PROTOTYPES^
  * GLOBAL VARIABLES^
  * -for various state
  * -for object selection
@@ -32,7 +32,7 @@
  * --fatal
  * -loadtexbmp convenience functions^
  * --reverse
- * --leadTexBMP
+ * --loadTexBMP
  * -shape definition functions^
  * --basic shapes^
  * ---square (15)
@@ -47,41 +47,46 @@
  * ---spike (23)
  * ---board (24)
  * --tower definitions (object #)^
- * ---basicTower (1)
- * ---advancedTower (2)
- * ---coneTower (3)
- * ---advancedConeTower (4)
- * ---squareTower (5)
- * ---advancedSquareTower (6)
- * ---fireTower (7)
- * ---fireTower2 (8)
- * ---iceTower (9)
- * ---iceTower2 (10)
- * ---earthTower (11)
- * ---earthTower2 (12)
- * ---poisonTower (13)
- * ---poisonTower2 (14)
+ * ---basicTower (9)
+ * ---advancedTower (10)
+ * ---coneTower (11)
+ * ---advancedConeTower (12)
+ * ---squareTower (13)
+ * ---advancedSquareTower (14)
+ * ---fireTower (1)
+ * ---fireTower2 (2)
+ * ---iceTower (3)
+ * ---iceTower2 (4)
+ * ---earthTower (5)
+ * ---earthTower2 (6)
+ * ---poisonTower (7)
+ * ---poisonTower2 (8)
  * -general glut functions^
  * --redisplayAll
  * --idle
  * --findMousePosition
+ * --processPicks
  * -display and draw functions^
  * --displayInit
  * --displayEye
  * --drawAxes
  * --drawParameters
  * --drawLight
+ * --drawObjects
  * -main glut commands^
  * --mainDisplay
  * --mainKey
  * --mainSpecial
- * --mainVisible
  * --mainReshape
+ * --mainVisible
  * -screen area glut commands^
  * --screenDisplay
  * --screenProject
  * --screenReshape
+ * --screenMouse
  * -sidebar area glut commands^
+ * --sidebarRow
+ * --sidebarRowT
  * --sidebarDisplay
  * --sidebarReshape
  * --sidebarMouse
@@ -135,46 +140,65 @@
 #define DEF_DRAW_DEFAULTS 1
 #define DEF_MODE 1
 #define DEF_ASP 1
-#define DEF_DIM 30
+#define DEF_DIM 12
 #define DEF_TH -60
 #define DEF_PH 30
-#define DEF_FOV 15
+#define DEF_FOV 50
 #define DEF_D 5
 #define DEF_AXES 0
 #define DEF_VALS 1
 #define DEF_TOPS_ROTATE 1
-/////#define DEF_SPIKES_ROTATE 1
 #define DEF_TOWER_TH 0
-#define DEF_DEBUG 1
+#define DEF_DEBUG 0
 
-/*  Object selection */
+/*  Object definitions and selection */
+#define OBJ_FIRE 1
+#define OBJ_FIRE2 2
+#define OBJ_ICE 3
+#define OBJ_ICE2 4
+#define OBJ_EARTH 5
+#define OBJ_EARTH2 6
+#define OBJ_POISON 7
+#define OBJ_POISON2 8
+#define OBJ_BASIC 9
+#define OBJ_ADV 10
+#define OBJ_CONE 11
+#define OBJ_ADV_CONE 12
+#define OBJ_SQUARE 13
+#define OBJ_ADV_SQUARE 14
+#define DEF_LAST_CURRENT_OBJECT 0
 #define DEF_OBJ_SEL 0
+#define DEF_OBJ_PICKED -1
+#define DEF_PREVIEW 0
+#define DEF_RENDER 1
+#define DEF_SELECT 2
+#define DEF_CURRENT_RED 5
+#define DEF_CURRENT_GREEN 5
+#define DEF_CURRENT_BLUE 5
+#define DEF_CURRENT_OBJS_SIZE 30
+#define DEF_CURRENT_OBJS_ATRS 8
 
 /*  Lighting */
 #define DEF_LIGHT 1
 #define DEF_MOVE 1
 #define DEF_DISTANCE 5
-#define DEF_AMBIENT 30
+#define DEF_AMBIENT 20
 #define DEF_DIFFUSE 100
 #define DEF_EMISSION 0
 #define DEF_SPECULAR 0
 #define DEF_SHININESS 0
 #define DEF_L_TH 90
-#define DEF_L_Y 0
+#define DEF_L_Y -2
 
 /*  Texture definitions */
 #define TEX_DEFAULT 0
 #define TEX_BRICK 1
-#define TEX_SPIKE 2
-#define TEX_FIRE 3
-#define TEX_ICE 4
-#define TEX_ROCK 5
-#define TEX_POISON 6
+#define TEX_FIRE 2
+#define TEX_ICE 3
+#define TEX_EARTH 4
+#define TEX_POISON 5
+#define TEX_SPIKE 6
 #define TEX_GRASS 7
-
-/*  Prototypes */
-void screenReshape(int width, int height);
-void sidebarReshape(int width, int height);
 
 /*  Structs */
 typedef struct vertices3f {
@@ -182,6 +206,108 @@ typedef struct vertices3f {
   GLfloat posY;
   GLfloat posZ;
 } vertices3f;
+
+/*  Prototypes */
+/*  Convenience */
+void reset(void);
+void setFont(char* name, int size);
+void printv(va_list args, const char* format);
+void print(const char* format , ...);
+void printAt(int x,int y, const char* format , ...);
+void errCheck(char* where);
+void fatal(const char* format, ...);
+static void reverse(void* x,const int n);
+unsigned int loadTexBMP(char* file);
+/*  Shapes and models */
+static void square(int s, int a, int b, int c, int d);
+static void cube(double x,double y,double z,
+                 double dx,double dy,double dz,
+                 double th);
+static void vertex(double th, double ph);
+static void sphere(double x,double y,double z,double r,double rot);
+static void cone(double x,double y,double z, double r, double h,int deg);
+static void cylinder(double x,double y,double z,
+		     double r,double h);
+static void pyramid(double x, double y, double z,
+		    double dx, double dy, double dz,
+		    double th);
+static void star(double x, double y, double z,
+		    double dx, double dy, double dz,
+		    double th);
+static void spike(double x, double y, double z,
+		  double r,double h,int deg,
+		  double ox,double oy,double oz);
+static void board(void);
+static void basicTower(double x,double y,double z,
+		       double dx,double dy,double dz,
+		       double th);
+static void advancedTower(double x,double y,double z,
+			  double dx,double dy,double dz,
+			  double th);
+static void coneTower(double x,double y,double z,
+		      double dx,double dy,double dz,
+		      double th);
+static void advancedConeTower(double x,double y,double z,
+			      double dx,double dy,double dz,
+			      double th);
+static void squareTower(double x,double y,double z,
+			double dx,double dy,double dz,
+			double th);
+static void advancedSquareTower(double x,double y,double z,
+				double dx,double dy,double dz,
+				double th);
+static void fireTower(double x,double y,double z,
+		      double dx,double dy,double dz,
+		      double th);
+static void fireTower2(double x,double y,double z,
+		       double dx,double dy,double dz,
+		       double th);
+static void iceTower(double x,double y,double z,
+		     double dx,double dy,double dz,
+		     double th);
+static void iceTower2(double x,double y,double z,
+		      double dx,double dy,double dz,
+		      double th);
+static void earthTower(double x,double y,double z,
+		       double dx,double dy,double dz,
+		       double th);
+static void earthTower2(double x,double y,double z,
+			double dx,double dy,double dz,
+			double th);
+static void poisonTower(double x,double y,double z,
+			double dx,double dy,double dz,
+			double th);
+static void poisonTower2(double x,double y,double z,
+			 double dx,double dy,double dz,
+			 double th);
+/*  Display and interaction */
+void redisplayAll(void);
+void idle(void);
+vertices3f findMousePosition(int x, int y);
+void processPicks(void);
+void displayInit(void);
+void displayEye(void);
+void drawAxes(void);
+void drawParameters(void);
+void drawLight(void);
+void drawObjects(void);
+void mainDisplay(void);
+void mainKey(unsigned char key,int x,int y);
+void mainSpecial(int key,int x,int y);
+void mainReshape(int width, int height);
+void mainVisible(int vis);
+void screenDisplay(void);
+void screenProject(double fov, double asp, double dim);
+void screenReshape(int width, int height);
+void screenMouse(int btn, int state, int x, int y);
+void sidebarRow(int x, int y, int obj, char* text);
+void sidebarRow(int x, int y, int obj, char* text);
+void sidebarDisplay(void);
+void sidebarReshape(int width, int height);
+void sidebarMouse(int btn, int state, int x, int y);
+void sidebarInit(void);
+void screenInit(void);
+void initTextures(void);
 
 /*  Globals */
 char *windowName = "Assignment 3: David Parker"; /* Window name */
@@ -205,7 +331,17 @@ int drawDefaults=DEF_DRAW_DEFAULTS; /* toggle drawing the defaults */
 int debug=DEF_DEBUG;                /* toggle debug */
 
 /*  Object selection */
-int objectSelected=DEF_OBJ_SEL;
+GLfloat current_objects[DEF_CURRENT_OBJS_SIZE][DEF_CURRENT_OBJS_ATRS]={{0}}; /* hold towers */
+GLfloat preview_object[5]={0};                 /* holds the preview object */
+int preview=DEF_PREVIEW;                       /* determine if preview is on */
+int objectSelected=DEF_OBJ_SEL;                /* the object to be placed */
+int lastCurrentObject=DEF_LAST_CURRENT_OBJECT; /* determine last object */
+int renderMode=DEF_RENDER;                     /* the current mode we are in */
+int objectPicked=DEF_OBJ_PICKED;               /* the object that we have picked */
+/*  Current level of RGB for object selection */
+int currentRed=DEF_CURRENT_RED;
+int currentGreen=DEF_CURRENT_GREEN;
+int currentBlue=DEF_CURRENT_BLUE;
 
 /*  Globals for lighting */
 int light=DEF_LIGHT;          /* toggle light */
@@ -216,7 +352,7 @@ int diffuse=DEF_DIFFUSE;      /* diffuse intensity % */
 int emission=DEF_EMISSION;    /* emission intensity % */
 int specular=DEF_SPECULAR;    /* specular intensity % */
 int shininess=DEF_SHININESS;  /* shininess (power of two) */
-float shinyvec[1];     /* shininess (value) */
+float shinyvec[1]={1};     /* shininess (value) */
 int lightTh=DEF_L_TH;  /* light azimuth */
 float lightY=DEF_L_Y;  /* elevation of light */
 float white[]={1,1,1,1};
@@ -224,12 +360,21 @@ float white[]={1,1,1,1};
 /*  Globals for textures */
 unsigned int textures[8];       /* currently holding eight textures */
 int currentTexture=TEX_DEFAULT; /* no texture assigned as default */
+int currentTextureSelected=TEX_DEFAULT; /* no texture currently selected */
 
 /*  cube vertices */
 GLfloat cube_v[][3] = {
   {-1.0,-1.0,-1.0},{+1.0,-1.0,-1.0},{+1.0,+1.0,-1.0},
   {-1.0,+1.0,-1.0},{-1.0,-1.0,+1.0},{+1.0,-1.0,+1.0},
   {+1.0,+1.0,+1.0},{-1.0,+1.0,+1.0}
+};
+
+/* default objects */
+GLfloat default_objects[4][8] = {
+  {OBJ_FIRE2, -2,0,-2, TEX_DEFAULT, 255,0,0},
+  {OBJ_ICE2,   2,0, 2, TEX_DEFAULT, 0,255,255},
+  {OBJ_EARTH2, 2,0,-2, TEX_DEFAULT, 139,69,19},
+  {OBJ_POISON2,-2,0,2, TEX_DEFAULT, 0,255,0}
 };
 
 /*  
@@ -239,6 +384,26 @@ GLfloat cube_v[][3] = {
  */
 void reset()
 {
+  /* reset the current objects with 0's and default objects */
+  int i,j;
+  for (i=0;i<DEF_CURRENT_OBJS_SIZE;i++)
+    for (j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
+      current_objects[i][j] = 0;
+  if (drawDefaults)
+    for (i=0;i<Length(default_objects);i++)
+      for(j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
+	current_objects[i][j] = default_objects[i][j];
+  /* reset object selection */
+  if (drawDefaults) lastCurrentObject = DEF_LAST_CURRENT_OBJECT+Length(default_objects);
+  else lastCurrentObject = DEF_LAST_CURRENT_OBJECT;
+  objectSelected    = DEF_OBJ_SEL;
+  objectPicked      = DEF_OBJ_PICKED;
+  preview           = DEF_PREVIEW;
+  currentRed   = DEF_CURRENT_RED;
+  currentGreen = DEF_CURRENT_GREEN;
+  currentBlue  = DEF_CURRENT_BLUE;
+
+
   /* reset the rest */
   mode = DEF_MODE;
   asp  = DEF_ASP;
@@ -249,10 +414,8 @@ void reset()
   axes = DEF_AXES;
   vals = DEF_VALS;
   fontStyle    = DEF_FONT_STYLE;
-  drawDefaults = DEF_DRAW_DEFAULTS;
   topsRotate   = DEF_TOPS_ROTATE;
   towerTh      = DEF_TOWER_TH;
-  objectSelected = DEF_OBJ_SEL;
 
   /* reset lighting */
   light     = DEF_LIGHT;
@@ -265,8 +428,10 @@ void reset()
   shininess = DEF_SHININESS;
   lightTh   = DEF_L_TH;
   lightY    = DEF_L_Y;
+
   /* reset textures */
   currentTexture = TEX_DEFAULT;
+  currentTextureSelected = TEX_DEFAULT;
 }
 
 /*
@@ -455,11 +620,10 @@ unsigned int loadTexBMP(char* file)
  *  Draw a square of type t, up to four sides
  *  This can be refactored to be much nicer
  */
-void square(int s, int a, int b, int c, int d)
+static void square(int s, int a, int b, int c, int d)
 {
   glBegin(GL_POLYGON);
 
-  glColor3fv(white);
   /* front */
   if (s == 1) { glNormal3f(0,0,1); }
   /* back */
@@ -498,10 +662,11 @@ static void cube(double x,double y,double z,
   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,emissions);
 
   /* enable textures */
-  glEnable(GL_TEXTURE_2D);
-  /* using the current texture */
-  glBindTexture(GL_TEXTURE_2D,currentTexture);
-
+  if (renderMode == DEF_RENDER) {
+    glEnable(GL_TEXTURE_2D);
+    /* using the current texture */
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
+  }
   glPushMatrix();
   /*  Transform cube */
   glTranslated(x,y,z);
@@ -559,20 +724,18 @@ static void sphere(double x,double y,double z,double r,double rot)
   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
   glMaterialfv(GL_FRONT,GL_EMISSION,emissions);
 
-  /* enable textures */
-  glEnable(GL_TEXTURE_2D);
-  /* using the current texture */
-  glBindTexture(GL_TEXTURE_2D,currentTexture);
-
+  if (renderMode == DEF_RENDER) {
+    /* enable textures */
+    glEnable(GL_TEXTURE_2D);
+    /* using the current texture */
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
+  }
   glPushMatrix();
 
   /*  Offset, scale and rotate */
   glTranslated(x,y,z);
   glScaled(r,r,r);
   glRotated(rot,0,1,0);
-
-  /*  White ball */
-  glColor3fv(white);
 
   /*  Bands of latitude */
   for (ph=-90;ph<90;ph+=DEF_D) {
@@ -602,7 +765,10 @@ static void cone(double x,double y,double z,
 		 double r,double h,int deg)
 {
   int k;
-  glEnable(GL_TEXTURE_2D);
+  if (renderMode == DEF_RENDER) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
+  }
   glPushMatrix();
 
   /*  Transformation */
@@ -613,11 +779,8 @@ static void cone(double x,double y,double z,
   glRotated(-90,1,0,0);
 
   /* sides */
-  glBindTexture(GL_TEXTURE_2D,currentTexture);
-  glColor3f(1,1,1);
   glBegin(GL_TRIANGLES);
   for (k=0;k<=360;k+=deg){
-    /* the normals probably aren't 100% correct :( */
     glNormal3f(0,0,1);
     /* center of cone is always center of texture */
     glTexCoord2f(0.5,0.5);
@@ -638,13 +801,14 @@ static void cone(double x,double y,double z,
   /* bottom circle */ 
   /* rotate back */
   glRotated(90,1,0,0);
-  glColor3f(1,1,1);
   glBegin(GL_TRIANGLES);
   glNormal3f(0,-1,0);
-  /* TODO: add texture */
   for (k=0;k<=360;k+=deg) {
+    glTexCoord2f(0.5,0.5);
     glVertex3f(0,0,0);
+    glTexCoord2f(0.5*Cos(k)+0.5,0.5*Sin(k)+0.5);
     glVertex3f(Cos(k),0,Sin(k));
+    glTexCoord2f(0.5*Cos(k+deg)+0.5,0.5*Sin(k+deg)+0.5);
     glVertex3f(Cos(k+deg),0,Sin(k+deg));
   }
   glEnd();
@@ -666,7 +830,10 @@ static void cylinder(double x,double y,double z,
 		     double r,double h)
 {
   int i,k;
-  glEnable(GL_TEXTURE_2D);
+  if (renderMode == DEF_RENDER) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
+  }
   glPushMatrix();
 
   /*  Transformation */
@@ -674,10 +841,6 @@ static void cylinder(double x,double y,double z,
   glScaled(r,h,r);
 
   /*  sides */
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glBindTexture(GL_TEXTURE_2D,currentTexture);
-  glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
   for (k=0;k<=360;k+=DEF_D) {
     /* These textures aren't exactly what I want, but I think they look cool */
@@ -696,7 +859,6 @@ static void cylinder(double x,double y,double z,
 
   /* top and bottom circles */
   /* reuse the currentTexture on top and bottom) */
-  glColor3f(1,1,1);
   for (i=1;i>=-1;i-=2) {
     glBegin(GL_TRIANGLE_FAN);
     glNormal3f(0,i,0);
@@ -820,9 +982,9 @@ static void spike(double x, double y, double z,
 /*
  *  board
  *  ------
- *  Draws the board as a cube on the screen
+ *  Draws the board as a 8x8 cubes on the screen
  */
-static void board()
+static void board(void)
 {
   int i,j;
   currentTexture = textures[TEX_GRASS];
@@ -1113,9 +1275,9 @@ static void earthTower(double x,double y,double z,
   glRotated(th,0,1,0);
   glScaled(dx,dy,dz);
 
-  currentTexture = textures[TEX_ROCK];
+  currentTexture = textures[TEX_EARTH];
   coneTower(0,0,0, 1,1,1, 0);
-  currentTexture = textures[TEX_ROCK];
+  currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
 
@@ -1136,9 +1298,9 @@ static void earthTower2(double x,double y,double z,
   glRotated(th,0,1,0);
   glScaled(dx,dy,dz);
 
-  currentTexture = textures[TEX_ROCK];
+  currentTexture = textures[TEX_EARTH];
   advancedConeTower(0,0,0, 1,1,1, 0);
-  currentTexture = textures[TEX_ROCK];
+  currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
 
@@ -1228,12 +1390,10 @@ void redisplayAll(void)
  */
 void idle(void)
 {
-  if (move) {
-    double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-    lightTh = fmod(90*t,360.0);
-    towerTh = fmod(90*t,360.0);
-    redisplayAll();
-  }
+  double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+  if (move) lightTh = fmod(90*t,360.0);
+  if (topsRotate) towerTh = fmod(90*t,360.0);
+  if (move || topsRotate) redisplayAll();
 }
 
 /*
@@ -1279,6 +1439,36 @@ vertices3f findMousePosition(int x, int y)
   return vertices;
 }
 
+/*  
+ *  processPicks
+ *  ------
+ *  Determines the pixel color and compares that to our object colors to determine
+ *  which was picked
+ */
+void processPicks(void)
+{
+  int i;
+  GLint viewport[4];
+  GLubyte pixel[3];
+  glGetIntegerv(GL_VIEWPORT,viewport);
+  glReadPixels(mouseX,viewport[3]-mouseY,1,1,GL_RGB,GL_UNSIGNED_BYTE,(void *)pixel);
+  if (debug) printf("R:%d  G:%d  B:%d\n",pixel[0],pixel[1],pixel[2]);
+  for (i = 0; i < Length(current_objects); i++){
+    GLint red,green,blue;
+    red = current_objects[i][5];
+    green = current_objects[i][6];
+    blue = current_objects[i][7];
+    /* Found the object we need, break out of loop */
+    if (pixel[0] == red && pixel[1] == green && pixel[2] == blue) {
+      objectPicked = i;
+      break;
+    }
+    /* Object not found, set to default */
+    else {
+      objectPicked = DEF_OBJ_PICKED;
+    }
+  }
+}
 
 /*
  *  BEGIN DISPLAY AND DRAW FUNCTIONS
@@ -1294,11 +1484,8 @@ void displayInit(void)
   /*  Set the font style */
   setFont("helvetica", 18);
 
-  /*  Erase the window and the depth buffer */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  /*  Enable Z-buffering in OpenGL */
   glEnable(GL_DEPTH_TEST);
-
   glLoadIdentity();
 }
 
@@ -1336,7 +1523,7 @@ void drawAxes(void)
   /*  Draw axes - no lighting */
   if (axes) {
     glDisable(GL_LIGHTING);
-    glColor3f(1,1,1);
+    glColor3fv(white);
     glBegin(GL_LINES);
     glVertex3d(0.0,0.0,0.0);
     glVertex3d(len,0.0,0.0);
@@ -1363,7 +1550,7 @@ void drawAxes(void)
 void drawParameters(void)
 {
   if (vals) {
-    glColor3f(1,1,1);
+    glColor3fv(white);
     /*  Display parameters */
     printAt(5,5,"Angle=%d,%d  Dim=%.1f FOV=%d Projection=%s Light=%s",
 	    th,ph,dim,fov,mode?"Perpective":"Orthogonal",light?"On":"Off");
@@ -1391,7 +1578,7 @@ void drawLight(void)
     /*  Light position */
     float Position[]  = {distance*Cos(lightTh),lightY,distance*Sin(lightTh),1.0};
     /*  Draw light position as sphere (still no lighting here) */
-    glColor3f(1,1,1);
+    glColor3fv(white);
     sphere(Position[0],Position[1],Position[2] , 0.1,0);
     /*  OpenGL should normalize normal vectors */
     glEnable(GL_NORMALIZE);
@@ -1413,6 +1600,86 @@ void drawLight(void)
 }
 
 /*
+ *  drawObjects
+ *  ------
+ *  draw the board, default objects, and current objects to screen
+ */
+void drawObjects(void)
+{
+  int i;
+  board();
+
+  /* preview object */
+  if (preview_object[0] != DEF_OBJ_SEL) {
+    GLfloat oType,oX,oY,oZ;
+    oType = preview_object[0];
+    oX = preview_object[1];
+    oY = preview_object[2];
+    oZ = preview_object[3];
+    currentTexture = preview_object[4];
+
+    if (oType == OBJ_BASIC) basicTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_ADV) advancedTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_CONE) coneTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_ADV_CONE) advancedConeTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_SQUARE) squareTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_FIRE) fireTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_FIRE2) fireTower2(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_ICE) iceTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_ICE2) iceTower2(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_EARTH) earthTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_EARTH2) earthTower2(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_POISON) poisonTower(oX,oY,oZ, 1,1,1, 0);
+    else if (oType == OBJ_POISON2) poisonTower2(oX,oY,oZ, 1,1,1, 0);
+    currentTexture = TEX_DEFAULT;
+  }
+
+  /* current objects */
+  if (Length(current_objects) > 0) {
+    for (i = 0; i < Length(current_objects); i++){
+      GLfloat oType,oX,oY,oZ;
+      GLint red,green,blue;
+      oType = current_objects[i][0];
+      oX = current_objects[i][1];
+      oY = current_objects[i][2];
+      oZ = current_objects[i][3];
+      currentTexture = current_objects[i][4];
+      red = current_objects[i][5];
+      green = current_objects[i][6];
+      blue = current_objects[i][7];
+
+      /* draw the objects */
+      if (renderMode == DEF_SELECT) {
+	glDisable(GL_DITHER);
+	glDisable(GL_LIGHTING);
+	glColor3ub(red,green,blue);
+      }
+      if (oType == OBJ_BASIC) basicTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_ADV) advancedTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_CONE) coneTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_ADV_CONE) advancedConeTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_SQUARE) squareTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_FIRE) fireTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_FIRE2) fireTower2(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_ICE) iceTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_ICE2) iceTower2(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_EARTH) earthTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_EARTH2) earthTower2(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_POISON) poisonTower(oX,oY,oZ, 1,1,1, 0);
+      else if (oType == OBJ_POISON2) poisonTower2(oX,oY,oZ, 1,1,1, 0);
+      currentTexture = TEX_DEFAULT;
+
+      if (renderMode == DEF_SELECT) {
+	glEnable(GL_DITHER);
+	glEnable(GL_LIGHTING);
+      }
+    }
+  }
+}
+
+/*
  *  BEGIN MAIN SECTION GLUT COMMANDS
  */
 
@@ -1421,7 +1688,7 @@ void drawLight(void)
  *  ------
  *  GLUT call this to display the main screen
  */
-void mainDisplay()
+void mainDisplay(void)
 {
   /* gray for the sidebar spacer */
   glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -1454,14 +1721,16 @@ void mainKey(unsigned char key,int x,int y)
   /*  change dim */
   else if (key == 'i' && dim>1) dim -= 0.2;
   else if (key == 'I') dim += 0.2;
+  /*  Toggle tower tops moving */
+  else if (key == 'M') topsRotate = 1-topsRotate;
   /*  BEGIN LIGHTING FUNCTIONALITY */
   /*  Toggle lighting */
   else if (key == 'l' || key == 'L') light = 1-light;
   /*  Toggle light movement */
-  else if (key == 'm' || key == 'M') move = 1-move;
+  else if (key == 'm') move = 1-move;
   /*  Move light */
-  else if (key == '<') lightTh += 1;
-  else if (key == '>') lightTh -= 1;
+  else if (key == '<') lightTh -= 1;
+  else if (key == '>') lightTh += 1;
   /*  Light elevation */
   else if (key == '[') lightY -= 0.1;
   else if (key == ']') lightY += 0.1;
@@ -1480,6 +1749,43 @@ void mainKey(unsigned char key,int x,int y)
   /*  Shininess level */
   else if (key == 'n' && shininess>-1) shininess -= 1;
   else if (key == 'N' && shininess<7) shininess += 1;
+  /*  BEGIN OPTION SELECTION FUNCTIONALITY */
+  /*  Select object */
+  else if (key == '0') objectSelected = DEF_OBJ_SEL;
+  else if (key == '1') objectSelected = OBJ_FIRE;
+  else if (key == '2') objectSelected = OBJ_FIRE2;
+  else if (key == '3') objectSelected = OBJ_ICE;
+  else if (key == '4') objectSelected = OBJ_ICE2;
+  else if (key == '5') objectSelected = OBJ_EARTH;
+  else if (key == '6') objectSelected = OBJ_EARTH2;
+  else if (key == '7') objectSelected = OBJ_POISON;
+  else if (key == '8') objectSelected = OBJ_POISON2;
+  else if (key == '9') {
+    if (objectSelected < OBJ_BASIC || objectSelected == OBJ_ADV_SQUARE) objectSelected = OBJ_BASIC;
+    else if (objectSelected >= OBJ_BASIC && objectSelected != OBJ_ADV_SQUARE) objectSelected++;
+  }
+  /*  Toggle through all the different textures */
+  else if (key == 't') {
+    if (currentTextureSelected > 4) currentTextureSelected = TEX_DEFAULT;
+    else currentTextureSelected++;
+  }
+  /*  Toggle preview mode (slightly buggy) */
+  else if (key == 'w' || key == 'W') {
+    preview = 1-preview;
+    /* Reset preview object if preview is turned off */
+    if (preview == DEF_PREVIEW) preview_object[0] = DEF_OBJ_SEL;
+  }
+  /*  Backspace and delete key to remove currently picked object */
+  else if (key == 8 || key == 127) {
+    int j;
+    if (objectPicked != DEF_OBJ_PICKED) {
+      for (j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
+	current_objects[objectPicked][j] = 0;
+      if (debug) printf("Killed current object picked ID: %d\n", objectPicked);
+      objectPicked = DEF_OBJ_PICKED;
+    }
+  }
+
   /*  Translate shininess power to value (-1 => 0) */
   shinyvec[0] = shininess<0 ? 0 : pow(2.0,shininess);
 
@@ -1504,7 +1810,8 @@ void mainSpecial(int key,int x,int y)
   else if (key == GLUT_KEY_DOWN) ph -= 5;
   /*  Function F3 - toggle distance */
   else if (key == GLUT_KEY_F3) distance = (distance==2) ? 5 : 2;
-
+  /*  Hold shift */
+  //else
   /*  Keep angles at +/- 360 degrees */
   th %= 360;
   ph %= 360;
@@ -1572,31 +1879,21 @@ void screenDisplay(void)
   drawParameters();
   drawLight();
 
-  /*  Draw scene */
-  board();
-
-  //  basicTower(0,0,0, 1,1,1, 0);
-  //  advancedTower(0,0,0, 1,1,1, 0);
-  //  coneTower(4,0,0, 1,1,1, 0);
-  //  advancedConeTower(4,0,0, 1,1,1, 0);
-  //  squareTower(0,0,0, 1,1,1, 0);
-  //  advancedSquareTower(0,0,0, 1,1,1, 0);
-
-
-  //  fireTower(4,0,0, 1,1,1, 0);
-    fireTower2(-2,0,-2, 1,1,1, 0);
-  //  iceTower(0,0,0, 1,1,1, 0);
-    iceTower2(2,0,2, 1,1,1, 0);
-  //  earthTower(4,0,0, 1,1,1, 0);
-    earthTower2(2,0,-2, 1,1,1, 0);
-  //  poisonTower(0,0,0, 1,1,1, 0);
-    poisonTower2(-2,0,2, 1,1,1, 0);
-
+  /* Draw scene */
+  drawObjects();
+  /* object selection */
+  /* first pass picking mode, then render mode */
+  if (renderMode == DEF_SELECT) {
+    processPicks();
+    renderMode = DEF_RENDER;
+  }
+  else {
+    /*  Flush and swap */
+    glFlush();
+    glutSwapBuffers();
+  }
+  
   errCheck("display sanity check");
-
-  /*  Flush and swap */
-  glFlush();
-  glutSwapBuffers();
 }
 
 /*
@@ -1606,16 +1903,16 @@ void screenDisplay(void)
  */
 void screenProject(double fov, double asp, double dim)
 {
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   /*  Perspective transformation */
-   if (fov)
-      gluPerspective(fov,asp,dim/16,16*dim);
-   /*  Orthogonal transformation */
-   else
-      glOrtho(-asp*dim,asp*dim,-dim,+dim,-dim,+dim);
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  /*  Perspective transformation */
+  if (fov)
+    gluPerspective(fov,asp,dim/16,16*dim);
+  /*  Orthogonal transformation */
+  else
+    glOrtho(-asp*dim,asp*dim,-dim,+dim,-dim,+dim);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 /*
@@ -1635,82 +1932,165 @@ void screenReshape(int width, int height)
 }
 
 /*
+ *  screenMouse
+ *  ------
+ *  If an object is selected, left-click the mouse in order to place it
+ *  If an object is not selected, left-click mouse on tower to select it
+ *  (this functionality actually happens in screenDisplay/drawObjects)
+ */ 
+void screenMouse(int btn, int state, int x, int y)
+{
+  vertices3f v3f;
+
+  /* return unless left mouse click and object selected */
+  if ((btn != GLUT_LEFT_BUTTON || state != GLUT_DOWN)) 
+    return;
+  
+  v3f = findMousePosition(x,y);
+  mouseX = x;
+  mouseY = y;
+  renderMode = DEF_SELECT;
+
+  /* We're adding a new object */
+  if (objectSelected != 0) {
+    renderMode = DEF_RENDER;
+
+    /* add the object to current objects */
+    current_objects[lastCurrentObject][0] = objectSelected;
+    current_objects[lastCurrentObject][1] = (int) v3f.posX;
+    current_objects[lastCurrentObject][2] = 0;
+    current_objects[lastCurrentObject][3] = (int) v3f.posZ;
+    current_objects[lastCurrentObject][4] = currentTextureSelected;
+    /* red, green, blue */
+    current_objects[lastCurrentObject][5] = currentRed;
+    current_objects[lastCurrentObject][6] = currentGreen;
+    current_objects[lastCurrentObject][7] = currentBlue;
+
+    /* increment red, then green, the blue to get unique composite RGBs 
+       for our object selection
+     */
+    currentRed += 10;
+    if (currentRed > 255) {
+      currentRed = 5;
+      currentGreen += 10;
+      if (currentGreen > 255) {
+	currentGreen = 5;
+	currentBlue += 10;
+	if (currentBlue > 255) {
+	  currentBlue = 5;
+	}
+      }
+    }
+    if (debug) printf("just added object id: %d\n",lastCurrentObject);
+
+    /* increment last current object, we are limiting to 30 objects, so reset if at 30 */
+    lastCurrentObject++;
+    if (lastCurrentObject == DEF_CURRENT_OBJS_SIZE) lastCurrentObject = 0;
+    /* reset object selected back to default unless shift key is held */
+    if (glutGetModifiers() != GLUT_ACTIVE_SHIFT) objectSelected = DEF_OBJ_SEL;
+  }
+
+  redisplayAll();
+}
+
+/*
+ *  Display the mouse position
+ *  TODO: show opacity-based object where drawing it
+ */ 
+void screenPmotion(int x, int y)
+{
+  if (preview && objectSelected != DEF_OBJ_SEL) {
+    vertices3f v3f= findMousePosition(x,y);
+    preview_object[0] = objectSelected;
+    preview_object[1] = (int)v3f.posX;
+    preview_object[2] = 0;
+    preview_object[3] = (int)v3f.posZ;
+    preview_object[4] = currentTextureSelected;
+
+    redisplayAll();
+  }
+}
+
+/*
  *  BEGIN SIDEBAR SECTION GLUT COMMANDS
  */
+
+/* 
+ *  sidebarRow
+ *  ------
+ *  Add a row of text with: x, y, text, with optional object selected highlight
+ */
+void sidebarRow(int x, int y, int obj, char* text)
+{
+  glColor3fv(white);
+  if (objectSelected == obj) glColor3f(1,0,1);
+  printAt(x,y,text);
+  glColor3fv(white);
+}
+
+/* 
+ *  sidebarRowT
+ *  ------
+ *  Add a row of text with: x, y, text, with optional texture selected highlight
+ */
+void sidebarRowT(int x, int y, int obj, char* text)
+{
+  glColor3fv(white);
+  if (currentTextureSelected == obj) glColor3f(1,0,1);
+  printAt(x,y,text);
+  glColor3fv(white);
+}
 
 /*
  *  sidebarDisplay
  *  ------
  *  The display for the sidebar
  */
-void sidebarDisplay()
+void sidebarDisplay(void)
 {
+  int line = 1;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  glColor3f(1,1,1);
 
   /* These display locations need to line up with mouse clicks */
-  printAt(100, windowHeight-DEF_TEXT_Y_OFFSET, "EXTRA CONTROLS");
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*2, "Select a tower to draw:");
+  sidebarRow(100, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "EXTRA CONTROLS");
+  setFont("helvetica",12);
+  sidebarRow(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a tower to draw:");
+  setFont("helvetica",18);
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, DEF_OBJ_SEL, "none");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_BASIC, "basic");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV, "advanced");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_CONE, "cone");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_CONE, "advanced cone");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_SQUARE, "square");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_SQUARE, "advanced square");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE, "[1] fire");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE2, "[2] advanced fire");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE, "[3] ice");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE2, "[4] advanced ice");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH, "[5] earth");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH2, "[6] advanced earth");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON, "[7] poison");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON2, "[8] advanced poison");
 
-  if (objectSelected == 1) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*3, "basic");
+  ++line;
+  setFont("helvetica",12);
+  sidebarRowT(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a texture for non-element tower:");
+  setFont("helvetica",18);
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_DEFAULT, "none");
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_BRICK, "brick");
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_FIRE, "fire");
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_ICE, "ice");
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_EARTH, "earth");
+  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_POISON, "poison");
 
-  glColor3f(1,1,1);
-  if (objectSelected == 2) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*4, "advanced");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 3) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*5, "cone");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 4) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*6, "advanced cone");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 5) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*7, "square");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 6) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*8, "advanced square");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 7) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*9, "fire");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 8) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*10, "advanced fire");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 9) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*11, "ice");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 10) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*12, "advanced ice");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 11) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*13, "earth");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 12) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*14, "advanced earth");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 13) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*15, "poison");
-
-  glColor3f(1,1,1);
-  if (objectSelected == 14) glColor3f(1,0,1);
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*16, "advanced poison");
-
-  glColor3f(1,1,1);
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*21, "For best (accurate) results, ");
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*22, "draw on the board");
+  ++line;
+  setFont("helvetica",12);
+  glColor3fv(white);
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "For best (accurate) results, ");
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "draw on the board");
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Object Picked: %d", objectPicked);
+  setFont("helvetica",18);
 
   glFlush();
   glutSwapBuffers();
@@ -1739,26 +2119,35 @@ void sidebarReshape(int width, int height)
  */
 void sidebarMouse(int btn, int state, int x, int y)
 {
+  int lineUp   = 1;
+  int lineDown = 2;
   /* only left mouse button */
   if (btn != GLUT_LEFT_BUTTON || state != GLUT_DOWN) return;
 
-  objectSelected=0;
   /* mouse position starts at upper left */
   if (x < 180 && x>= 5) {
-    if (y >= DEF_TEXT_Y_OFFSET*2+5 && y < DEF_TEXT_Y_OFFSET*3+9) objectSelected=1;
-    else if (y >= DEF_TEXT_Y_OFFSET*3+9 && y < DEF_TEXT_Y_OFFSET*4+9) objectSelected=2;
-    else if (y >= DEF_TEXT_Y_OFFSET*4+9 && y < DEF_TEXT_Y_OFFSET*5+9) objectSelected=3;
-    else if (y >= DEF_TEXT_Y_OFFSET*5+9 && y < DEF_TEXT_Y_OFFSET*6+9) objectSelected=4;
-    else if (y >= DEF_TEXT_Y_OFFSET*6+9 && y < DEF_TEXT_Y_OFFSET*7+9) objectSelected=5;
-    else if (y >= DEF_TEXT_Y_OFFSET*7+9 && y < DEF_TEXT_Y_OFFSET*8+9) objectSelected=6;
-    else if (y >= DEF_TEXT_Y_OFFSET*8+9 && y < DEF_TEXT_Y_OFFSET*9+9) objectSelected=7;
-    else if (y >= DEF_TEXT_Y_OFFSET*9+9 && y < DEF_TEXT_Y_OFFSET*10+9) objectSelected=8;
-    else if (y >= DEF_TEXT_Y_OFFSET*10+9 && y < DEF_TEXT_Y_OFFSET*11+9) objectSelected=9;
-    else if (y >= DEF_TEXT_Y_OFFSET*11+9 && y < DEF_TEXT_Y_OFFSET*12+9) objectSelected=10;
-    else if (y >= DEF_TEXT_Y_OFFSET*12+9 && y < DEF_TEXT_Y_OFFSET*13+9) objectSelected=11;
-    else if (y >= DEF_TEXT_Y_OFFSET*13+9 && y < DEF_TEXT_Y_OFFSET*14+9) objectSelected=12;
-    else if (y >= DEF_TEXT_Y_OFFSET*14+9 && y < DEF_TEXT_Y_OFFSET*15+9) objectSelected=13;
-    else if (y >= DEF_TEXT_Y_OFFSET*15+9 && y < DEF_TEXT_Y_OFFSET*16+9) objectSelected=14;
+    if (y >= DEF_TEXT_Y_OFFSET*++lineUp+5 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=DEF_OBJ_SEL;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_BASIC;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_CONE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV_CONE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_SQUARE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV_SQUARE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_FIRE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_FIRE2;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ICE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ICE2;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_EARTH;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_EARTH2;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON2;
+    ++lineUp; ++lineUp; ++lineDown; ++lineDown;
+    if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_DEFAULT;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_BRICK;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_FIRE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_ICE;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_EARTH;
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_POISON;
   }
 
   redisplayAll();
@@ -1783,25 +2172,6 @@ void sidebarInit(void)
   glutKeyboardFunc(mainKey); 
   glutSpecialFunc(mainSpecial);
   glutMouseFunc(sidebarMouse);
-
-  /*  glutCreateMenu(sidebarMenu);
-  glutAddMenuEntry("Select a Tower", 0);
-  glutAddMenuEntry("-------------",0);
-  glutAddMenuEntry("[u] basic", 'u');
-  glutAddMenuEntry("[h] advanced", 'h');
-  glutAddMenuEntry("[p] cone", 'p');
-  glutAddMenuEntry("[i] advanced cone", 'i');
-  glutAddMenuEntry("[s] square", 's');
-  glutAddMenuEntry("[t] advanced square", 't');
-  glutAddMenuEntry("[w] fire", 'w');
-  glutAddMenuEntry("[o] advanced fire", 'o');
-  glutAddMenuEntry("[w] ice", 'w');
-  glutAddMenuEntry("[o] advanced ice", 'o');
-  glutAddMenuEntry("[w] earth", 'w');
-  glutAddMenuEntry("[o] advanced earth", 'o');
-  glutAddMenuEntry("[w] poison", 'w');
-  glutAddMenuEntry("[o] advanced poison", 'o');
-  glutAttachMenu(GLUT_RIGHT_BUTTON); */
 }
 
 /*
@@ -1819,14 +2189,8 @@ void screenInit(void)
   glutReshapeFunc(screenReshape);
   glutKeyboardFunc(mainKey);
   glutSpecialFunc(mainSpecial);
-  //  glutPassiveMotionFunc(screenPmotion);
-  //  glutMouseFunc(screenMouse);
-  /*
-  glutCreateMenu(screenMenu);
-  glutAddMenuEntry("[r] reset",'r');
-  glutAddMenuEntry("[f] toggle defaults",'f');
-  glutAddMenuEntry("[b] toggle board",'b');
-  glutAttachMenu(GLUT_RIGHT_BUTTON);*/
+  glutMouseFunc(screenMouse);
+  glutPassiveMotionFunc(screenPmotion);
 }
 
 /*
@@ -1836,13 +2200,24 @@ void screenInit(void)
  */
 void initTextures(void)
 {
-  textures[TEX_BRICK] = loadTexBMP("Brick14.bmp");
-  textures[TEX_FIRE] = loadTexBMP("lava1.bmp");
-  textures[TEX_SPIKE] = loadTexBMP("Floor4.bmp");
-  textures[TEX_ICE] = loadTexBMP("Ice7.bmp");
-  textures[TEX_ROCK] = loadTexBMP("Rock5.bmp");
-  textures[TEX_POISON] = loadTexBMP("Floor38.bmp");
-  textures[TEX_GRASS] = loadTexBMP("Grass5.bmp");
+  /*
+    TEX_DEFAULT 0
+    TEX_BRICK 1
+    TEX_FIRE 2
+    TEX_ICE 3
+    TEX_EARTH 4
+    TEX_POISON 5
+    TEX_SPIKE 6
+    TEX_GRASS 7
+   */
+  /* for some reason, order matters here (I don't know C well enough */
+  textures[TEX_BRICK] = loadTexBMP("txBrick14.bmp");
+  textures[TEX_FIRE] = loadTexBMP("txlava1.bmp");
+  textures[TEX_ICE] = loadTexBMP("txIce7.bmp");
+  textures[TEX_EARTH] = loadTexBMP("txRock5.bmp");
+  textures[TEX_POISON] = loadTexBMP("txFloor38.bmp");
+  textures[TEX_SPIKE] = loadTexBMP("txFloor4.bmp");
+  textures[TEX_GRASS] = loadTexBMP("txGrass5.bmp");
 }
 
 /*
@@ -1865,6 +2240,7 @@ int main(int argc,char* argv[])
   glutKeyboardFunc(mainKey);
   glutVisibilityFunc(mainVisible);
 
+  reset();
   sidebarInit();
   screenInit();
 
