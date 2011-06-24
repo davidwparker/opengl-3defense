@@ -24,21 +24,22 @@
 /*  Projection  */
 #define DEF_ASP 1
 #define DEF_DIM 25
-#define DEF_TH 285
-#define DEF_PH 30
+#define DEF_TH 250
+#define DEF_PH 40
 #define DEF_FOV 55
-#define DEF_ECX 0
+#define DEF_ECX 2
 #define DEF_ECY 0
-#define DEF_ECZ 0
+#define DEF_ECZ 4
 
 /*  Draw defaults  */
 #define DEF_DRAW_DEFAULTS 0
 #define DEF_GRID 1
 #define DEF_AXES 0
 #define DEF_VALS 1
+#define DEF_D 5
 
 /*  Animation  */
-#define DEF_D 5
+#define DEF_MOVE 1
 #define DEF_TOPS_ROTATE 1
 #define DEF_TOWER_TH 0
 
@@ -59,21 +60,23 @@
 #define OBJ_ADV_SQUARE 14
 
 /*  Object Selection */
-#define DEF_CURRENT_OBJS_SIZE 30
-#define DEF_CURRENT_OBJS_ATRS 8
+#define DEF_CURRENT_OBJS_SIZE 57
 #define DEF_LAST_CURRENT_OBJECT 0
 #define DEF_OBJ_SEL 0
 #define DEF_OBJ_PICKED -1
-#define DEF_PREVIEW 0
+#define DEF_BAD_POINT -255
+#define DEF_PREVIEW 1
 #define DEF_RENDER 1
 #define DEF_SELECT 2
 #define DEF_CURRENT_RED 5
 #define DEF_CURRENT_GREEN 5
 #define DEF_CURRENT_BLUE 5
 
+/*  Minions */
+#define DEF_MINION_OBJ 0
+
 /*  Lighting */
 #define DEF_LIGHT 1
-#define DEF_MOVE 1
 #define DEF_DISTANCE 25
 #define DEF_AMBIENT 35
 #define DEF_DIFFUSE 100
@@ -81,7 +84,7 @@
 #define DEF_SPECULAR 0
 #define DEF_SHININESS 0
 #define DEF_L_PH 90
-#define DEF_L_Y -2
+#define DEF_L_Y 0
 
 /*  Texture definitions */
 #define TEX_DEFAULT 0
@@ -96,6 +99,8 @@
 #define TEX_EVERGREEN 9
 #define TEX_BRICK2 10
 #define TEX_CRATE 11
+#define TEX_STREET1 12
+#define TEX_STREET3 13
 
 /*  Background (skybox) */
 #define BACK_FRONT 0

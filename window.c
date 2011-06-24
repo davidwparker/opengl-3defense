@@ -79,29 +79,25 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == '6') objectSelected = OBJ_EARTH2;
   else if (key == '7') objectSelected = OBJ_POISON;
   else if (key == '8') objectSelected = OBJ_POISON2;
-  else if (key == '9') {
-    if (objectSelected < OBJ_BASIC || objectSelected == OBJ_ADV_SQUARE) objectSelected = OBJ_BASIC;
-    else if (objectSelected >= OBJ_BASIC && objectSelected != OBJ_ADV_SQUARE) objectSelected++;
-  }
-  /*  Toggle through all the different textures */
-  else if (key == 't') {
-    if (currentTextureSelected > 4) currentTextureSelected = TEX_DEFAULT;
-    else currentTextureSelected++;
-  }
   /*  Toggle preview mode (slightly buggy) */
   else if (key == 'w' || key == 'W') {
     preview = 1-preview;
     /* Reset preview object if preview is turned off */
-    if (preview == DEF_PREVIEW) preview_object[0] = DEF_OBJ_SEL;
+    if (preview == DEF_PREVIEW) preview_tower.id = DEF_OBJ_SEL;
   }
   /*  Backspace and delete key to remove currently picked object */
   else if (key == 8 || key == 127) {
-    int j;
     if (objectPicked != DEF_OBJ_PICKED) {
-      for (j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
-	current_objects[objectPicked][j] = 0;
-      if (debug) printf("Killed current object picked ID: %d\n", objectPicked);
+      towers[objectPicked].id = DEF_OBJ_PICKED;
+      towers[objectPicked].type = DEF_OBJ_SEL;
+      towers[objectPicked].translation.x = 0;
+      towers[objectPicked].translation.z = 0;
+      towers[objectPicked].texture = 0;
+      towers[objectPicked].rgb.r = 0;
+      towers[objectPicked].rgb.g = 0;
+      towers[objectPicked].rgb.b = 0;
       objectPicked = DEF_OBJ_PICKED;
+      if (debug) printf("Killed current object picked ID: %d\n", objectPicked);
     }
   }
 
@@ -138,10 +134,6 @@ void windowSpecial(int key,int x,int y)
     else if (key == GLUT_KEY_DOWN) ecX += 1;
   }
   
-/*  Function F3 - toggle distance */
-  if (key == GLUT_KEY_F3) distance = (distance==2) ? 5 : 2;
-  /*  Hold shift */
-  //else
   /*  Keep angles at +/- 360 degrees */
   th %= 360;
   ph %= 360;

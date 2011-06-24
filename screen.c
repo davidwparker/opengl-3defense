@@ -49,6 +49,7 @@ void screenDisplay(void)
 
   /*  Object selection */
   /*  First pass picking mode, then render mode */
+  /*  TODO: objectSelected and then deleting */
   if (renderMode == DEF_SELECT) {
     processPicks();
     renderMode = DEF_RENDER;
@@ -101,66 +102,42 @@ void screenReshape(int width, int height)
  */ 
 void screenMouse(int btn, int state, int x, int y)
 {
-  vertices3f v3f;
-  int realX, realZ;
-
+  point p;
   /* return unless left mouse click and object selected */
   if ((btn != GLUT_LEFT_BUTTON || state != GLUT_DOWN)) 
     return;
   
-  v3f = findMousePosition(x,y);
+  p = findPreviewPosition(x,y);
   mouseX = x;
   mouseY = y;
-  /* TODO: after fixing preview, this should be the spot where we calculate actual
-     drawing location */
-  realX = (int)v3f.posX;
-  realZ = (int)v3f.posZ;
   renderMode = DEF_SELECT;
 
-  /* We're adding a new object (within the bounds of the grid) */
-  if (objectSelected != 0 && 
-      (realX <= 18 && realX >= -18) &&
-      (realZ <= 18 && realZ >= -18)) {
+  /* We're adding a new object */ 
+  if (objectSelected != DEF_OBJ_SEL && p.x != DEF_BAD_POINT) {
     int modifiers = glutGetModifiers();
     renderMode = DEF_RENDER;
-    
-    /* add the object to current objects */
-    current_objects[lastCurrentObject][0] = objectSelected;
-    current_objects[lastCurrentObject][1] = realX;
-    current_objects[lastCurrentObject][2] = 0;
-    current_objects[lastCurrentObject][3] = realZ;
-    current_objects[lastCurrentObject][4] = currentTextureSelected;
-    /* red, green, blue */
-    current_objects[lastCurrentObject][5] = currentRed;
-    current_objects[lastCurrentObject][6] = currentGreen;
-    current_objects[lastCurrentObject][7] = currentBlue;
+    towers[lastCurrentObject].id = objectSelected;
+    towers[lastCurrentObject].type = objectSelected;
+    towers[lastCurrentObject].translation.x = p.x;
+    towers[lastCurrentObject].translation.y = p.y;
+    towers[lastCurrentObject].translation.z = p.z;
+    towers[lastCurrentObject].texture = currentTextureSelected;
+    towers[lastCurrentObject].rgb.r = currentRed;
+    towers[lastCurrentObject].rgb.g = currentGreen;
+    towers[lastCurrentObject].rgb.b = currentBlue;
+    /* increment the rgb for object selection */
+    incrementCurrentRGB();
 
-    /* increment red, then green, the blue to get unique composite RGBs 
-       for our object selection
-     */
-    currentRed += 10;
-    if (currentRed > 255) {
-      currentRed = 5;
-      currentGreen += 10;
-      if (currentGreen > 255) {
-	currentGreen = 5;
-	currentBlue += 10;
-	if (currentBlue > 255) {
-	  currentBlue = 5;
-	}
-      }
-    }
+    /* increment last current object, we are limiting to 57 objects, so reset if at 57 */
     if (debug) printf("just added object id: %d\n",lastCurrentObject);
-
-    /* increment last current object, we are limiting to 30 objects, so reset if at 30 */
     lastCurrentObject++;
     if (lastCurrentObject == DEF_CURRENT_OBJS_SIZE) lastCurrentObject = 0;
+
     /* reset object selected back to default unless shift key is held 
        this should be a bitwise &, in case multiple modifiers are pressed */
     if (modifiers != GLUT_ACTIVE_SHIFT) {
       objectSelected = DEF_OBJ_SEL;
-      /* TODO: check preview mode stuff */
-      preview_object[0] = DEF_OBJ_SEL;
+      preview_tower.id = DEF_OBJ_SEL;
     }
   }
 
@@ -168,29 +145,24 @@ void screenMouse(int btn, int state, int x, int y)
 }
 
 /*
- *  Display the mouse position
+ *  screenPmotion
+ *  ------
+ *  If preview mode is on, then display where the tower will be placed
  *  TODO: show opacity-based object where drawing it
  */ 
 void screenPmotion(int x, int y)
 {
   if (preview && objectSelected != DEF_OBJ_SEL) {
-    vertices3f v3f= findMousePosition(x,y);
-    /*
-    int newX = (int) v3f.posX;
-    int newZ = (int) v3f.posZ;
-    double finalX = (double) newX + 0.5;
-    double finalZ = (double) newZ + 0.5;*/
-    /* TODO: fix drop location to round posX and posY to closest 0.5 */
-    /*    printf("%f %f\n",v3f.posX,v3f.posZ);
-    printf("%d %d\n",newX, newZ);
-    printf("%f %f\n",finalX, finalZ);*/
-    preview_object[0] = objectSelected;
-    preview_object[1] = (int) v3f.posX; //finalX;
-    preview_object[2] = 0;
-    preview_object[3] = (int) v3f.posZ; //finalZ;
-    preview_object[4] = currentTextureSelected;
-
-    redisplayAll();
+    point p = findPreviewPosition(x,y);
+    if (p.x != DEF_BAD_POINT) {
+      preview_tower.id = objectSelected;
+      preview_tower.type = objectSelected;
+      preview_tower.translation.x = p.x;
+      preview_tower.translation.y = p.y;
+      preview_tower.translation.z = p.z;
+      preview_tower.texture = currentTextureSelected;
+      redisplayAll();
+    }
   }
 }
 

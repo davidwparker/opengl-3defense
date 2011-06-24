@@ -125,6 +125,50 @@ void board(void)
   currentTexture = textures[TEX_DEFAULT];
 }
 
+void pathCube(pathC path)
+{
+  glPushMatrix();
+  currentTexture = path.texture;
+  cube(path.p.x,path.p.y,path.p.z, 2,0.2,2, path.rotation);
+  glPopMatrix();
+}
+
+/*
+ *  path
+ *  ------
+ *  A path is just a textured cubes which is slightly higher than the board
+ */
+void path(void)
+{
+  int ts1 = textures[TEX_STREET1];
+  int ts3 = textures[TEX_STREET3];
+  pathC path[] = {
+    {{21,-2.9,-1},ts1,90},{{17,-2.9,-1},ts1,90},{{13,-2.9,-1},ts3,270},
+    {{13,-2.9,-5},ts1,180},{{13,-2.9,-9},ts1,180},{{13,-2.9,-13},ts1,180},
+    {{13,-2.9,-17},ts3,90},{{9,-2.9,-17},ts1,90},{{5,-2.9,-17},ts3,180},
+    {{5,-2.9,-17},ts1,180},{{5,-2.9,-13},ts1,180},{{5,-2.9,-9},ts1,180},
+    {{5,-2.9,-5},ts1,180},{{5,-2.9,-1},ts1,180},{{5,-2.9,3},ts1,180},
+    {{5,-2.9,7},ts3,270},{{9,-2.9,7},ts1,270},{{13,-2.9,7},ts1,270},
+    {{17,-2.9,7},ts3,90},{{17,-2.9,11},ts1,0},{{17,-2.9,15},ts3,0},
+    {{13,-2.9,15},ts1,90},{{9,-2.9,15},ts1,90},{{5,-2.9,15},ts1,90},
+    {{1,-2.9,15},ts1,90},{{-3,-2.9,15},ts3,270},{{-3,-2.9,11},ts1,180},
+    {{-3,-2.9,7},ts1,180},{{-3,-2.9,3},ts1,180},{{-3,-2.9,-1},ts1,180},
+    {{-3,-2.9,-5},ts1,180},{{-3,-2.9,-9},ts1,180},{{-3,-2.9,-13},ts1,180},
+    {{-3,-2.9,-17},ts3,90},{{-7,-2.9,-17},ts1,90},{{-11,-2.9,-17},ts3,180},
+    {{-11,-2.9,-13},ts1,180},{{-11,-2.9,-9},ts1,180},{{-11,-2.9,-5},ts1,180},
+    {{-11,-2.9,-1},ts1,180},{{-11,-2.9,3},ts1,180},{{-11,-2.9,7},ts1,180},
+    {{-11,-2.9,11},ts3,0},{{-15,-2.9,11},ts1,90},{{-19,-2.9,11},ts1,90},
+  };
+  int i;
+
+  glPushMatrix();
+  for (i=0; i < Length(path); i++) {
+    pathCube(path[i]);
+  }
+  currentTexture = textures[TEX_DEFAULT];
+  glPopMatrix();
+}
+
 /*
  *  crate
  *  ------
@@ -345,7 +389,7 @@ void keep(double x,double y,double z,
 
   /* some grass */
   currentTexture = textures[TEX_GRASS];
-  for (i=-9;i<6;i++){
+  for (i=-10;i<8;i++){
     for(j=-10;j<10;j++){
       cube(i,-3,j, 1,0.2,1, 0);
     }
@@ -402,5 +446,22 @@ void keep(double x,double y,double z,
   crate(5,0,10, 1,1,1, 0);
   glPopMatrix();
 
+  glPopMatrix();
+}
+
+/*
+ *  plane
+ *  ------
+ *  A plane is just an obj
+ */
+void plane(double x,double y,double z,
+	   double dx,double dy,double dz,
+	   double th)
+{
+  glPushMatrix();
+  glTranslated(x,y,z);
+  glRotated(th,0,1,0);
+  glScaled(dx,dy,dz);
+  glCallList(minionObj);
   glPopMatrix();
 }

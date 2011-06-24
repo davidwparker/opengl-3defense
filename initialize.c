@@ -16,6 +16,8 @@ void initialize(void)
   screenInit();
   initTextures();
   initBackground();
+  initObjs();
+  initPreviewPoints();
 }
 
 /*
@@ -37,6 +39,13 @@ void initTextures(void)
     TEX_WOOD 8
     TEX_EVERGREEN 9
     TEX_BRICK2 10
+    TEX_CRATE 11
+    TEX_STREET1 12
+    TEX_STREET2 13
+    TEX_STREET3 14
+    TEX_STREET4 15
+    TEX_STREET5 16
+    TEX_STREET6 17
    */
   /* for some reason, order matters here (I don't know C well enough */
   textures[TEX_BRICK] = loadTexBMP("txBrick14.bmp");
@@ -50,6 +59,8 @@ void initTextures(void)
   textures[TEX_EVERGREEN] = loadTexBMP("txGrass5.bmp");
   textures[TEX_BRICK2] = loadTexBMP("txBrick13.bmp");
   textures[TEX_CRATE] = loadTexBMP("txCrate.bmp");
+  textures[TEX_STREET1] = loadTexBMP("txStreet1.bmp");
+  textures[TEX_STREET3] = loadTexBMP("txStreet3.bmp");
 }
 
 /*
@@ -76,6 +87,43 @@ void initBackground(void)
   backgrounds[BACK_DOWN] = loadTexBMP("txStormydays_down.bmp");
 }
 
+/*
+ *  initObjs
+ *  ------
+ *  initializes our obj's for use
+ */
+void initObjs(void)
+{
+  minionObj = loadOBJ("obj-f16.obj");
+}
+
+/*
+ *  initPreviewPoints
+ *  ------
+ *  initializes the preview points (line up with grid);
+ */
+void initPreviewPoints(void)
+{
+  int valid_points[DEF_CURRENT_OBJS_SIZE][3] = {
+    /* ordered by row */
+    {17,0,-17},{17,0,-13},{17,0,-9},{17,0,-5},{17,0,3},{17,0,19},
+    {13,0,3},{13,0,11},{13,0,19},
+    {9,0,-13},{9,0,-9},{9,0,-5},{9,0,-1},{9,0,3},{9,0,11},{9,0,19},
+    {5,0,11},{5,0,19},
+    {1,0,-17},{1,0,-13},{1,0,-9},{1,0,-5},{1,0,-1},{1,0,3},{1,0,7},{1,0,11},{1,0,19},
+    {-3,0,19},
+    {-7,0,-13},{-7,0,-9},{-7,0,-5},{-7,0,-1},{-7,0,3},{-7,0,7},{-7,0,11},{-7,0,15},{-7,0,19},
+    {-11,0,15},{-11,0,19},
+    {-15,0,-17},{-15,0,-13},{-15,0,-9},{-15,0,-5},{-15,0,-1},{-15,0,3},{-15,0,7},{-15,0,15},{-15,0,19},
+    {-19,0,-17},{-19,0,-13},{-19,0,-9},{-19,0,-5},{-19,0,-1},{-19,0,3},{-19,0,7},{-19,0,15},{-19,0,19},
+  };
+  int i;
+  for (i = 0; i < Length(valid_points); i++) {
+    preview_points[i].x = valid_points[i][0];
+    preview_points[i].y = valid_points[i][1];
+    preview_points[i].z = valid_points[i][2];
+  }
+}
 
 /*
  *  screenInit

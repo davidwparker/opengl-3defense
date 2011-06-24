@@ -70,15 +70,15 @@ void drawGrid(void)
     glColor3fv(white);
     glBegin(GL_LINES);
     /* horizontal z */
-    for (i=-19;i<20;i+=2){
-      for (j=-19;j<20;j+=38){
-	glVertex3d(i,-2.75,j);
+    for (i=-21;i<21;i+=2){
+      for (j=-19;j<23;j+=40){
+	glVertex3d(i,-2.8,j);
       }
     }
     /* horizontal x */
-    for (i=-19;i<20;i+=2){
-      for (j=-19;j<20;j+=38){
-	glVertex3d(j,-2.75,i);
+    for (i=-19;i<23;i+=2){
+      for (j=-21;j<20;j+=40){
+	glVertex3d(j,-2.8,i);
       }
     }
 
@@ -204,7 +204,7 @@ void drawBoard(void)
  */
 void drawPath(void)
 {
-  //TODO: stub for the path drawing
+  path();
 }
 
 /*
@@ -215,9 +215,9 @@ void drawPath(void)
 void drawForests(void)
 {
   /* backside forests */
-  evergreenForest1(-20,0,15, 1,1,1, 90);
+  evergreenForest1(-22,0,-10, 1,1,1, 90);
   /* gap here for keep */
-  evergreenForest1(-20,0,-20, 1,1,1, 90);
+  evergreenForest1(-22,0,-20, 1,1,1, 90);
 
   /* rightside forests */
   evergreenForest1(-15,0,-20, 1,1,1, 0);
@@ -234,11 +234,11 @@ void drawForests(void)
   evergreenForest1(20,0,20, 1,1,1, -90);
 
   /* leftside forests */
-  evergreenForest1(15,0,20, 1,1,1, 180);
-  evergreenForest1(10,0,20, 1,1,1, 180);
-  evergreenForest1(0,0,20, 1,1,1, 180);
-  evergreenForest1(-10,0,20, 1,1,1, 180);
-  evergreenForest1(-20,0,20, 1,1,1, 180);
+  evergreenForest1(15,0,22, 1,1,1, 180);
+  evergreenForest1(10,0,22, 1,1,1, 180);
+  evergreenForest1(0,0,22, 1,1,1, 180);
+  evergreenForest1(-10,0,22, 1,1,1, 180);
+  evergreenForest1(-20,0,22, 1,1,1, 180);
 }
 
 /*
@@ -248,7 +248,7 @@ void drawForests(void)
  */
 void drawKeep(void)
 {
-  keep(-30,0,0, 1,1,1, 0);
+  keep(-32,0,10, 1,1,1, 0);
 }
 
 /*
@@ -258,7 +258,7 @@ void drawKeep(void)
  */
 void drawMinions(void)
 {
-  //TODO: stub for minions
+  plane(23,0,-0.5,0.3,0.3,0.3,270);
 }
 
 /*
@@ -270,15 +270,18 @@ void drawObjects(void)
 {
   int i;
 
-  /* preview object */
-  if (preview_object[0] != DEF_OBJ_SEL) {
+  /* preview tower */
+  if (preview_tower.id != DEF_OBJ_SEL) {
     GLfloat oType,oX,oY,oZ;
-    oType = preview_object[0];
-    oX = preview_object[1];
-    oY = preview_object[2];
-    oZ = preview_object[3];
-    currentTexture = preview_object[4];
+    oType = preview_tower.type;
+    oX = preview_tower.translation.x;
+    oY = preview_tower.translation.y;
+    oZ = preview_tower.translation.z;
+    currentTexture = preview_tower.texture;
 
+    /* awesome opacity for the preview */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE,GL_ONE_MINUS_DST_COLOR);
     if (oType == OBJ_BASIC) basicTower(oX,oY,oZ, 1,1,1, 0);
     else if (oType == OBJ_ADV) advancedTower(oX,oY,oZ, 1,1,1, 0);
     else if (oType == OBJ_CONE) coneTower(oX,oY,oZ, 1,1,1, 0);
@@ -294,21 +297,22 @@ void drawObjects(void)
     else if (oType == OBJ_POISON) poisonTower(oX,oY,oZ, 1,1,1, 0);
     else if (oType == OBJ_POISON2) poisonTower2(oX,oY,oZ, 1,1,1, 0);
     currentTexture = TEX_DEFAULT;
+    glDisable(GL_BLEND);
   }
 
-  /* current objects */
-  if (Length(current_objects) > 0) {
-    for (i = 0; i < Length(current_objects); i++){
+  /* towers */
+  if (Length(towers) > 0) {
+    for (i = 0; i < Length(towers); i++){
       GLfloat oType,oX,oY,oZ;
       GLint red,green,blue;
-      oType = current_objects[i][0];
-      oX = current_objects[i][1];
-      oY = current_objects[i][2];
-      oZ = current_objects[i][3];
-      currentTexture = current_objects[i][4];
-      red = current_objects[i][5];
-      green = current_objects[i][6];
-      blue = current_objects[i][7];
+      oType = towers[i].id;
+      oX = towers[i].translation.x;
+      oY = towers[i].translation.y;
+      oZ = towers[i].translation.z;
+      currentTexture = towers[i].texture;
+      red = towers[i].rgb.r;
+      green = towers[i].rgb.g;
+      blue = towers[i].rgb.b;
 
       /* draw the objects */
       if (renderMode == DEF_SELECT) {

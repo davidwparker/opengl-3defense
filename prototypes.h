@@ -9,6 +9,9 @@ void fatal(const char* format, ...);
 /*  Texture loading (loadTexBMP.c)  */
 unsigned int loadTexBMP(char* file);
 
+/*  Object loading (loadObj.c)  */
+int loadOBJ(char* file);
+
 /*  Shapes (shapes.c)  */
 void square(int s, int a, int b, int c, int d);
 void cube(double x,double y,double z,
@@ -31,6 +34,7 @@ void spike(double x, double y, double z,
 	   double r,double h,int deg,
 	   double ox,double oy,double oz);
 void board(void);
+void path(void);
 void crate(double x, double y, double z,
 	   double dx,double dy,double dz,
 	   double th);
@@ -55,6 +59,9 @@ void wall(double x, double y, double z,
 void keep(double x, double y, double z,
 	  double dx,double dy,double dz,
 	  double th);
+void plane(double x, double y, double z,
+	   double dx,double dy,double dz,
+	   double th);
 
 /*  Towers (towers.c)  */
 void basicTower(double x,double y,double z,
@@ -101,8 +108,10 @@ void poisonTower2(double x,double y,double z,
 		  double th);
 
 /*  General Convenience (general.c)- the catchall  */
-vertices3f findMousePosition(int x, int y);
+point findMousePosition(int x, int y);
+point findPreviewPosition(int x, int y);
 void idle(void);
+void incrementCurrentRGB(void);
 void processPicks(void);
 void redisplayAll(void);
 void reset(void);
@@ -111,6 +120,8 @@ void reset(void);
 void initialize(void);
 void initTextures(void);
 void initBackground(void);
+void initObjs(void);
+void initPreviewPoints(void);
 void screenInit(void);
 void sidebarInit(void);
 

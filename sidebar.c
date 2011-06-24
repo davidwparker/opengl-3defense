@@ -42,7 +42,7 @@ void sidebarDisplay(void)
   glLoadIdentity();
 
   /* These display locations need to line up with mouse clicks */
-  sidebarRow(100, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "EXTRA CONTROLS");
+  sidebarRow(70, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "EXTRA CONTROLS");
   setFont("helvetica",12);
   sidebarRow(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a tower to draw:");
   setFont("helvetica",18);

@@ -37,9 +37,10 @@ int mouseY=0;
 int mouseZ=0;
 
 /*  OBJECT SELECTION  */
-/*  Holds towers */
-GLfloat current_objects[DEF_CURRENT_OBJS_SIZE][DEF_CURRENT_OBJS_ATRS] = {{0}};
-GLfloat preview_object[5]={0};                 /* holds the preview object */
+minion minions[1];                      /* holds the minions */
+tower towers[DEF_CURRENT_OBJS_SIZE];    /* holds towers - the most our board can hold is 53 */
+tower preview_tower;                    /* ho lds the preview tower */
+point preview_points[DEF_CURRENT_OBJS_SIZE];/* holds valid locations of preview locations */
 int preview=DEF_PREVIEW;                       /* determine if preview is on */
 int objectSelected=DEF_OBJ_SEL;                /* the object to be placed */
 int lastCurrentObject=DEF_LAST_CURRENT_OBJECT; /* determine last object */
@@ -49,6 +50,9 @@ int objectPicked=DEF_OBJ_PICKED;               /* the object that we have picked
 int currentRed=DEF_CURRENT_RED;
 int currentGreen=DEF_CURRENT_GREEN;
 int currentBlue=DEF_CURRENT_BLUE;
+
+/*  MINIONS */
+int minionObj=DEF_MINION_OBJ; /* minion obj */
 
 /*  LIGHTING */
 int light=DEF_LIGHT;          /* toggle light */
@@ -65,7 +69,7 @@ float lightY=DEF_L_Y;         /* elevation of light */
 float white[]={1,1,1,1};
 
 /*  TEXTURES  */
-unsigned int textures[12];              /* holds our textures */
+unsigned int textures[17];              /* holds our textures */
 int currentTexture=TEX_DEFAULT;         /* no texture assigned as default */
 int currentTextureSelected=TEX_DEFAULT; /* no texture currently selected */
 int backgrounds[6];                     /* holds the textures for the skybox background */

@@ -9,9 +9,9 @@
  *  ------
  *  Determines the OpenGL mouse position based on world coordinates 
  */
-vertices3f findMousePosition(int x, int y)
+point findMousePosition(int x, int y)
 {
-  vertices3f vertices;
+  point point;
   GLfloat winX, winY, winZ;
   GLdouble posX, posY, posZ;
   GLint viewport[4];
@@ -40,11 +40,56 @@ vertices3f findMousePosition(int x, int y)
     printf("pos: %f %f %f\n", posX, posY, posZ);
   }
 
-  vertices.posX = posX;
-  vertices.posY = posY;
-  vertices.posZ = posZ;
+  point.x = posX;
+  point.y = posY;
+  point.z = posZ;
 
-  return vertices;
+  return point;
+}
+
+/*
+ *  findPreviewPosition
+ *  ------
+ *  Finds the position that is in the preview_points list, which are the 
+ *  only valid places to place a tower
+ */
+point findPreviewPosition(int x, int y)
+{
+  point p = findMousePosition(x,y);
+  point returnP;
+  int finalX = (int)p.x;
+  int finalZ = (int)p.z;
+  int i,j,exists;
+  /* default "bad" values */
+  returnP.x = DEF_BAD_POINT;
+  returnP.y = DEF_BAD_POINT;
+  returnP.z = DEF_BAD_POINT;
+  exists = 0;
+
+  /* current objects size is the size of the valid points */
+  for (i=0; i < DEF_CURRENT_OBJS_SIZE; i++) {
+    /* check +/-2 from the exact point to speed up the grid checking */
+    if (finalX >= (preview_points[i].x-2) && finalX <= (preview_points[i].x+2) &&
+	finalZ >= (preview_points[i].z-2) && finalZ <= (preview_points[i].z+2)) {
+      /* check current objects to make sure there isn't a tower there already */
+      for(j=0; j < Length(towers);j++) {
+	if (towers[j].translation.x == preview_points[i].x &&
+	    towers[j].translation.z == preview_points[i].z) {
+	  /* a tower already exists in this location, break */
+	  exists = 1;
+	  break;
+	}
+      }
+      /* tower doesn't exist, place the preview point */
+      if (!exists) {
+	returnP.x = preview_points[i].x;
+	returnP.y = 0;
+	returnP.z = preview_points[i].z;
+	return returnP;
+      }
+    }
+  }
+  return returnP;
 }
 
 /*
@@ -65,6 +110,28 @@ void idle(void)
   }
 }
 
+/* 
+ *  incrementRGB
+ *  ------
+ *  Increment red, then green, the blue to get unique composite RGBs 
+ *  for our object selection 
+ */
+void incrementCurrentRGB(void)
+{
+  currentRed += 10;
+  if (currentRed > 255) {
+    currentRed = 5;
+    currentGreen += 10;
+    if (currentGreen > 255) {
+      currentGreen = 5;
+      currentBlue += 10;
+      if (currentBlue > 255) {
+	currentBlue = 5;
+      }
+    }
+  }
+}
+
 /*  
  *  processPicks
  *  ------
@@ -79,11 +146,11 @@ void processPicks(void)
   glGetIntegerv(GL_VIEWPORT,viewport);
   glReadPixels(mouseX,viewport[3]-mouseY,1,1,GL_RGB,GL_UNSIGNED_BYTE,(void *)pixel);
   if (debug) printf("R:%d  G:%d  B:%d\n",pixel[0],pixel[1],pixel[2]);
-  for (i = 0; i < Length(current_objects); i++){
+  for (i = 0; i < Length(towers); i++){
     GLint red,green,blue;
-    red = current_objects[i][5];
-    green = current_objects[i][6];
-    blue = current_objects[i][7];
+    red = towers[i].rgb.r;
+    green = towers[i].rgb.g;
+    blue = towers[i].rgb.b;
     /* Found the object we need, break out of loop */
     if (pixel[0] == red && pixel[1] == green && pixel[2] == blue) {
       objectPicked = i;
@@ -103,13 +170,6 @@ void processPicks(void)
  */
 void redisplayAll(void)
 {
-  /* 
-     At one point, for some reason related to textures, I was losing the window, 
-     so I was re-getting it here. 
-     *** a fix may be available here: http://graphics.tudelft.nl/~paul/glut.html
-     It's currently working without issue.
-     window = glutGetWindow();
-   */
   glutSetWindow(screen);
 
   /* set screen position, reshape */
@@ -130,17 +190,27 @@ void redisplayAll(void)
 void reset()
 {
   /* reset the current objects with 0's and default objects */
-  int i,j;
-  for (i=0;i<DEF_CURRENT_OBJS_SIZE;i++)
-    for (j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
-      current_objects[i][j] = 0;
+  int i;
+  for (i=0;i<DEF_CURRENT_OBJS_SIZE;i++) {
+    towers[i].id = 0;
+    towers[i].type = 0;
+    towers[i].translation.x = 0;
+    towers[i].translation.y = 0;
+    towers[i].translation.z = 0;
+    towers[i].texture = 0;
+    towers[i].rgb.r = 0;
+    towers[i].rgb.g = 0;
+    towers[i].rgb.b = 0;
+  }
+  /*
   if (drawDefaults)
     for (i=0;i<Length(default_objects);i++)
-      for(j=0;j<DEF_CURRENT_OBJS_ATRS;j++)
-	current_objects[i][j] = default_objects[i][j];
-  /* reset object selection */
+      towers[i] = default_objects[i];
+
   if (drawDefaults) lastCurrentObject = DEF_LAST_CURRENT_OBJECT+Length(default_objects);
-  else lastCurrentObject = DEF_LAST_CURRENT_OBJECT;
+  else lastCurrentObject = DEF_LAST_CURRENT_OBJECT;*/
+
+  /* reset object selection */
   objectSelected    = DEF_OBJ_SEL;
   objectPicked      = DEF_OBJ_PICKED;
   preview           = DEF_PREVIEW;
@@ -154,6 +224,10 @@ void reset()
   th   = DEF_TH;
   ph   = DEF_PH;
   fov  = DEF_FOV;
+  ecX  = DEF_ECX;
+  ecY  = DEF_ECY;
+  ecZ  = DEF_ECZ;  
+
   axes = DEF_AXES;
   vals = DEF_VALS;
   fontStyle    = DEF_FONT_STYLE;
