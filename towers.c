@@ -15,6 +15,7 @@ void basicTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
+  currentTexture = textures[t.texture];
 
   /* base */
   cylinder(0,0,0, 1,3);
@@ -23,6 +24,7 @@ void basicTower(tower t)
   /* top */
   cylinder(0,4,0, 1.2,1);
 
+  currentTexture = textures[TEX_DEFAULT];
   glPopMatrix();
 }
 
@@ -38,7 +40,7 @@ void advancedTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-
+  t2.texture = t.texture;
   basicTower(t2);
 
   /* 8x cones as spikes */
@@ -67,6 +69,7 @@ void coneTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
+  currentTexture = textures[t.texture];
 
   /* base */
   cone(0,-3,0, 1.4,4,DEF_D);
@@ -78,6 +81,7 @@ void coneTower(tower t)
   /* top */
   cylinder(0,4.0,0, 1.5,1.0);
 
+  currentTexture = textures[TEX_DEFAULT];
   glPopMatrix();
 }
 
@@ -93,7 +97,7 @@ void advancedConeTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-
+  t2.texture = t.texture;
   coneTower(t2);
 
   /* 8x cones as spikes */
@@ -122,6 +126,7 @@ void squareTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
+  currentTexture = textures[t.texture];
 
   /* base */
   cylinder(0,0,0, 1,3);
@@ -130,6 +135,7 @@ void squareTower(tower t)
   /* pyramid */
   pyramid(0,4,0, 0.75,0.75,0.75, 0);
 
+  currentTexture = textures[TEX_DEFAULT];
   glPopMatrix();
 }
 
@@ -145,7 +151,7 @@ void advancedSquareTower(tower t)
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-
+  t2.texture = t.texture;
   /* base */
   squareTower(t2);
 
@@ -171,13 +177,12 @@ void advancedSquareTower(tower t)
  */
 void fireTower(tower t)
 {
-  tower t2 = {0, OBJ_BASIC,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
+  tower t2 = {0, OBJ_FIRE,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1}};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_FIRE];
   basicTower(t2);
   currentTexture = textures[TEX_FIRE];
   sphere(0,6.2,0, 1,towerTh);
@@ -199,7 +204,6 @@ void fireTower2(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_FIRE];
   advancedTower(t2);
   currentTexture = textures[TEX_FIRE];
   sphere(0,6.2,0, 1,towerTh);
@@ -221,7 +225,6 @@ void iceTower(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_ICE];
   basicTower(t2);
   currentTexture = textures[TEX_ICE];
   star(0,6.2,0, 0.25,0.25,0.25, towerTh);
@@ -243,7 +246,6 @@ void iceTower2(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_ICE];
   advancedTower(t2);
   currentTexture = textures[TEX_ICE];
   star(0,6.2,0, 0.25,0.25,0.25, towerTh);
@@ -265,7 +267,6 @@ void earthTower(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_EARTH];
   coneTower(t2);
   currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
@@ -287,7 +288,6 @@ void earthTower2(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_EARTH];
   advancedConeTower(t2);
   currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
@@ -309,7 +309,6 @@ void poisonTower(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_POISON];
   squareTower(t2);
   currentTexture = textures[TEX_POISON];
   sphere(0,6,0, 1,towerTh);
@@ -331,7 +330,6 @@ void poisonTower2(tower t)
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  currentTexture = textures[TEX_POISON];
   advancedSquareTower(t2);
   currentTexture = textures[TEX_POISON];
   sphere(0,6,0, 1,towerTh);

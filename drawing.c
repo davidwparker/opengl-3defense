@@ -276,7 +276,6 @@ void drawObjects(void)
     tower t = {0, preview_tower.type,
 	       {preview_tower.translation.x,preview_tower.translation.y,preview_tower.translation.z},
 	       {1,1,1},{0,0,0},preview_tower.texture,{1,1,1}};
-    currentTexture = preview_tower.texture;
 
     /* awesome opacity for the preview */
     glEnable(GL_BLEND);
@@ -295,7 +294,6 @@ void drawObjects(void)
     else if (oType == OBJ_EARTH2) earthTower2(t);
     else if (oType == OBJ_POISON) poisonTower(t);
     else if (oType == OBJ_POISON2) poisonTower2(t);
-    currentTexture = TEX_DEFAULT;
     glDisable(GL_BLEND);
   }
 
@@ -305,7 +303,7 @@ void drawObjects(void)
       int oType = towers[i].type;
       tower t = {0, towers[i].type,
 		 {towers[i].translation.x,towers[i].translation.y,towers[i].translation.z},
-		 {1,1,1},{0,0,0},preview_tower.texture,
+		 {1,1,1},{0,0,0},towers[i].texture,
 		 {towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b}};
 
       /* draw the objects */
@@ -328,7 +326,6 @@ void drawObjects(void)
       else if (oType == OBJ_EARTH2) earthTower2(t);
       else if (oType == OBJ_POISON) poisonTower(t);
       else if (oType == OBJ_POISON2) poisonTower2(t);
-      currentTexture = TEX_DEFAULT;
 
       if (renderMode == DEF_SELECT) {
 	glEnable(GL_DITHER);

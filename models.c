@@ -368,7 +368,7 @@ void keep(double x,double y,double z,
 	  double th)
 {
   int i,j;
-  tower t = {0, OBJ_ADV_SQUARE,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_DEFAULT,{1,1,1}};
+  tower t = {0, OBJ_ADV_SQUARE,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_BRICK2,{1,1,1}};
   glPushMatrix();
   glTranslated(x,y,z);
   glRotated(th,0,1,0);
@@ -413,18 +413,13 @@ void keep(double x,double y,double z,
   glPopMatrix();
 
   /* towers */
-  currentTexture = textures[TEX_BRICK2];
   advancedSquareTower(t);
-  currentTexture = textures[TEX_BRICK2];
   t.translation.x = -9;
   advancedSquareTower(t);
-  currentTexture = textures[TEX_BRICK2];
   t.translation.z = -9;
   advancedSquareTower(t);
-  currentTexture = textures[TEX_BRICK2];
   t.translation.x = 9;
   advancedSquareTower(t);
-  currentTexture = textures[TEX_DEFAULT];
 
   /* crates */
   glPushMatrix();
@@ -436,6 +431,7 @@ void keep(double x,double y,double z,
   crate(5,0,10, 1,1,1, 0);
   glPopMatrix();
 
+  currentTexture = textures[TEX_DEFAULT];
   glPopMatrix();
 }
 
