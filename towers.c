@@ -9,14 +9,12 @@
  *  ------
  *  A basic tower just consists of several cylinders and a diamond
  */
-void basicTower(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th)
+void basicTower(tower t)
 {
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   /* base */
   cylinder(0,0,0, 1,3);
@@ -33,16 +31,15 @@ void basicTower(double x,double y,double z,
  *  ------
  *  An advanced tower is a basic tower plus spikes
  */
-void advancedTower(double x,double y,double z,
-		   double dx,double dy,double dz,
-		   double th)
+void advancedTower(tower t)
 {
+  tower t2 = {0, OBJ_BASIC,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  basicTower(0,0,0,1,1,1,0);
+  basicTower(t2);
 
   /* 8x cones as spikes */
   spike(0,1.2,-3, 0.5,1,DEF_D, 90,0,0);
@@ -64,14 +61,12 @@ void advancedTower(double x,double y,double z,
  *  ------
  *  A cone tower just consists of two cones and a cylinders
  */
-void coneTower(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th)
+void coneTower(tower t)
 {
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   /* base */
   cone(0,-3,0, 1.4,4,DEF_D);
@@ -91,16 +86,15 @@ void coneTower(double x,double y,double z,
  *  ------
  *  An advanced cone tower just consists of a cone tower and spikes
  */
-void advancedConeTower(double x,double y,double z,
-		       double dx,double dy,double dz,
-		       double th)
+void advancedConeTower(tower t)
 {
+  tower t2 = {0, OBJ_CONE,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
-  coneTower(0,0,0, 1,1,1, 0);
+  coneTower(t2);
 
   /* 8x cones as spikes */
   spike(0,1.2,-4, 0.5,1,DEF_D, 90,0,0);
@@ -122,14 +116,12 @@ void advancedConeTower(double x,double y,double z,
  *  ------
  *  A square tower just consists of a cylinder, a cube, and a pyramid
  */
-void squareTower(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th)
+void squareTower(tower t)
 {
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   /* base */
   cylinder(0,0,0, 1,3);
@@ -146,17 +138,16 @@ void squareTower(double x,double y,double z,
  *  ------
  *  An advanced square tower just consists of a square tower and spikes
  */
-void advancedSquareTower(double x,double y,double z,
-			 double dx,double dy,double dz,
-			 double th)
+void advancedSquareTower(tower t)
 {
+  tower t2 = {0, OBJ_SQUARE,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   /* base */
-  squareTower(0,0,0, 1,1,1, 0);
+  squareTower(t2);
 
   /* 8x cones as spikes */
   spike(0,1.2,-3.5, 0.5,1,DEF_D, 90,0,0);
@@ -178,17 +169,16 @@ void advancedSquareTower(double x,double y,double z,
  *  ------
  *  A fire tower is a plain tower with a sphere above it
  */
-void fireTower(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th)
+void fireTower(tower t)
 {
+  tower t2 = {0, OBJ_BASIC,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_FIRE];
-  basicTower(0,0,0, 1,1,1,0);
+  basicTower(t2);
   currentTexture = textures[TEX_FIRE];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -201,17 +191,16 @@ void fireTower(double x,double y,double z,
  *  ------
  *  A fire tower is an advanced tower with a sphere above it
  */
-void fireTower2(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th)
+void fireTower2(tower t)
 {
+  tower t2 = {0, OBJ_FIRE2,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_FIRE];
-  advancedTower(0,0,0, 1,1,1,0);
+  advancedTower(t2);
   currentTexture = textures[TEX_FIRE];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -224,17 +213,16 @@ void fireTower2(double x,double y,double z,
  *  ------
  *  An ice tower is a plain tower with a star above it
  */
-void iceTower(double x,double y,double z,
-	      double dx,double dy,double dz,
-	      double th)
+void iceTower(tower t)
 {
+  tower t2 = {0, OBJ_ICE,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_ICE];
-  basicTower(0,0,0, 1,1,1,0);
+  basicTower(t2);
   currentTexture = textures[TEX_ICE];
   star(0,6.2,0, 0.25,0.25,0.25, towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -247,17 +235,16 @@ void iceTower(double x,double y,double z,
  *  ------
  *  An ice tower is an advanced tower with a star above it
  */
-void iceTower2(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th)
+void iceTower2(tower t)
 {
+  tower t2 = {0, OBJ_ICE2,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_ICE];
-  advancedTower(0,0,0, 1,1,1,0);
+  advancedTower(t2);
   currentTexture = textures[TEX_ICE];
   star(0,6.2,0, 0.25,0.25,0.25, towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -270,17 +257,16 @@ void iceTower2(double x,double y,double z,
  *  ------
  *  An earth tower is a cone tower with a sphere above it
  */
-void earthTower(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th)
+void earthTower(tower t)
 {
+  tower t2 = {0, OBJ_EARTH,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_EARTH];
-  coneTower(0,0,0, 1,1,1, 0);
+  coneTower(t2);
   currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -293,17 +279,16 @@ void earthTower(double x,double y,double z,
  *  ------
  *  An earth tower 2 is an advanced cone tower with a sphere above it
  */
-void earthTower2(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th)
+void earthTower2(tower t)
 {
+  tower t2 = {0, OBJ_EARTH,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_EARTH];
-  advancedConeTower(0,0,0, 1,1,1, 0);
+  advancedConeTower(t2);
   currentTexture = textures[TEX_EARTH];
   sphere(0,6.2,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -316,17 +301,16 @@ void earthTower2(double x,double y,double z,
  *  ------
  *  An poison tower is a square tower with a sphere above it
  */
-void poisonTower(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th)
+void poisonTower(tower t)
 {
+  tower t2 = {0, OBJ_POISON,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_POISON];
-  squareTower(0,0,0, 1,1,1, 0);
+  squareTower(t2);
   currentTexture = textures[TEX_POISON];
   sphere(0,6,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];
@@ -339,17 +323,16 @@ void poisonTower(double x,double y,double z,
  *  ------
  *  An poison tower 2 is an advanced square tower with a sphere above it
  */
-void poisonTower2(double x,double y,double z,
-		  double dx,double dy,double dz,
-		  double th)
+void poisonTower2(tower t)
 {
+  tower t2 = {0, OBJ_POISON,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1}};
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
+  glTranslated(t.translation.x,t.translation.y,t.translation.z);
+  glRotated(t.rotation.y,0,1,0);
+  glScaled(t.scale.x,t.scale.y,t.scale.z);
 
   currentTexture = textures[TEX_POISON];
-  advancedSquareTower(0,0,0, 1,1,1, 0);
+  advancedSquareTower(t2);
   currentTexture = textures[TEX_POISON];
   sphere(0,6,0, 1,towerTh);
   currentTexture = textures[TEX_DEFAULT];

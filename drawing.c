@@ -272,30 +272,29 @@ void drawObjects(void)
 
   /* preview tower */
   if (preview_tower.id != DEF_OBJ_SEL) {
-    GLfloat oType,oX,oY,oZ;
-    oType = preview_tower.type;
-    oX = preview_tower.translation.x;
-    oY = preview_tower.translation.y;
-    oZ = preview_tower.translation.z;
+    int oType = preview_tower.type;
+    tower t = {0, preview_tower.type,
+	       {preview_tower.translation.x,preview_tower.translation.y,preview_tower.translation.z},
+	       {1,1,1},{0,0,0},preview_tower.texture,{1,1,1}};
     currentTexture = preview_tower.texture;
 
     /* awesome opacity for the preview */
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE,GL_ONE_MINUS_DST_COLOR);
-    if (oType == OBJ_BASIC) basicTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_ADV) advancedTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_CONE) coneTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_ADV_CONE) advancedConeTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_SQUARE) squareTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_FIRE) fireTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_FIRE2) fireTower2(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_ICE) iceTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_ICE2) iceTower2(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_EARTH) earthTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_EARTH2) earthTower2(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_POISON) poisonTower(oX,oY,oZ, 1,1,1, 0);
-    else if (oType == OBJ_POISON2) poisonTower2(oX,oY,oZ, 1,1,1, 0);
+    if (oType == OBJ_BASIC) basicTower(t);
+    else if (oType == OBJ_ADV) advancedTower(t);
+    else if (oType == OBJ_CONE) coneTower(t);
+    else if (oType == OBJ_ADV_CONE) advancedConeTower(t);
+    else if (oType == OBJ_SQUARE) squareTower(t);
+    else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(t);
+    else if (oType == OBJ_FIRE) fireTower(t);
+    else if (oType == OBJ_FIRE2) fireTower2(t);
+    else if (oType == OBJ_ICE) iceTower(t);
+    else if (oType == OBJ_ICE2) iceTower2(t);
+    else if (oType == OBJ_EARTH) earthTower(t);
+    else if (oType == OBJ_EARTH2) earthTower2(t);
+    else if (oType == OBJ_POISON) poisonTower(t);
+    else if (oType == OBJ_POISON2) poisonTower2(t);
     currentTexture = TEX_DEFAULT;
     glDisable(GL_BLEND);
   }
@@ -303,37 +302,32 @@ void drawObjects(void)
   /* towers */
   if (Length(towers) > 0) {
     for (i = 0; i < Length(towers); i++){
-      GLfloat oType,oX,oY,oZ;
-      GLint red,green,blue;
-      oType = towers[i].id;
-      oX = towers[i].translation.x;
-      oY = towers[i].translation.y;
-      oZ = towers[i].translation.z;
-      currentTexture = towers[i].texture;
-      red = towers[i].rgb.r;
-      green = towers[i].rgb.g;
-      blue = towers[i].rgb.b;
+      int oType = towers[i].type;
+      tower t = {0, towers[i].type,
+		 {towers[i].translation.x,towers[i].translation.y,towers[i].translation.z},
+		 {1,1,1},{0,0,0},preview_tower.texture,
+		 {towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b}};
 
       /* draw the objects */
       if (renderMode == DEF_SELECT) {
 	glDisable(GL_DITHER);
 	glDisable(GL_LIGHTING);
-	glColor3ub(red,green,blue);
+	glColor3ub(towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b);
       }
-      if (oType == OBJ_BASIC) basicTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_ADV) advancedTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_CONE) coneTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_ADV_CONE) advancedConeTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_SQUARE) squareTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_FIRE) fireTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_FIRE2) fireTower2(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_ICE) iceTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_ICE2) iceTower2(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_EARTH) earthTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_EARTH2) earthTower2(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_POISON) poisonTower(oX,oY,oZ, 1,1,1, 0);
-      else if (oType == OBJ_POISON2) poisonTower2(oX,oY,oZ, 1,1,1, 0);
+      if (oType == OBJ_BASIC) basicTower(t);
+      else if (oType == OBJ_ADV) advancedTower(t);
+      else if (oType == OBJ_CONE) coneTower(t);
+      else if (oType == OBJ_ADV_CONE) advancedConeTower(t);
+      else if (oType == OBJ_SQUARE) squareTower(t);
+      else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(t);
+      else if (oType == OBJ_FIRE) fireTower(t);
+      else if (oType == OBJ_FIRE2) fireTower2(t);
+      else if (oType == OBJ_ICE) iceTower(t);
+      else if (oType == OBJ_ICE2) iceTower2(t);
+      else if (oType == OBJ_EARTH) earthTower(t);
+      else if (oType == OBJ_EARTH2) earthTower2(t);
+      else if (oType == OBJ_POISON) poisonTower(t);
+      else if (oType == OBJ_POISON2) poisonTower2(t);
       currentTexture = TEX_DEFAULT;
 
       if (renderMode == DEF_SELECT) {
@@ -363,4 +357,9 @@ void drawScene(void)
   drawKeep();
   drawMinions();
   drawObjects();
+}
+
+void moveMinions(void)
+{
+
 }

@@ -81,6 +81,25 @@ GLfloat cube_v[][3] = {
   {+1.0,+1.0,+1.0},{-1.0,+1.0,+1.0}
 };
 
+/*  path cube vertices, texture, rotation */
+pathCube pathCubes[] = {
+  {{21,-2.9,-1},TEX_STREET1,90},{{17,-2.9,-1},TEX_STREET1,90},{{13,-2.9,-1},TEX_STREET3,270},
+  {{13,-2.9,-5},TEX_STREET1,180},{{13,-2.9,-9},TEX_STREET1,180},{{13,-2.9,-13},TEX_STREET1,180},
+  {{13,-2.9,-17},TEX_STREET3,90},{{9,-2.9,-17},TEX_STREET1,90},{{5,-2.9,-17},TEX_STREET3,180},
+  {{5,-2.9,-17},TEX_STREET1,180},{{5,-2.9,-13},TEX_STREET1,180},{{5,-2.9,-9},TEX_STREET1,180},
+  {{5,-2.9,-5},TEX_STREET1,180},{{5,-2.9,-1},TEX_STREET1,180},{{5,-2.9,3},TEX_STREET1,180},
+  {{5,-2.9,7},TEX_STREET3,270},{{9,-2.9,7},TEX_STREET1,270},{{13,-2.9,7},TEX_STREET1,270},
+  {{17,-2.9,7},TEX_STREET3,90},{{17,-2.9,11},TEX_STREET1,0},{{17,-2.9,15},TEX_STREET3,0},
+  {{13,-2.9,15},TEX_STREET1,90},{{9,-2.9,15},TEX_STREET1,90},{{5,-2.9,15},TEX_STREET1,90},
+  {{1,-2.9,15},TEX_STREET1,90},{{-3,-2.9,15},TEX_STREET3,270},{{-3,-2.9,11},TEX_STREET1,180},
+  {{-3,-2.9,7},TEX_STREET1,180},{{-3,-2.9,3},TEX_STREET1,180},{{-3,-2.9,-1},TEX_STREET1,180},
+  {{-3,-2.9,-5},TEX_STREET1,180},{{-3,-2.9,-9},TEX_STREET1,180},{{-3,-2.9,-13},TEX_STREET1,180},
+  {{-3,-2.9,-17},TEX_STREET3,90},{{-7,-2.9,-17},TEX_STREET1,90},{{-11,-2.9,-17},TEX_STREET3,180},
+  {{-11,-2.9,-13},TEX_STREET1,180},{{-11,-2.9,-9},TEX_STREET1,180},{{-11,-2.9,-5},TEX_STREET1,180},
+  {{-11,-2.9,-1},TEX_STREET1,180},{{-11,-2.9,3},TEX_STREET1,180},{{-11,-2.9,7},TEX_STREET1,180},
+  {{-11,-2.9,11},TEX_STREET3,0},{{-15,-2.9,11},TEX_STREET1,90},{{-19,-2.9,11},TEX_STREET1,90}
+};
+
 /* default objects */
 GLfloat default_objects[4][8] = {
   {OBJ_FIRE2, -2,0,-2, TEX_DEFAULT, 255,0,0},

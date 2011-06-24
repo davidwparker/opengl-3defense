@@ -80,6 +80,7 @@ extern int currentTexture;
 extern int currentTextureSelected;
 extern int backgrounds[6];
 extern GLfloat cube_v[][3];
+extern pathCube pathCubes[];
 extern GLfloat default_objects[4][8];
 
 #endif

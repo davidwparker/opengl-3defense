@@ -106,7 +106,8 @@ void idle(void)
     lastTime = time;
     if (move) lightPh = fmod(45*t,360.0);
     if (topsRotate) towerTh = fmod(90*t,360.0);
-    if (move || topsRotate) redisplayAll();
+    moveMinions();
+    redisplayAll();
   }
 }
 

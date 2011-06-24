@@ -10,11 +10,11 @@ typedef struct rgb {
   int b;
 } rgb;
 
-typedef struct pathC {
+typedef struct pathCube {
   point p;
   int texture;
   int rotation;
-} pathC;
+} pathCube;
 
 typedef struct tower {
   int id;
@@ -33,4 +33,7 @@ typedef struct minion {
   point rotation;
   int texture;
   rgb rgb;
+  int health;
+  int speed;
+  int money;
 } minion;

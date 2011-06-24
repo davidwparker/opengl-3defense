@@ -34,6 +34,7 @@ void spike(double x, double y, double z,
 	   double r,double h,int deg,
 	   double ox,double oy,double oz);
 void board(void);
+void pathBlock(pathCube p);
 void path(void);
 void crate(double x, double y, double z,
 	   double dx,double dy,double dz,
@@ -64,48 +65,20 @@ void plane(double x, double y, double z,
 	   double th);
 
 /*  Towers (towers.c)  */
-void basicTower(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th);
-void advancedTower(double x,double y,double z,
-		   double dx,double dy,double dz,
-		   double th);
-void coneTower(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th);
-void advancedConeTower(double x,double y,double z,
-		       double dx,double dy,double dz,
-		       double th);
-void squareTower(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th);
-void advancedSquareTower(double x,double y,double z,
-			 double dx,double dy,double dz,
-			 double th);
-void fireTower(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th);
-void fireTower2(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th);
-void iceTower(double x,double y,double z,
-	      double dx,double dy,double dz,
-	      double th);
-void iceTower2(double x,double y,double z,
-	       double dx,double dy,double dz,
-	       double th);
-void earthTower(double x,double y,double z,
-		double dx,double dy,double dz,
-		double th);
-void earthTower2(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th);
-void poisonTower(double x,double y,double z,
-		 double dx,double dy,double dz,
-		 double th);
-void poisonTower2(double x,double y,double z,
-		  double dx,double dy,double dz,
-		  double th);
+void basicTower(tower t);
+void advancedTower(tower t);
+void coneTower(tower t);
+void advancedConeTower(tower t);
+void squareTower(tower t);
+void advancedSquareTower(tower t);
+void fireTower(tower t);
+void fireTower2(tower t);
+void iceTower(tower t);
+void iceTower2(tower t);
+void earthTower(tower t);
+void earthTower2(tower t);
+void poisonTower(tower t);
+void poisonTower2(tower t);
 
 /*  General Convenience (general.c)- the catchall  */
 point findMousePosition(int x, int y);
@@ -116,7 +89,7 @@ void processPicks(void);
 void redisplayAll(void);
 void reset(void);
 
-/*  Initialization  (initialize.c)  */
+/*  Initialization (initialize.c)  */
 void initialize(void);
 void initTextures(void);
 void initBackground(void);
@@ -125,7 +98,7 @@ void initPreviewPoints(void);
 void screenInit(void);
 void sidebarInit(void);
 
-/*  Display and draw  (drawing.c)  */
+/*  Drawing (drawing.c)  */
 void drawAxes(void);
 void drawParameters(void);
 void drawGrid(void);
@@ -138,6 +111,7 @@ void drawKeep(void);
 void drawMinions(void);
 void drawObjects(void);
 void drawScene(void);
+void moveMinions(void);
 
 /*  Main window (window.c)  */
 void windowDisplay(void);

@@ -125,11 +125,16 @@ void board(void)
   currentTexture = textures[TEX_DEFAULT];
 }
 
-void pathCube(pathC path)
+/*
+ *  pathBlock
+ *  ------
+ *  Draws an individual block of the path
+ */
+void pathBlock(pathCube p)
 {
   glPushMatrix();
-  currentTexture = path.texture;
-  cube(path.p.x,path.p.y,path.p.z, 2,0.2,2, path.rotation);
+  currentTexture = textures[p.texture];
+  cube(p.p.x,p.p.y,p.p.z, 2,0.2,2, p.rotation);
   glPopMatrix();
 }
 
@@ -140,30 +145,11 @@ void pathCube(pathC path)
  */
 void path(void)
 {
-  int ts1 = textures[TEX_STREET1];
-  int ts3 = textures[TEX_STREET3];
-  pathC path[] = {
-    {{21,-2.9,-1},ts1,90},{{17,-2.9,-1},ts1,90},{{13,-2.9,-1},ts3,270},
-    {{13,-2.9,-5},ts1,180},{{13,-2.9,-9},ts1,180},{{13,-2.9,-13},ts1,180},
-    {{13,-2.9,-17},ts3,90},{{9,-2.9,-17},ts1,90},{{5,-2.9,-17},ts3,180},
-    {{5,-2.9,-17},ts1,180},{{5,-2.9,-13},ts1,180},{{5,-2.9,-9},ts1,180},
-    {{5,-2.9,-5},ts1,180},{{5,-2.9,-1},ts1,180},{{5,-2.9,3},ts1,180},
-    {{5,-2.9,7},ts3,270},{{9,-2.9,7},ts1,270},{{13,-2.9,7},ts1,270},
-    {{17,-2.9,7},ts3,90},{{17,-2.9,11},ts1,0},{{17,-2.9,15},ts3,0},
-    {{13,-2.9,15},ts1,90},{{9,-2.9,15},ts1,90},{{5,-2.9,15},ts1,90},
-    {{1,-2.9,15},ts1,90},{{-3,-2.9,15},ts3,270},{{-3,-2.9,11},ts1,180},
-    {{-3,-2.9,7},ts1,180},{{-3,-2.9,3},ts1,180},{{-3,-2.9,-1},ts1,180},
-    {{-3,-2.9,-5},ts1,180},{{-3,-2.9,-9},ts1,180},{{-3,-2.9,-13},ts1,180},
-    {{-3,-2.9,-17},ts3,90},{{-7,-2.9,-17},ts1,90},{{-11,-2.9,-17},ts3,180},
-    {{-11,-2.9,-13},ts1,180},{{-11,-2.9,-9},ts1,180},{{-11,-2.9,-5},ts1,180},
-    {{-11,-2.9,-1},ts1,180},{{-11,-2.9,3},ts1,180},{{-11,-2.9,7},ts1,180},
-    {{-11,-2.9,11},ts3,0},{{-15,-2.9,11},ts1,90},{{-19,-2.9,11},ts1,90},
-  };
   int i;
-
   glPushMatrix();
-  for (i=0; i < Length(path); i++) {
-    pathCube(path[i]);
+  /* Length(pathCubes = 45... error about sizeof with structs */
+  for (i=0; i < 45; i++) {
+    pathBlock(pathCubes[i]);
   }
   currentTexture = textures[TEX_DEFAULT];
   glPopMatrix();
@@ -382,6 +368,7 @@ void keep(double x,double y,double z,
 	  double th)
 {
   int i,j;
+  tower t = {0, OBJ_ADV_SQUARE,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_DEFAULT,{1,1,1}};
   glPushMatrix();
   glTranslated(x,y,z);
   glRotated(th,0,1,0);
@@ -427,13 +414,16 @@ void keep(double x,double y,double z,
 
   /* towers */
   currentTexture = textures[TEX_BRICK2];
-  advancedSquareTower(9,0,9,1.5,2,1.5,0);
+  advancedSquareTower(t);
   currentTexture = textures[TEX_BRICK2];
-  advancedSquareTower(-9,0,9,1.5,2,1.5,0);
+  t.translation.x = -9;
+  advancedSquareTower(t);
   currentTexture = textures[TEX_BRICK2];
-  advancedSquareTower(-9,0,-9,1.5,2,1.5,0);
+  t.translation.z = -9;
+  advancedSquareTower(t);
   currentTexture = textures[TEX_BRICK2];
-  advancedSquareTower(9,0,-9,1.5,2,1.5,0);
+  t.translation.x = 9;
+  advancedSquareTower(t);
   currentTexture = textures[TEX_DEFAULT];
 
   /* crates */
