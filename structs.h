@@ -14,6 +14,7 @@ typedef struct pathCube {
   point p;
   int texture;
   int rotation;
+  int dir;
 } pathCube;
 
 typedef struct tower {
@@ -28,12 +29,13 @@ typedef struct tower {
 
 typedef struct minion {
   int id;
+  int type;
   point translation;
   point scale;
   point rotation;
   int texture;
   rgb rgb;
   int health;
-  int speed;
   int money;
+  int speed;
 } minion;

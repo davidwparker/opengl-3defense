@@ -74,6 +74,10 @@
 
 /*  Minions */
 #define DEF_MINION_OBJ 0
+#define DEF_NORTH 270
+#define DEF_EAST 180
+#define DEF_SOUTH 90
+#define DEF_WEST 0
 
 /*  Lighting */
 #define DEF_LIGHT 1

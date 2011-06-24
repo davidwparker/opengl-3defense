@@ -258,7 +258,10 @@ void drawKeep(void)
  */
 void drawMinions(void)
 {
-  plane(23,0,-0.5,0.3,0.3,0.3,270);
+  int i;
+  for (i=0;i<Length(minions);i++) {
+    minionModel(minions[i]);
+  }
 }
 
 /*
@@ -273,7 +276,7 @@ void drawObjects(void)
   /* preview tower */
   if (preview_tower.id != DEF_OBJ_SEL) {
     int oType = preview_tower.type;
-    tower t = {0, preview_tower.type,
+    tower t = {preview_tower.id, preview_tower.type,
 	       {preview_tower.translation.x,preview_tower.translation.y,preview_tower.translation.z},
 	       {1,1,1},{0,0,0},preview_tower.texture,{1,1,1}};
 
@@ -299,7 +302,7 @@ void drawObjects(void)
 
   /* towers */
   if (Length(towers) > 0) {
-    for (i = 0; i < Length(towers); i++){
+    for (i = 0; i < Length(towers); i++) {
       int oType = towers[i].type;
       tower t = {0, towers[i].type,
 		 {towers[i].translation.x,towers[i].translation.y,towers[i].translation.z},
@@ -326,7 +329,7 @@ void drawObjects(void)
       else if (oType == OBJ_EARTH2) earthTower2(t);
       else if (oType == OBJ_POISON) poisonTower(t);
       else if (oType == OBJ_POISON2) poisonTower2(t);
-
+      
       if (renderMode == DEF_SELECT) {
 	glEnable(GL_DITHER);
 	glEnable(GL_LIGHTING);
@@ -358,5 +361,31 @@ void drawScene(void)
 
 void moveMinions(void)
 {
-
+  int i,j;
+  for (i=0;i<Length(minions);i++) {
+    //    int speed = minions[i].speed;
+    /* Length(pathCubes) = 44... error about sizeof with structs */
+    for (j=0;j<44;j++) {
+      /* first time through */
+      if (minions[i].translation.x > 22) {
+	minions[i].translation.x = pathCubes[0].p.x;
+	minions[i].translation.z = pathCubes[0].p.z;
+	minions[i].rotation.y = pathCubes[0].dir;
+	break;
+      }
+      /* if we're at the previous position, increment by one */
+      else if(minions[i].translation.x == pathCubes[j-1].p.x &&
+	      minions[i].translation.z == pathCubes[j-1].p.z) {
+	minions[i].translation.x = pathCubes[j].p.x;
+	minions[i].translation.z = pathCubes[j].p.z;
+	minions[i].rotation.y = pathCubes[j].dir;
+	break;
+      }
+      if (j == 43) {
+	minions[i].translation.x = pathCubes[0].p.x;
+	minions[i].translation.z = pathCubes[0].p.z;
+	minions[i].rotation.y = pathCubes[0].dir;
+	}
+    }
+  }
 }

@@ -60,9 +60,7 @@ void wall(double x, double y, double z,
 void keep(double x, double y, double z,
 	  double dx,double dy,double dz,
 	  double th);
-void plane(double x, double y, double z,
-	   double dx,double dy,double dz,
-	   double th);
+void minionModel(minion m);
 
 /*  Towers (towers.c)  */
 void basicTower(tower t);
@@ -94,6 +92,7 @@ void initialize(void);
 void initTextures(void);
 void initBackground(void);
 void initObjs(void);
+void initMinions(void);
 void initPreviewPoints(void);
 void screenInit(void);
 void sidebarInit(void);

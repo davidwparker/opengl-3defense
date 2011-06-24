@@ -17,6 +17,7 @@ void initialize(void)
   initTextures();
   initBackground();
   initObjs();
+  initMinions();
   initPreviewPoints();
 }
 
@@ -95,6 +96,19 @@ void initBackground(void)
 void initObjs(void)
 {
   minionObj = loadOBJ("obj-f16.obj");
+}
+
+/*
+ *  initMinions
+ *  ------
+ *  initializes our minions
+ */
+void initMinions(void)
+{
+  minion m = {0,minionObj,{23,0,-0.5},
+	      {0.3,0.3,0.3,},{0,0,0},
+	      0,{1,1,1},0,0,1};
+  minions[0] = m;
 }
 
 /*

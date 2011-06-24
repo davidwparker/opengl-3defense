@@ -138,7 +138,10 @@ void sidebarMouse(int btn, int state, int x, int y)
     else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_EARTH;
     else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_POISON;
   }
-
+  /* 
+   * TODO: fix bug where if user clicks here instead of using keyboard that the preview
+   * functionality doesn't work 
+   */
   redisplayAll();
 }
 

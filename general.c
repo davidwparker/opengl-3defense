@@ -102,7 +102,7 @@ void idle(void)
   static int lastTime = 0;
   int time = glutGet(GLUT_ELAPSED_TIME);
   double t = time/1000.0;
-  if (lastTime == 0 || time >= lastTime + 20) {
+  if (lastTime == 0 || time >= lastTime + 30) {
     lastTime = time;
     if (move) lightPh = fmod(45*t,360.0);
     if (topsRotate) towerTh = fmod(90*t,360.0);

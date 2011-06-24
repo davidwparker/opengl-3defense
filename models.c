@@ -147,8 +147,8 @@ void path(void)
 {
   int i;
   glPushMatrix();
-  /* Length(pathCubes = 45... error about sizeof with structs */
-  for (i=0; i < 45; i++) {
+  /* Length(pathCubes) = 44... error about sizeof with structs */
+  for (i=0; i < 44; i++) {
     pathBlock(pathCubes[i]);
   }
   currentTexture = textures[TEX_DEFAULT];
@@ -436,18 +436,17 @@ void keep(double x,double y,double z,
 }
 
 /*
- *  plane
+ *  minionModel
  *  ------
- *  A plane is just an obj
+ *  A minionModel is just an obj at a particular location
  */
-void plane(double x,double y,double z,
-	   double dx,double dy,double dz,
-	   double th)
+void minionModel(minion m)
 {
   glPushMatrix();
-  glTranslated(x,y,z);
-  glRotated(th,0,1,0);
-  glScaled(dx,dy,dz);
-  glCallList(minionObj);
+  glTranslated(m.translation.x,m.translation.y,m.translation.z);
+  glRotated(m.rotation.y,0,1,0);
+  glScaled(m.scale.x,m.scale.y,m.scale.z);
+  glCallList(m.type);
   glPopMatrix();
 }
+

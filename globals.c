@@ -37,10 +37,9 @@ int mouseY=0;
 int mouseZ=0;
 
 /*  OBJECT SELECTION  */
-minion minions[1];                      /* holds the minions */
 tower towers[DEF_CURRENT_OBJS_SIZE];    /* holds towers - the most our board can hold is 53 */
-tower preview_tower;                    /* ho lds the preview tower */
-point preview_points[DEF_CURRENT_OBJS_SIZE];/* holds valid locations of preview locations */
+tower preview_tower;                    /* holds the preview tower */
+point preview_points[DEF_CURRENT_OBJS_SIZE];   /* holds valid locations of preview locations */
 int preview=DEF_PREVIEW;                       /* determine if preview is on */
 int objectSelected=DEF_OBJ_SEL;                /* the object to be placed */
 int lastCurrentObject=DEF_LAST_CURRENT_OBJECT; /* determine last object */
@@ -52,7 +51,8 @@ int currentGreen=DEF_CURRENT_GREEN;
 int currentBlue=DEF_CURRENT_BLUE;
 
 /*  MINIONS */
-int minionObj=DEF_MINION_OBJ; /* minion obj */
+minion minions[1];                      /* holds the minions */
+int minionObj=DEF_MINION_OBJ;           /* minion obj */
 
 /*  LIGHTING */
 int light=DEF_LIGHT;          /* toggle light */
@@ -83,21 +83,28 @@ GLfloat cube_v[][3] = {
 
 /*  path cube vertices, texture, rotation */
 pathCube pathCubes[] = {
-  {{21,-2.9,-1},TEX_STREET1,90},{{17,-2.9,-1},TEX_STREET1,90},{{13,-2.9,-1},TEX_STREET3,270},
-  {{13,-2.9,-5},TEX_STREET1,180},{{13,-2.9,-9},TEX_STREET1,180},{{13,-2.9,-13},TEX_STREET1,180},
-  {{13,-2.9,-17},TEX_STREET3,90},{{9,-2.9,-17},TEX_STREET1,90},{{5,-2.9,-17},TEX_STREET3,180},
-  {{5,-2.9,-17},TEX_STREET1,180},{{5,-2.9,-13},TEX_STREET1,180},{{5,-2.9,-9},TEX_STREET1,180},
-  {{5,-2.9,-5},TEX_STREET1,180},{{5,-2.9,-1},TEX_STREET1,180},{{5,-2.9,3},TEX_STREET1,180},
-  {{5,-2.9,7},TEX_STREET3,270},{{9,-2.9,7},TEX_STREET1,270},{{13,-2.9,7},TEX_STREET1,270},
-  {{17,-2.9,7},TEX_STREET3,90},{{17,-2.9,11},TEX_STREET1,0},{{17,-2.9,15},TEX_STREET3,0},
-  {{13,-2.9,15},TEX_STREET1,90},{{9,-2.9,15},TEX_STREET1,90},{{5,-2.9,15},TEX_STREET1,90},
-  {{1,-2.9,15},TEX_STREET1,90},{{-3,-2.9,15},TEX_STREET3,270},{{-3,-2.9,11},TEX_STREET1,180},
-  {{-3,-2.9,7},TEX_STREET1,180},{{-3,-2.9,3},TEX_STREET1,180},{{-3,-2.9,-1},TEX_STREET1,180},
-  {{-3,-2.9,-5},TEX_STREET1,180},{{-3,-2.9,-9},TEX_STREET1,180},{{-3,-2.9,-13},TEX_STREET1,180},
-  {{-3,-2.9,-17},TEX_STREET3,90},{{-7,-2.9,-17},TEX_STREET1,90},{{-11,-2.9,-17},TEX_STREET3,180},
-  {{-11,-2.9,-13},TEX_STREET1,180},{{-11,-2.9,-9},TEX_STREET1,180},{{-11,-2.9,-5},TEX_STREET1,180},
-  {{-11,-2.9,-1},TEX_STREET1,180},{{-11,-2.9,3},TEX_STREET1,180},{{-11,-2.9,7},TEX_STREET1,180},
-  {{-11,-2.9,11},TEX_STREET3,0},{{-15,-2.9,11},TEX_STREET1,90},{{-19,-2.9,11},TEX_STREET1,90}
+  {{21,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},  {{17,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},
+  {{13,-2.9,-1},  TEX_STREET3,270,DEF_NORTH}, {{13,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
+  {{13,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{13,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
+  {{13,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{9,-2.9,-17},  TEX_STREET1,90,DEF_NORTH},
+  {{5,-2.9,-17},  TEX_STREET3,180,DEF_NORTH}, {{5,-2.9,-13},  TEX_STREET1,180,DEF_WEST},
+  {{5,-2.9,-9},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,-5},   TEX_STREET1,180,DEF_WEST},
+  {{5,-2.9,-1},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,3},    TEX_STREET1,180,DEF_WEST},
+  {{5,-2.9,7},    TEX_STREET3,270,DEF_SOUTH}, {{9,-2.9,7},    TEX_STREET1,270,DEF_SOUTH},
+  {{13,-2.9,7},   TEX_STREET1,270,DEF_SOUTH}, {{17,-2.9,7},   TEX_STREET3,90,DEF_WEST},
+  {{17,-2.9,11},  TEX_STREET1,0,DEF_WEST},    {{17,-2.9,15},  TEX_STREET3,0,DEF_NORTH},
+  {{13,-2.9,15},  TEX_STREET1,90,DEF_NORTH},  {{9,-2.9,15},   TEX_STREET1,90,DEF_NORTH},
+  {{5,-2.9,15},   TEX_STREET1,90,DEF_NORTH},  {{1,-2.9,15},   TEX_STREET1,90,DEF_NORTH},
+  {{-3,-2.9,15},  TEX_STREET3,270,DEF_EAST},  {{-3,-2.9,11},  TEX_STREET1,0,DEF_EAST},
+  {{-3,-2.9,7},   TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,3},   TEX_STREET1,0,DEF_EAST},
+  {{-3,-2.9,-1},  TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
+  {{-3,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
+  {{-3,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{-7,-2.9,-17}, TEX_STREET1,90,DEF_NORTH},
+  {{-11,-2.9,-17},TEX_STREET3,180,DEF_WEST},  {{-11,-2.9,-13},TEX_STREET1,180,DEF_WEST},
+  {{-11,-2.9,-9}, TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,-5}, TEX_STREET1,180,DEF_WEST},
+  {{-11,-2.9,-1}, TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,3},  TEX_STREET1,180,DEF_WEST},
+  {{-11,-2.9,7},  TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,11}, TEX_STREET3,0,DEF_NORTH},
+  {{-15,-2.9,11}, TEX_STREET1,90,DEF_NORTH},  {{-19,-2.9,11}, TEX_STREET1,90,DEF_NORTH}
 };
 
 /* default objects */
