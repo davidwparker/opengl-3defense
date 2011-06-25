@@ -2,3 +2,4 @@ executables/*
 *~
 *.o
 .DS_Store
+*.a
