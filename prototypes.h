@@ -93,6 +93,7 @@ void initTextures(void);
 void initBackground(void);
 void initObjs(void);
 void initMinions(void);
+void initPath(void);
 void initPreviewPoints(void);
 void screenInit(void);
 void sidebarInit(void);
@@ -110,7 +111,11 @@ void drawKeep(void);
 void drawMinions(void);
 void drawObjects(void);
 void drawScene(void);
+
+/*  Animation (animate.c)  */
 void moveMinions(void);
+void moveLight(double t);
+void moveTowerTops(double t);
 
 /*  Main window (window.c)  */
 void windowDisplay(void);

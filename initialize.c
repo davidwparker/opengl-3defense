@@ -18,6 +18,7 @@ void initialize(void)
   initBackground();
   initObjs();
   initMinions();
+  initPath();
   initPreviewPoints();
 }
 
@@ -105,10 +106,61 @@ void initObjs(void)
  */
 void initMinions(void)
 {
-  minion m = {0,minionObj,{23,0,-0.5},
+  /* 
+     minion: 
+     typedef struct minion {
+     int id;
+     int type;
+     point translation;
+     point scale;
+     point rotation;
+     int texture;
+     rgb rgb;
+     
+     char* name;
+     int damage;
+     int health;
+     int money;
+     int speed;
+     int wave;
+  */
+
+  minion m = {0,minionObj,{26,0,-0.5},
 	      {0.3,0.3,0.3,},{0,0,0},
-	      0,{1,1,1},0,0,1};
+	      0,{1,1,1},"F16",0,0,0,5,0};
   minions[0] = m;
+}
+
+/*
+ *  initPath
+ *  ------
+ *  initializes all the points that we'll be using for the path
+ */
+void initPath(void)
+{
+  int i,j;
+  pathCube currentPath, nextPath, addedPath;
+  /* 4/50 = 0.08 = # points between centerpoints/# desired points */
+  double moveFactor = 0.08;
+  fullPath[0] = pathCubes[0];
+
+  /* Length(pathCubes) = 45... error about sizeof with structs */
+  /* one less since we're checking next path */
+  for (i=0;i<(DEF_PATH_LEN-1);i++) {
+    addedPath = currentPath = pathCubes[i];
+    nextPath = pathCubes[i+1];
+
+    /* create 50 points between each pathCube for 2250 points total */
+    for (j=0;j<DEF_FULL_PATH_LEN;j++) {
+      /* add x */
+      if (currentPath.p.x > nextPath.p.x) addedPath.p.x -= moveFactor;
+      else if (currentPath.p.x < nextPath.p.x) addedPath.p.x += moveFactor;
+      /* add z */
+      if (currentPath.p.z > nextPath.p.z) addedPath.p.z -= moveFactor;
+      else if (currentPath.p.z < nextPath.p.z) addedPath.p.z += moveFactor;
+      fullPath[i*50+j] = addedPath;
+    }
+  }
 }
 
 /*
@@ -118,7 +170,7 @@ void initMinions(void)
  */
 void initPreviewPoints(void)
 {
-  int valid_points[DEF_CURRENT_OBJS_SIZE][3] = {
+  point valid_points[DEF_CURRENT_OBJS_SIZE] = {
     /* ordered by row */
     {17,0,-17},{17,0,-13},{17,0,-9},{17,0,-5},{17,0,3},{17,0,19},
     {13,0,3},{13,0,11},{13,0,19},
@@ -133,9 +185,9 @@ void initPreviewPoints(void)
   };
   int i;
   for (i = 0; i < Length(valid_points); i++) {
-    preview_points[i].x = valid_points[i][0];
-    preview_points[i].y = valid_points[i][1];
-    preview_points[i].z = valid_points[i][2];
+    preview_points[i].x = valid_points[i].x;
+    preview_points[i].y = valid_points[i].y;
+    preview_points[i].z = valid_points[i].z;
   }
 }
 

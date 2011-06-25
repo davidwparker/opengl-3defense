@@ -29,12 +29,17 @@
 #include "prototypes.h"
 
 /*  GLOBALS (externs required here)  */
+/*  Generic  */
 extern int debug;
 extern char *windowName;
 extern int windowHeight;
 extern int windowWidth;
 extern GLuint window, screen, sidebar;
+
+/*  Font styling  */
 extern GLvoid *fontStyle;
+
+/*  Projection  */
 extern double asp;
 extern double dim;
 extern int th;
@@ -43,28 +48,49 @@ extern int fov;
 extern double ecX;
 extern double ecY;
 extern double ecZ;
+
+/*  Toggle draw displays  */
 extern int axes;
 extern int grid;
 extern int vals;
 extern int drawDefaults;
-extern int topsRotate;
+
+/*  Animation  */
+extern int moveLightB;
+extern int lightPh;
+extern int moveMinionsB;
+extern int moveTowerTopsB;
 extern int towerTh;
+
+/*  Game Data  */
+extern int lives;
+extern int money;
+extern int scrolls;
+extern int wave;
+extern int lastWave;
+
+/*  User Interaction  */
 extern int mouseX, mouseY, mouseZ;
-extern minion minions[1];
+
+/*  Object Selection  */
 extern tower towers[DEF_CURRENT_OBJS_SIZE];
 extern tower preview_tower;
 extern point preview_points[DEF_CURRENT_OBJS_SIZE];
 extern int preview;
 extern int objectSelected;
 extern int lastCurrentObject;
-extern int minionObj;
 extern int renderMode;
 extern int objectPicked;
 extern int currentRed;
 extern int currentGreen;
 extern int currentBlue;
+
+/*  Minions  */
+extern minion minions[1];
+extern int minionObj;
+
+/*  Light  */
 extern int light;
-extern int move;
 extern int distance;
 extern int ambient;
 extern int diffuse;
@@ -72,15 +98,19 @@ extern int emission;
 extern int specular;
 extern int shininess;
 extern float shinyvec[1];
-extern int lightPh;
 extern float lightY;
 extern float white[];
+
+/*  Textures  */
 extern unsigned int textures[17];
 extern int currentTexture;
 extern int currentTextureSelected;
 extern int backgrounds[6];
+
+/*  Preset data  */
 extern GLfloat cube_v[][3];
 extern pathCube pathCubes[];
+extern pathCube fullPath[];
 extern GLfloat default_objects[4][8];
 
 #endif

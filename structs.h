@@ -25,6 +25,14 @@ typedef struct tower {
   point rotation;
   int texture;
   rgb rgb;
+  /* game data */
+  char* name;
+  int level;
+  int range;
+  int damage;
+  int fireRate;
+  int cost;
+  char* description;
 } tower;
 
 typedef struct minion {
@@ -35,7 +43,11 @@ typedef struct minion {
   point rotation;
   int texture;
   rgb rgb;
+  /* game data */
+  char* name;
+  int damage;
   int health;
   int money;
   int speed;
+  int wave;
 } minion;

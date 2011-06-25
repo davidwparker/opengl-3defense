@@ -41,12 +41,17 @@ void sidebarDisplay(void)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
+  sidebarRow(80, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "3Defense");
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "WAVE: %d out of %d", wave, lastWave);
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "LIVES: %d", lives);
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "MONEY: %d", money);
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "SCROLLS: %d", scrolls);
+
   /* These display locations need to line up with mouse clicks */
-  sidebarRow(70, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "EXTRA CONTROLS");
   setFont("helvetica",12);
-  sidebarRow(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a tower to draw:");
+  sidebarRow(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a tower to build:");
   setFont("helvetica",18);
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, DEF_OBJ_SEL, "none");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, DEF_OBJ_SEL, "[0] none");
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_BASIC, "basic");
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV, "advanced");
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_CONE, "cone");
@@ -61,17 +66,6 @@ void sidebarDisplay(void)
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH2, "[6] advanced earth");
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON, "[7] poison");
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON2, "[8] advanced poison");
-
-  ++line;
-  setFont("helvetica",12);
-  sidebarRowT(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a texture for non-element tower:");
-  setFont("helvetica",18);
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_DEFAULT, "none");
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_BRICK, "brick");
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_FIRE, "fire");
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_ICE, "ice");
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_EARTH, "earth");
-  sidebarRowT(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, TEX_POISON, "poison");
 
   ++line;
   setFont("helvetica",12);
@@ -108,8 +102,8 @@ void sidebarReshape(int width, int height)
  */
 void sidebarMouse(int btn, int state, int x, int y)
 {
-  int lineUp   = 1;
-  int lineDown = 2;
+  int lineUp   = 5;
+  int lineDown = 6;
   /* only left mouse button */
   if (btn != GLUT_LEFT_BUTTON || state != GLUT_DOWN) return;
 
@@ -130,13 +124,6 @@ void sidebarMouse(int btn, int state, int x, int y)
     else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_EARTH2;
     else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON;
     else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON2;
-    ++lineUp; ++lineUp; ++lineDown; ++lineDown;
-    if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_DEFAULT;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_BRICK;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_FIRE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_ICE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_EARTH;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) currentTextureSelected=TEX_POISON;
   }
   /* 
    * TODO: fix bug where if user clicks here instead of using keyboard that the preview

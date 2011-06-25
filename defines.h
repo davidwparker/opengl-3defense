@@ -39,9 +39,18 @@
 #define DEF_D 5
 
 /*  Animation  */
-#define DEF_MOVE 1
-#define DEF_TOPS_ROTATE 1
+#define DEF_MOVE_LIGHT 1
+#define DEF_L_PH 90
+#define DEF_MOVE_MINIONS 1
+#define DEF_MOVE_TOWER_TOPS 1
 #define DEF_TOWER_TH 0
+
+/*  Game Data  */
+#define DEF_LIVES 10
+#define DEF_MONEY 500
+#define DEF_SCROLLS 0
+#define DEF_WAVE 0
+#define DEF_LAST_WAVE 10
 
 /*  Object definitions */
 #define OBJ_FIRE 1
@@ -58,6 +67,8 @@
 #define OBJ_ADV_CONE 12
 #define OBJ_SQUARE 13
 #define OBJ_ADV_SQUARE 14
+#define OBJ_PYRAMID 15
+#define OBJ_ADV_PYRAMID 16
 
 /*  Object Selection */
 #define DEF_CURRENT_OBJS_SIZE 57
@@ -78,6 +89,8 @@
 #define DEF_EAST 180
 #define DEF_SOUTH 90
 #define DEF_WEST 0
+#define DEF_PATH_LEN 45
+#define DEF_FULL_PATH_LEN 50
 
 /*  Lighting */
 #define DEF_LIGHT 1
@@ -87,7 +100,6 @@
 #define DEF_EMISSION 0
 #define DEF_SPECULAR 0
 #define DEF_SHININESS 0
-#define DEF_L_PH 90
 #define DEF_L_Y 0
 
 /*  Texture definitions */

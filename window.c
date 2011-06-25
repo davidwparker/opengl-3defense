@@ -40,13 +40,16 @@ void windowKey(unsigned char key,int x,int y)
   /*  change dim */
   else if (key == 'i' && dim>1) dim -= 0.2;
   else if (key == 'I') dim += 0.2;
+  /*  BEGIN ANIMATION FUNCTIANALITY */
+  /*  Toggle light movement */
+  else if (key == 'm') moveLightB = 1-moveLightB;
+  /*  Toggle minion movement */
+  else if (key == 'p') moveMinionsB = 1-moveMinionsB;
   /*  Toggle tower tops moving */
-  else if (key == 'M') topsRotate = 1-topsRotate;
+  else if (key == 'M') moveTowerTopsB = 1-moveTowerTopsB;
   /*  BEGIN LIGHTING FUNCTIONALITY */
   /*  Toggle lighting */
   else if (key == 'l' || key == 'L') light = 1-light;
-  /*  Toggle light movement */
-  else if (key == 'm') move = 1-move;
   /*  Move light */
   else if (key == '<') lightPh -= 1;
   else if (key == '>') lightPh += 1;
@@ -128,10 +131,10 @@ void windowSpecial(int key,int x,int y)
   /* otherwise, just shift the screen */
   else {
     /*  Shift */
-    if (key == GLUT_KEY_RIGHT) ecZ -= 1;
-    else if (key == GLUT_KEY_LEFT) ecZ += 1;
-    else if (key == GLUT_KEY_UP) ecX -= 1;
-    else if (key == GLUT_KEY_DOWN) ecX += 1;
+    if (key == GLUT_KEY_RIGHT) ecZ -= .5;
+    else if (key == GLUT_KEY_LEFT) ecZ += .5;
+    else if (key == GLUT_KEY_UP) ecX -= .5;
+    else if (key == GLUT_KEY_DOWN) ecX += .5;
   }
   
   /*  Keep angles at +/- 360 degrees */

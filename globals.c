@@ -27,10 +27,20 @@ int vals=DEF_VALS;       /* toggle show values on/off */
 int drawDefaults=DEF_DRAW_DEFAULTS; /* toggle drawing the defaults */
 
 /*  ANIMATION  */
-int topsRotate=DEF_TOPS_ROTATE;     /* toggles whether top of towers rotate */
-int towerTh=DEF_TOWER_TH;           /* top of ice tower rotation */
+int moveLightB=DEF_MOVE_LIGHT;          /* toggle move light */
+int lightPh=DEF_L_PH;                   /* light elevation */
+int moveMinionsB=DEF_MOVE_MINIONS;      /* toggle pause game */
+int moveTowerTopsB=DEF_MOVE_TOWER_TOPS; /* toggles whether top of towers rotate */
+int towerTh=DEF_TOWER_TH;               /* top of ice tower rotation */
 
 /*  USER INTERACTION  */
+/*  GAME DATA  */
+int lives=DEF_LIVES;
+int money=DEF_MONEY;
+int scrolls=DEF_SCROLLS;
+int wave=DEF_WAVE;
+int lastWave=DEF_LAST_WAVE;
+
 /*  current X, Y, Z position of mouse */
 int mouseX=0;
 int mouseY=0;
@@ -56,7 +66,6 @@ int minionObj=DEF_MINION_OBJ;           /* minion obj */
 
 /*  LIGHTING */
 int light=DEF_LIGHT;          /* toggle light */
-int move=DEF_MOVE;            /* toggle move light */
 int distance=DEF_DISTANCE;    /* light distance */
 int ambient=DEF_AMBIENT;      /* ambient intensity % */
 int diffuse=DEF_DIFFUSE;      /* diffuse intensity % */
@@ -64,7 +73,6 @@ int emission=DEF_EMISSION;    /* emission intensity % */
 int specular=DEF_SPECULAR;    /* specular intensity % */
 int shininess=DEF_SHININESS;  /* shininess (power of two) */
 float shinyvec[1]={1};        /* shininess (value) */
-int lightPh=DEF_L_PH;         /* light elevation */
 float lightY=DEF_L_Y;         /* elevation of light */
 float white[]={1,1,1,1};
 
@@ -74,6 +82,7 @@ int currentTexture=TEX_DEFAULT;         /* no texture assigned as default */
 int currentTextureSelected=TEX_DEFAULT; /* no texture currently selected */
 int backgrounds[6];                     /* holds the textures for the skybox background */
 
+/*  PRESET DATA  */
 /*  cube vertices */
 GLfloat cube_v[][3] = {
   {-1.0,-1.0,-1.0},{+1.0,-1.0,-1.0},{+1.0,+1.0,-1.0},
@@ -83,11 +92,12 @@ GLfloat cube_v[][3] = {
 
 /*  path cube vertices, texture, rotation */
 pathCube pathCubes[] = {
+  {{25,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},
   {{21,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},  {{17,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},
-  {{13,-2.9,-1},  TEX_STREET3,270,DEF_NORTH}, {{13,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
+  {{13,-2.9,-1},  TEX_STREET3,270,DEF_EAST},  {{13,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
   {{13,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{13,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
   {{13,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{9,-2.9,-17},  TEX_STREET1,90,DEF_NORTH},
-  {{5,-2.9,-17},  TEX_STREET3,180,DEF_NORTH}, {{5,-2.9,-13},  TEX_STREET1,180,DEF_WEST},
+  {{5,-2.9,-17},  TEX_STREET3,180,DEF_WEST},  {{5,-2.9,-13},  TEX_STREET1,180,DEF_WEST},
   {{5,-2.9,-9},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,-5},   TEX_STREET1,180,DEF_WEST},
   {{5,-2.9,-1},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,3},    TEX_STREET1,180,DEF_WEST},
   {{5,-2.9,7},    TEX_STREET3,270,DEF_SOUTH}, {{9,-2.9,7},    TEX_STREET1,270,DEF_SOUTH},
@@ -101,11 +111,13 @@ pathCube pathCubes[] = {
   {{-3,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
   {{-3,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{-7,-2.9,-17}, TEX_STREET1,90,DEF_NORTH},
   {{-11,-2.9,-17},TEX_STREET3,180,DEF_WEST},  {{-11,-2.9,-13},TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,-9}, TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,-5}, TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,-1}, TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,3},  TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,7},  TEX_STREET1,180,DEF_WEST}, {{-11,-2.9,11}, TEX_STREET3,0,DEF_NORTH},
+  {{-11,-2.9,-9}, TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,-5}, TEX_STREET1,180,DEF_WEST},
+  {{-11,-2.9,-1}, TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,3},  TEX_STREET1,180,DEF_WEST},
+  {{-11,-2.9,7},  TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,11}, TEX_STREET3,0,DEF_NORTH},
   {{-15,-2.9,11}, TEX_STREET1,90,DEF_NORTH},  {{-19,-2.9,11}, TEX_STREET1,90,DEF_NORTH}
 };
+
+pathCube fullPath[2200];
 
 /* default objects */
 GLfloat default_objects[4][8] = {

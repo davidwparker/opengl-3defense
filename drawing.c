@@ -359,33 +359,3 @@ void drawScene(void)
   drawObjects();
 }
 
-void moveMinions(void)
-{
-  int i,j;
-  for (i=0;i<Length(minions);i++) {
-    //    int speed = minions[i].speed;
-    /* Length(pathCubes) = 44... error about sizeof with structs */
-    for (j=0;j<44;j++) {
-      /* first time through */
-      if (minions[i].translation.x > 22) {
-	minions[i].translation.x = pathCubes[0].p.x;
-	minions[i].translation.z = pathCubes[0].p.z;
-	minions[i].rotation.y = pathCubes[0].dir;
-	break;
-      }
-      /* if we're at the previous position, increment by one */
-      else if(minions[i].translation.x == pathCubes[j-1].p.x &&
-	      minions[i].translation.z == pathCubes[j-1].p.z) {
-	minions[i].translation.x = pathCubes[j].p.x;
-	minions[i].translation.z = pathCubes[j].p.z;
-	minions[i].rotation.y = pathCubes[j].dir;
-	break;
-      }
-      if (j == 43) {
-	minions[i].translation.x = pathCubes[0].p.x;
-	minions[i].translation.z = pathCubes[0].p.z;
-	minions[i].rotation.y = pathCubes[0].dir;
-	}
-    }
-  }
-}

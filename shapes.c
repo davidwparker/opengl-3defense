@@ -235,13 +235,9 @@ void cylinder(double x,double y,double z,
   for (k=0;k<=360;k+=DEF_D) {
     /* These textures aren't exactly what I want, but I think they look cool */
     glNormal3f(Cos(k),0,Sin(k));
-    /*  glTexCoord2f(Cos(k),Sin(k));  // vertical stripes */
-    /*  glTexCoord2f(0,0);            // horizontal stripes */
     glTexCoord2f(-Cos(k),Sin(k));
     glVertex3f(Cos(k),+1,Sin(k));
 
-    /*  glTexCoord2f(Cos(k),Sin(k));  // vertical stripes */
-    /*  glTexCoord2f(1,1);            // horizontal stripes */
     glTexCoord2f(Cos(k),Sin(k));
     glVertex3f(Cos(k),-1,Sin(k));
   }

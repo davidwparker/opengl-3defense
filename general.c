@@ -104,8 +104,9 @@ void idle(void)
   double t = time/1000.0;
   if (lastTime == 0 || time >= lastTime + 30) {
     lastTime = time;
-    if (move) lightPh = fmod(45*t,360.0);
-    if (topsRotate) towerTh = fmod(90*t,360.0);
+    moveLight(t);
+    moveTowerTops(t);
+
     moveMinions();
     redisplayAll();
   }
@@ -232,19 +233,22 @@ void reset()
   axes = DEF_AXES;
   vals = DEF_VALS;
   fontStyle    = DEF_FONT_STYLE;
-  topsRotate   = DEF_TOPS_ROTATE;
-  towerTh      = DEF_TOWER_TH;
+
+  /* reset animation */
+  moveLightB     = DEF_MOVE_LIGHT;
+  lightPh        = DEF_L_PH;
+  moveMinionsB   = DEF_MOVE_MINIONS;
+  moveTowerTopsB = DEF_MOVE_TOWER_TOPS;
+  towerTh        = DEF_TOWER_TH;
 
   /* reset lighting */
   light     = DEF_LIGHT;
-  move      = DEF_MOVE;
   distance  = DEF_DISTANCE;
   ambient   = DEF_AMBIENT;
   diffuse   = DEF_DIFFUSE;
   emission  = DEF_EMISSION;
   specular  = DEF_SPECULAR;
   shininess = DEF_SHININESS;
-  lightPh   = DEF_L_PH;
   lightY    = DEF_L_Y;
 
   /* reset textures */

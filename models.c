@@ -141,14 +141,14 @@ void pathBlock(pathCube p)
 /*
  *  path
  *  ------
- *  A path is just a textured cubes which is slightly higher than the board
+ *  A path is just a bunch of pathBlocks
  */
 void path(void)
 {
   int i;
   glPushMatrix();
-  /* Length(pathCubes) = 44... error about sizeof with structs */
-  for (i=0; i < 44; i++) {
+  /* Length(pathCubes) = 45... error about sizeof with structs */
+  for (i=0; i < DEF_PATH_LEN; i++) {
     pathBlock(pathCubes[i]);
   }
   currentTexture = textures[TEX_DEFAULT];
