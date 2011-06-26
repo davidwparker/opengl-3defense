@@ -111,18 +111,41 @@ void spike(double x, double y, double z,
 /*
  *  board
  *  ------
- *  Draws the board as a 8x8 cubes on the screen
+ *  Draws the board as a 24x24 flat board
+ *  TODO: the board and the pathBlock should be refactored
  */
 void board(void)
 {
   int i,j;
-  currentTexture = textures[TEX_GRASS];
-  for (i=-24;i<24;i++){
-    for(j=-24;j<24;j++){
-      cube(i,-3,j, 1,0.2,1, 0);
-    }
+  glPushMatrix();
+
+  if (renderMode == DEF_RENDER) {
+    currentTexture = textures[TEX_GRASS];
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
   }
-  currentTexture = textures[TEX_DEFAULT];
+
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(2,1);
+  glColor3f(1,1,1);
+  glNormal3f(0,1,0);
+  for (i=-DEF_D_FLOOR;i<DEF_D_FLOOR;i+=2){
+    glBegin(GL_QUADS);
+    for(j=-DEF_D_FLOOR;j<DEF_D_FLOOR;j+=2){
+      glTexCoord2f(0,0); glVertex3f(i,DEF_Y_FLOOR,j);
+      glTexCoord2f(1,0); glVertex3f(i,DEF_Y_FLOOR,j+2);
+      glTexCoord2f(1,1); glVertex3f(i+2,DEF_Y_FLOOR,j+2);
+      glTexCoord2f(0,1); glVertex3f(i+2,DEF_Y_FLOOR,j);
+    }
+    glEnd();
+  }
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  if  (renderMode == DEF_RENDER) {
+    glDisable(GL_TEXTURE_2D);
+    currentTexture = textures[TEX_DEFAULT];
+  }
+  glPopMatrix();
 }
 
 /*
@@ -133,8 +156,31 @@ void board(void)
 void pathBlock(pathCube p)
 {
   glPushMatrix();
-  currentTexture = textures[p.texture];
-  cube(p.p.x,p.p.y,p.p.z, 2,0.2,2, p.rotation);
+
+  if (renderMode == DEF_RENDER) {
+    currentTexture = textures[p.texture];
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,currentTexture);
+  }
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(1,1);
+  glColor3f(1,1,1);
+  glNormal3f(0,1,0);
+
+  glBegin(GL_QUADS);
+  glTexCoord2f(0,0); glVertex3f(p.p.x-2, p.p.y, p.p.z-2);
+  glTexCoord2f(1,0); glVertex3f(p.p.x-2, p.p.y, p.p.z+2);
+  glTexCoord2f(1,1); glVertex3f(p.p.x+2, p.p.y, p.p.z+2);
+  glTexCoord2f(0,1); glVertex3f(p.p.x+2, p.p.y, p.p.z-2);
+  glEnd();
+
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  if  (renderMode == DEF_RENDER) {
+    glDisable(GL_TEXTURE_2D);
+    currentTexture = textures[TEX_DEFAULT];
+  }
+
   glPopMatrix();
 }
 
@@ -361,27 +407,17 @@ void wall(double x,double y,double z,
 /*
  *  keep
  *  ------
- *  A keep is just walls, towers, some grass (like board), and crates
+ *  A keep is just walls, towers, and crates
  */
 void keep(double x,double y,double z,
 	  double dx,double dy,double dz,
 	  double th)
 {
-  int i,j;
   tower t = {0, OBJ_ADV_SQUARE,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_BRICK2,{1,1,1}};
   glPushMatrix();
   glTranslated(x,y,z);
   glRotated(th,0,1,0);
   glScaled(dx,dy,dz);
-
-  /* some grass */
-  currentTexture = textures[TEX_GRASS];
-  for (i=-10;i<8;i++){
-    for(j=-10;j<10;j++){
-      cube(i,-3,j, 1,0.2,1, 0);
-    }
-  }
-  currentTexture = textures[TEX_DEFAULT];
 
   /* back walls */
   wall(-9,0,5, 1,1,1, 0);

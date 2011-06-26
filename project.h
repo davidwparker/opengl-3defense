@@ -107,6 +107,10 @@ extern int currentTexture;
 extern int currentTextureSelected;
 extern int backgrounds[6];
 
+/*  Shadows  */
+extern float N[];
+extern float E[];
+
 /*  Preset data  */
 extern GLfloat cube_v[][3];
 extern pathCube pathCubes[];

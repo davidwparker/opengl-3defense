@@ -62,7 +62,11 @@ void initTextures(void)
   textures[TEX_BRICK2] = loadTexBMP("txBrick13.bmp");
   textures[TEX_CRATE] = loadTexBMP("txCrate.bmp");
   textures[TEX_STREET1] = loadTexBMP("txStreet1.bmp");
+  textures[TEX_STREET2] = loadTexBMP("txStreet2.bmp");
   textures[TEX_STREET3] = loadTexBMP("txStreet3.bmp");
+  textures[TEX_STREET4] = loadTexBMP("txStreet4.bmp");
+  textures[TEX_STREET5] = loadTexBMP("txStreet5.bmp");
+  textures[TEX_STREET6] = loadTexBMP("txStreet6.bmp");
 }
 
 /*
@@ -150,7 +154,7 @@ void initPath(void)
     addedPath = currentPath = pathCubes[i];
     nextPath = pathCubes[i+1];
 
-    /* create 50 points between each pathCube for 2250 points total */
+    /* create 50 points between each pathCube for 2200 = (44x50) points total */
     for (j=0;j<DEF_FULL_PATH_LEN;j++) {
       /* add x */
       if (currentPath.p.x > nextPath.p.x) addedPath.p.x -= moveFactor;

@@ -12,7 +12,7 @@
 void drawAxes(void)
 {
   /* axes length */
-  const double len=2.0;
+  const double len=DEF_D_FLOOR;
 
   /*  Draw axes - no lighting */
   if (axes) {
@@ -33,7 +33,9 @@ void drawAxes(void)
     print("Y");
     glRasterPos3d(0.0,0.0,len);
     print("Z");
+    glEnable(GL_LIGHTING);
   }
+
 }
 
 /*
@@ -60,6 +62,7 @@ void drawParameters(void)
  *  drawGrid
  *  ------
  *  Draws the grid if desired
+ *  TODO: polygon offset grid with the path
  */
 void drawGrid(void)
 {
@@ -68,6 +71,8 @@ void drawGrid(void)
     int i,j;
     glDisable(GL_LIGHTING);
     glColor3fv(white);
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(2,1);
     glBegin(GL_LINES);
     /* horizontal z */
     for (i=-21;i<21;i+=2){
@@ -81,8 +86,9 @@ void drawGrid(void)
 	glVertex3d(j,-2.8,i);
       }
     }
-
     glEnd();
+    glDisable(GL_POLYGON_OFFSET_FILL);
+    glEnable(GL_LIGHTING);
   }
 }
 
@@ -165,6 +171,7 @@ void drawLight(void)
     float Specular[]  = {0.01*specular,0.01*specular,0.01*specular,1.0};
     /*  Light position */
     float Position[]  = {lightY,distance*Sin(lightPh),distance*Cos(lightPh),1.0};
+
     /*  Draw light position as sphere (still no lighting here) */
     glColor3fv(white);
     sphere(Position[0],Position[1],Position[2] , 0.1,0);
@@ -339,6 +346,84 @@ void drawObjects(void)
 }
 
 /*
+ *  drawShadows
+ *  ------
+ *  draw shadows for minions and objects on the screen
+ */
+void drawShadows()
+{
+  /* position of the light */
+  float Position[]  = {lightY,distance*Sin(lightPh),distance*Cos(lightPh),1.0};
+
+  /* Save what is glEnabled */
+  glPushAttrib(GL_ENABLE_BIT);
+  glDisable(GL_LIGHTING);
+  /* Enable stencil operations */
+  glEnable(GL_STENCIL_TEST);
+
+  /*
+   *  Step 1:  Set stencil buffer to 1 where there are shadows
+   */
+  /* Existing value of stencil buffer doesn't matter */
+  glStencilFunc(GL_ALWAYS,1,0xFFFFFFFF);
+  /*  Set the value to 1 (REF=1 in StencilFunc)  
+      only if Z-buffer would allow write */
+  glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+  /*  Make Z-buffer and color buffer read-only */
+  glDepthMask(0);
+  glColorMask(0,0,0,0);
+  
+  /*  Draw flattened scene */
+  glPushMatrix();
+  shadowProjection(Position,E,N);
+  /* only draw objects that we want shadows for */
+  drawForests();
+  drawKeep();
+  drawMinions();
+  drawObjects();
+
+  glPopMatrix();
+  /*  Make Z-buffer and color buffer read-write */
+  glDepthMask(1);
+  glColorMask(1,1,1,1);
+  
+  /*
+   *  Step 2:  Draw shadow masked by stencil buffer
+   */
+  /*  Set the stencil test draw where stencil buffer is > 0 */
+  glStencilFunc(GL_LESS,0,0xFFFFFFFF);
+  /*  Make the stencil buffer read-only */
+  glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+  /*  Enable blending */
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glColor4f(0,0,0,0.5);
+  /*  Draw the shadow over the entire floor */
+  glBegin(GL_QUADS);
+  glVertex3f(-DEF_D_FLOOR,DEF_Y_FLOOR,-DEF_D_FLOOR);
+  glVertex3f(+DEF_D_FLOOR,DEF_Y_FLOOR,-DEF_D_FLOOR);
+  glVertex3f(+DEF_D_FLOOR,DEF_Y_FLOOR,+DEF_D_FLOOR);
+  glVertex3f(-DEF_D_FLOOR,DEF_Y_FLOOR,+DEF_D_FLOOR);
+  glEnd();
+
+  /* Undo glEnables */
+  glPopAttrib();
+}
+
+void scene()
+{
+   int i;
+   //  Draw two teapots
+   for (i=-1;i<=1;i+=2)
+   {
+      glPushMatrix();
+      glTranslated(0.5*i,0.5*i,0);
+      glutSolidTeapot(0.5);
+      glPopMatrix();
+   }
+}
+
+/*
  *  drawScene
  *  ------
  *  draws the entire scene
@@ -346,8 +431,8 @@ void drawObjects(void)
 void drawScene(void)
 {
   drawAxes();
-  drawParameters();
   drawGrid();
+  drawParameters();
   drawBackground(3.5*dim);
   drawLight();
   /* anything with lighting should be drawn after the light */
@@ -357,5 +442,6 @@ void drawScene(void)
   drawKeep();
   drawMinions();
   drawObjects();
+  /* only draw shadows on rendering, not selection */
+  if (renderMode == DEF_RENDER) drawShadows();
 }
-

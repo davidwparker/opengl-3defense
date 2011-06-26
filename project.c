@@ -14,7 +14,7 @@ int main(int argc,char* argv[])
 {
   glutInit(&argc,argv);
   /*  Request double buffered, true color window with Z buffering */
-  glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL | GLUT_DOUBLE);
   /*  Even if you want full size, you need to specify initial size or get GLUT warning */
   glutInitWindowSize(windowWidth,windowHeight);
 

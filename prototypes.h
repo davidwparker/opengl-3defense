@@ -117,6 +117,9 @@ void moveMinions(void);
 void moveLight(double t);
 void moveTowerTops(double t);
 
+/*  Shadows (shadow.c)  */
+void shadowProjection(float L[4], float E[4], float N[4]);
+
 /*  Main window (window.c)  */
 void windowDisplay(void);
 void windowKey(unsigned char key,int x,int y);
@@ -140,3 +143,5 @@ void sidebarDisplay(void);
 void sidebarReshape(int width, int height);
 void sidebarMouse(int btn, int state, int x, int y);
 
+/*  Gameplay (gameplay.c)  */
+void modifyLives(int die);

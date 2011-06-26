@@ -42,7 +42,7 @@
 #define DEF_MOVE_LIGHT 1
 #define DEF_L_PH 90
 #define DEF_MOVE_MINIONS 1
-#define DEF_MOVE_TOWER_TOPS 1
+#define DEF_MOVE_TOWER_TOPS 0
 #define DEF_TOWER_TH 0
 
 /*  Game Data  */
@@ -52,7 +52,7 @@
 #define DEF_WAVE 0
 #define DEF_LAST_WAVE 10
 
-/*  Object definitions */
+/*  Object definitions  */
 #define OBJ_FIRE 1
 #define OBJ_FIRE2 2
 #define OBJ_ICE 3
@@ -70,7 +70,7 @@
 #define OBJ_PYRAMID 15
 #define OBJ_ADV_PYRAMID 16
 
-/*  Object Selection */
+/*  Object Selection  */
 #define DEF_CURRENT_OBJS_SIZE 57
 #define DEF_LAST_CURRENT_OBJECT 0
 #define DEF_OBJ_SEL 0
@@ -83,7 +83,7 @@
 #define DEF_CURRENT_GREEN 5
 #define DEF_CURRENT_BLUE 5
 
-/*  Minions */
+/*  Minions  */
 #define DEF_MINION_OBJ 0
 #define DEF_NORTH 270
 #define DEF_EAST 180
@@ -92,9 +92,9 @@
 #define DEF_PATH_LEN 45
 #define DEF_FULL_PATH_LEN 50
 
-/*  Lighting */
+/*  Lighting  */
 #define DEF_LIGHT 1
-#define DEF_DISTANCE 25
+#define DEF_DISTANCE 40
 #define DEF_AMBIENT 35
 #define DEF_DIFFUSE 100
 #define DEF_EMISSION 0
@@ -102,7 +102,7 @@
 #define DEF_SHININESS 0
 #define DEF_L_Y 0
 
-/*  Texture definitions */
+/*  Texture definitions  */
 #define TEX_DEFAULT 0
 #define TEX_BRICK 1
 #define TEX_FIRE 2
@@ -116,12 +116,20 @@
 #define TEX_BRICK2 10
 #define TEX_CRATE 11
 #define TEX_STREET1 12
-#define TEX_STREET3 13
+#define TEX_STREET2 13
+#define TEX_STREET3 14
+#define TEX_STREET4 15
+#define TEX_STREET5 16
+#define TEX_STREET6 17
 
-/*  Background (skybox) */
+/*  Background (skybox)  */
 #define BACK_FRONT 0
 #define BACK_RIGHT 1
 #define BACK_LEFT 2
 #define BACK_BACK 3
 #define BACK_UP 4
 #define BACK_DOWN 5
+
+/*  Shadows  */
+#define DEF_D_FLOOR 45
+#define DEF_Y_FLOOR -3

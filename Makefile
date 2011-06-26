@@ -21,5 +21,5 @@ all: $(TARGET)
 clean:;rm -f $(TARGET) *.o *.a
 
 #  Create archive
-project.a:globals.o print.o loadTexBMP.o loadObj.o shapes.o models.o towers.o general.o initialize.o drawing.o animate.o window.o screen.o sidebar.o
+project.a:globals.o print.o loadTexBMP.o loadObj.o shapes.o models.o towers.o general.o initialize.o drawing.o animate.o shadow.o window.o screen.o sidebar.o gameplay.o
 	ar -rcs project.a $^

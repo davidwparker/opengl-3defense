@@ -29,6 +29,10 @@ void moveMinions(void)
       int speed = minions[i].speed;
       /* Length(fullPath) = 2200... error about sizeof with structs */
       for (j=0;j<(DEF_PATH_LEN*DEF_FULL_PATH_LEN);j += speed) {
+	if (j == (DEF_PATH_LEN*DEF_FULL_PATH_LEN-DEF_FULL_PATH_LEN)) {
+	  modifyLives(1);
+	  /* TODO: remove the minion */
+	}
 	/* first time through */
 	if (minions[i].translation.x > 25) {
 	  minions[i].translation.x = fullPath[0].p.x;
@@ -44,17 +48,16 @@ void moveMinions(void)
 	  minions[i].rotation.y = fullPath[j].dir;
 	  break;
 	}
-	/* TODO: remove this after calculating failure, restart back at the begininning */
-	if (j == (DEF_PATH_LEN*DEF_FULL_PATH_LEN)) {
-	  minions[i].translation.x = fullPath[0].p.x;
-	  minions[i].translation.z = fullPath[0].p.z;
-	  minions[i].rotation.y = fullPath[0].dir;
-	}
       }
     }
   }
 }
 
+/*
+ *  moveTowerTops
+ *  ------
+ *  toggles moving the tower tops on or off
+ */
 void moveTowerTops(double t) 
 {
   if (moveTowerTopsB) 

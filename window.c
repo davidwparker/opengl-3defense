@@ -34,6 +34,8 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == 'f' || key == 'F') drawDefaults = 1-drawDefaults;
   /*  toggle text values displayed at bottom */
   else if (key == 'v' || key == 'V') vals = 1-vals;
+  /*  toggle grid */
+  else if (key == 'g' || key == 'G') grid = 1-grid;
   /*  change field of view angle */
   else if (key == '-' && key>1) fov--;
   else if (key == '+' && key<179) fov++;
@@ -119,7 +121,7 @@ void windowKey(unsigned char key,int x,int y)
 void windowSpecial(int key,int x,int y)
 {
   int modifiers = glutGetModifiers();
-  /* if holding shift, then rotate/elevate */
+  /*  If holding shift, then rotate/elevate */
   if (modifiers == GLUT_ACTIVE_SHIFT) {
     /*  Right/Left - rotate */
     if (key == GLUT_KEY_RIGHT) th += 5;
@@ -128,7 +130,7 @@ void windowSpecial(int key,int x,int y)
     else if (key == GLUT_KEY_UP) ph += 5;
     else if (key == GLUT_KEY_DOWN) ph -= 5;
   }
-  /* otherwise, just shift the screen */
+  /*  Otherwise, just shift the screen */
   else {
     /*  Shift */
     if (key == GLUT_KEY_RIGHT) ecZ -= .5;

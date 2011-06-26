@@ -82,6 +82,10 @@ int currentTexture=TEX_DEFAULT;         /* no texture assigned as default */
 int currentTextureSelected=TEX_DEFAULT; /* no texture currently selected */
 int backgrounds[6];                     /* holds the textures for the skybox background */
 
+/*  SHADOWS  */
+float N[] = {0, -1, 0, 0};            /* normal vector for the plane */
+float E[] = {0, DEF_Y_FLOOR, 0, 0};   /* Point of the plane */
+
 /*  PRESET DATA  */
 /*  cube vertices */
 GLfloat cube_v[][3] = {
@@ -92,29 +96,29 @@ GLfloat cube_v[][3] = {
 
 /*  path cube vertices, texture, rotation */
 pathCube pathCubes[] = {
-  {{25,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},
-  {{21,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},  {{17,-2.9,-1},  TEX_STREET1,90,DEF_NORTH},
-  {{13,-2.9,-1},  TEX_STREET3,270,DEF_EAST},  {{13,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
-  {{13,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{13,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
-  {{13,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{9,-2.9,-17},  TEX_STREET1,90,DEF_NORTH},
-  {{5,-2.9,-17},  TEX_STREET3,180,DEF_WEST},  {{5,-2.9,-13},  TEX_STREET1,180,DEF_WEST},
-  {{5,-2.9,-9},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,-5},   TEX_STREET1,180,DEF_WEST},
-  {{5,-2.9,-1},   TEX_STREET1,180,DEF_WEST},  {{5,-2.9,3},    TEX_STREET1,180,DEF_WEST},
-  {{5,-2.9,7},    TEX_STREET3,270,DEF_SOUTH}, {{9,-2.9,7},    TEX_STREET1,270,DEF_SOUTH},
-  {{13,-2.9,7},   TEX_STREET1,270,DEF_SOUTH}, {{17,-2.9,7},   TEX_STREET3,90,DEF_WEST},
-  {{17,-2.9,11},  TEX_STREET1,0,DEF_WEST},    {{17,-2.9,15},  TEX_STREET3,0,DEF_NORTH},
-  {{13,-2.9,15},  TEX_STREET1,90,DEF_NORTH},  {{9,-2.9,15},   TEX_STREET1,90,DEF_NORTH},
-  {{5,-2.9,15},   TEX_STREET1,90,DEF_NORTH},  {{1,-2.9,15},   TEX_STREET1,90,DEF_NORTH},
-  {{-3,-2.9,15},  TEX_STREET3,270,DEF_EAST},  {{-3,-2.9,11},  TEX_STREET1,0,DEF_EAST},
-  {{-3,-2.9,7},   TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,3},   TEX_STREET1,0,DEF_EAST},
-  {{-3,-2.9,-1},  TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,-5},  TEX_STREET1,0,DEF_EAST},
-  {{-3,-2.9,-9},  TEX_STREET1,0,DEF_EAST},    {{-3,-2.9,-13}, TEX_STREET1,0,DEF_EAST},
-  {{-3,-2.9,-17}, TEX_STREET3,90,DEF_NORTH},  {{-7,-2.9,-17}, TEX_STREET1,90,DEF_NORTH},
-  {{-11,-2.9,-17},TEX_STREET3,180,DEF_WEST},  {{-11,-2.9,-13},TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,-9}, TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,-5}, TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,-1}, TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,3},  TEX_STREET1,180,DEF_WEST},
-  {{-11,-2.9,7},  TEX_STREET1,180,DEF_WEST},  {{-11,-2.9,11}, TEX_STREET3,0,DEF_NORTH},
-  {{-15,-2.9,11}, TEX_STREET1,90,DEF_NORTH},  {{-19,-2.9,11}, TEX_STREET1,90,DEF_NORTH}
+  {{25,-3,-1},  TEX_STREET1,90,DEF_NORTH},
+  {{21,-3,-1},  TEX_STREET1,90,DEF_NORTH},  {{17,-3,-1},  TEX_STREET1,90,DEF_NORTH},
+  {{13,-3,-1},  TEX_STREET6,270,DEF_EAST},  {{13,-3,-5},  TEX_STREET2,0,DEF_EAST},
+  {{13,-3,-9},  TEX_STREET2,0,DEF_EAST},    {{13,-3,-13}, TEX_STREET2,0,DEF_EAST},
+  {{13,-3,-17}, TEX_STREET4,90,DEF_NORTH},  {{9,-3,-17},  TEX_STREET1,90,DEF_NORTH},
+  {{5,-3,-17},  TEX_STREET3,180,DEF_WEST},  {{5,-3,-13},  TEX_STREET2,180,DEF_WEST},
+  {{5,-3,-9},   TEX_STREET2,180,DEF_WEST},  {{5,-3,-5},   TEX_STREET2,180,DEF_WEST},
+  {{5,-3,-1},   TEX_STREET2,180,DEF_WEST},  {{5,-3,3},    TEX_STREET2,180,DEF_WEST},
+  {{5,-3,7},    TEX_STREET6,270,DEF_SOUTH}, {{9,-3,7},    TEX_STREET1,270,DEF_SOUTH},
+  {{13,-3,7},   TEX_STREET1,270,DEF_SOUTH}, {{17,-3,7},   TEX_STREET4,90,DEF_WEST},
+  {{17,-3,11},  TEX_STREET2,0,DEF_WEST},    {{17,-3,15},  TEX_STREET5,0,DEF_NORTH},
+  {{13,-3,15},  TEX_STREET1,90,DEF_NORTH},  {{9,-3,15},   TEX_STREET1,90,DEF_NORTH},
+  {{5,-3,15},   TEX_STREET1,90,DEF_NORTH},  {{1,-3,15},   TEX_STREET1,90,DEF_NORTH},
+  {{-3,-3,15},  TEX_STREET6,270,DEF_EAST},  {{-3,-3,11},  TEX_STREET2,0,DEF_EAST},
+  {{-3,-3,7},   TEX_STREET2,0,DEF_EAST},    {{-3,-3,3},   TEX_STREET2,0,DEF_EAST},
+  {{-3,-3,-1},  TEX_STREET2,0,DEF_EAST},    {{-3,-3,-5},  TEX_STREET2,0,DEF_EAST},
+  {{-3,-3,-9},  TEX_STREET2,0,DEF_EAST},    {{-3,-3,-13}, TEX_STREET2,0,DEF_EAST},
+  {{-3,-3,-17}, TEX_STREET4,90,DEF_NORTH},  {{-7,-3,-17}, TEX_STREET1,90,DEF_NORTH},
+  {{-11,-3,-17},TEX_STREET3,180,DEF_WEST},  {{-11,-3,-13},TEX_STREET2,180,DEF_WEST},
+  {{-11,-3,-9}, TEX_STREET2,180,DEF_WEST},  {{-11,-3,-5}, TEX_STREET2,180,DEF_WEST},
+  {{-11,-3,-1}, TEX_STREET2,180,DEF_WEST},  {{-11,-3,3},  TEX_STREET2,180,DEF_WEST},
+  {{-11,-3,7},  TEX_STREET2,180,DEF_WEST},  {{-11,-3,11}, TEX_STREET5,0,DEF_NORTH},
+  {{-15,-3,11}, TEX_STREET1,90,DEF_NORTH},  {{-19,-3,11}, TEX_STREET1,90,DEF_NORTH}
 };
 
 pathCube fullPath[2200];
