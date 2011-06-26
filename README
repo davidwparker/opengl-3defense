@@ -4,12 +4,35 @@ David Parker
 Total time spent on code: 10 hours
 -X hours - research
 
-Final notes:
+TODO:
+Top 4 issues are probably going to be priority, unless you say otherwise... 
+with #1 getting the majority of my focus.
 
+#1) FIX FRAMERATE ISSUE. This Ubuntu/Freeglut thing is haunting me. Since adding shadows and minions, 
+whenever I use gluUnProject, some of the times I get a bad Z value (and by some, I mean quite often if
+the framerate is higher). By adding a delay (currently ~80-100 ms), then it works, but if I drop down
+to ~30 then it doesn't work on my Ubuntu machine. It works perfectly on my Macbook Pro.
 
-Some interesting things learned:
+If you have time, I would like to meet with you if you have any knowledge of what I could do to fix
+this issue.
 
+Gameplay:
+#2) Add 'waves' of minions, where a group of minions will go, then X time later, a second wave will go, 
+and so on.
+#3) Add the ability for the towers to "attack" the minions by shooting things.
+#4) By way of #3, add collision detection for those attacks whene hitting the minions.
+#5) Ensure that the user earns money for kills, and is able to only buy certain towers.
+#6) Provide ability to upgrade towers (example: fire tower becomes advanced fire tower).
 
+Graphics (These would be nice, but probably won't happen considering my timing):
+#7) It would be "cool" to have realistic shadows (towers shading each other), but I DON'T think I'll 
+be able to get to that.
+#8) Clean up the sidebar to add textures, icons for towers (I would have to draw these), icons for
+money, lives, etc.
+#9) Add pop-ups, etc, on hover-over for icons, etc. to show the statistics of the towers.
+#10) Show area of attack for the towers.
+
+ (SOME OF THESE MAY BE WRONG...)
 The following interactions are provided:
 Keyboard interactions:
 Special Keys:
@@ -27,7 +50,6 @@ Regular Keys:
 Escape     => close the program
 r or R     => reset to original parameters
 x or X     => toggle axes on/off (default off)
-
 f or F     => toggle draw default objects (must reset "r" after toggling)
 v or V     => toggle draw values on bottom of screen
 -          => decrease the field of view (for perspective) by 1
@@ -88,7 +110,3 @@ click on a texture name to select it
 NOTE: there are two ways to select a shape: 
  1) keyboard shortcuts
  2) mouse click on shape name
-
-
-
-
