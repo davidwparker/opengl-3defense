@@ -20,6 +20,7 @@ typedef struct pathCube {
 typedef struct tower {
   int id;
   int type;
+  int inPlay;
   point translation;
   point scale;
   point rotation;
@@ -31,9 +32,17 @@ typedef struct tower {
   int range;
   int damage;
   int fireRate;
+  double lastFired;
   int cost;
   char* description;
 } tower;
+
+typedef struct shot {
+  int inPlay;
+  point p;
+  int texture;
+  int damage;
+} shot;
 
 typedef struct minion {
   int id;
@@ -48,6 +57,12 @@ typedef struct minion {
   int damage;
   int health;
   int money;
-  int speed;
-  int wave;
+  double speed;
+  int inPlay;
 } minion;
+
+typedef struct wave {
+  int id;
+  int number;
+  minion m[DEF_MINION_PER_WAVE_SIZE];
+} wave;

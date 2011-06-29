@@ -23,13 +23,21 @@ double ecZ=DEF_ECZ;      /* eye center position z */
 /*  TOGGLE DRAW DISPLAYS  */
 int axes=DEF_AXES;       /* toggle axes on/off */
 int grid=DEF_GRID;       /* toggle grid on/off */
+int showAttackRadius=DEF_SHOW_ATTACK;  /* toggle attack radius on/off */
 int vals=DEF_VALS;       /* toggle show values on/off */
-int drawDefaults=DEF_DRAW_DEFAULTS; /* toggle drawing the defaults */
+
+/*  COLLISION DETECTION  */
+int showCollisionDetection=DEF_COLLISION; /* toggle showing spheres around planes on/off */
+int lastShot=DEF_LAST_SHOT;
+shot shots[200];                          /* holds the current shots - hardcoded to 200 max */
 
 /*  ANIMATION  */
+char *info=DEF_INFO;
+int gameStarted=DEF_GAME_STARTED;       /* has the game been started? */
+int gamePaused=DEF_GAME_PAUSED;         /* toggle game paused */
+int gameSpeed=DEF_GAME_SPEED;           /* game speed for idle */
 int moveLightB=DEF_MOVE_LIGHT;          /* toggle move light */
 int lightPh=DEF_L_PH;                   /* light elevation */
-int moveMinionsB=DEF_MOVE_MINIONS;      /* toggle pause game */
 int moveTowerTopsB=DEF_MOVE_TOWER_TOPS; /* toggles whether top of towers rotate */
 int towerTh=DEF_TOWER_TH;               /* top of ice tower rotation */
 
@@ -38,7 +46,8 @@ int towerTh=DEF_TOWER_TH;               /* top of ice tower rotation */
 int lives=DEF_LIVES;
 int money=DEF_MONEY;
 int scrolls=DEF_SCROLLS;
-int wave=DEF_WAVE;
+int score=DEF_SCORE;
+int waveNumber=DEF_WAVE;
 int lastWave=DEF_LAST_WAVE;
 
 /*  current X, Y, Z position of mouse */
@@ -60,11 +69,12 @@ int currentRed=DEF_CURRENT_RED;
 int currentGreen=DEF_CURRENT_GREEN;
 int currentBlue=DEF_CURRENT_BLUE;
 
-/*  MINIONS */
-minion minions[1];                      /* holds the minions */
-int minionObj=DEF_MINION_OBJ;           /* minion obj */
+/*  MINIONS  */
+wave waves[DEF_LAST_WAVE];                   /* holds the waves of minions */
+minion minions[DEF_MINION_PER_WAVE_SIZE];    /* holds the minions */
+int minionObj=DEF_MINION_OBJ;                /* minion obj */
 
-/*  LIGHTING */
+/*  LIGHTING  */
 int light=DEF_LIGHT;          /* toggle light */
 int distance=DEF_DISTANCE;    /* light distance */
 int ambient=DEF_AMBIENT;      /* ambient intensity % */
@@ -96,37 +106,45 @@ GLfloat cube_v[][3] = {
 
 /*  path cube vertices, texture, rotation */
 pathCube pathCubes[] = {
-  {{25,-3,-1},  TEX_STREET1,90,DEF_NORTH},
-  {{21,-3,-1},  TEX_STREET1,90,DEF_NORTH},  {{17,-3,-1},  TEX_STREET1,90,DEF_NORTH},
-  {{13,-3,-1},  TEX_STREET6,270,DEF_EAST},  {{13,-3,-5},  TEX_STREET2,0,DEF_EAST},
-  {{13,-3,-9},  TEX_STREET2,0,DEF_EAST},    {{13,-3,-13}, TEX_STREET2,0,DEF_EAST},
-  {{13,-3,-17}, TEX_STREET4,90,DEF_NORTH},  {{9,-3,-17},  TEX_STREET1,90,DEF_NORTH},
+  {{25,-3,-1},  TEX_STREET1,90, DEF_NORTH},
+  {{21,-3,-1},  TEX_STREET1,90, DEF_NORTH}, {{17,-3,-1},  TEX_STREET1,90, DEF_NORTH},
+  {{13,-3,-1},  TEX_STREET6,270,DEF_EAST},  {{13,-3,-5},  TEX_STREET2,0,  DEF_EAST},
+  {{13,-3,-9},  TEX_STREET2,0,  DEF_EAST},  {{13,-3,-13}, TEX_STREET2,0,  DEF_EAST},
+  {{13,-3,-17}, TEX_STREET4,90, DEF_NORTH}, {{9,-3,-17},  TEX_STREET1,90, DEF_NORTH},
   {{5,-3,-17},  TEX_STREET3,180,DEF_WEST},  {{5,-3,-13},  TEX_STREET2,180,DEF_WEST},
   {{5,-3,-9},   TEX_STREET2,180,DEF_WEST},  {{5,-3,-5},   TEX_STREET2,180,DEF_WEST},
   {{5,-3,-1},   TEX_STREET2,180,DEF_WEST},  {{5,-3,3},    TEX_STREET2,180,DEF_WEST},
   {{5,-3,7},    TEX_STREET6,270,DEF_SOUTH}, {{9,-3,7},    TEX_STREET1,270,DEF_SOUTH},
-  {{13,-3,7},   TEX_STREET1,270,DEF_SOUTH}, {{17,-3,7},   TEX_STREET4,90,DEF_WEST},
-  {{17,-3,11},  TEX_STREET2,0,DEF_WEST},    {{17,-3,15},  TEX_STREET5,0,DEF_NORTH},
-  {{13,-3,15},  TEX_STREET1,90,DEF_NORTH},  {{9,-3,15},   TEX_STREET1,90,DEF_NORTH},
-  {{5,-3,15},   TEX_STREET1,90,DEF_NORTH},  {{1,-3,15},   TEX_STREET1,90,DEF_NORTH},
-  {{-3,-3,15},  TEX_STREET6,270,DEF_EAST},  {{-3,-3,11},  TEX_STREET2,0,DEF_EAST},
-  {{-3,-3,7},   TEX_STREET2,0,DEF_EAST},    {{-3,-3,3},   TEX_STREET2,0,DEF_EAST},
-  {{-3,-3,-1},  TEX_STREET2,0,DEF_EAST},    {{-3,-3,-5},  TEX_STREET2,0,DEF_EAST},
-  {{-3,-3,-9},  TEX_STREET2,0,DEF_EAST},    {{-3,-3,-13}, TEX_STREET2,0,DEF_EAST},
-  {{-3,-3,-17}, TEX_STREET4,90,DEF_NORTH},  {{-7,-3,-17}, TEX_STREET1,90,DEF_NORTH},
+  {{13,-3,7},   TEX_STREET1,270,DEF_SOUTH}, {{17,-3,7},   TEX_STREET4,90, DEF_WEST},
+  {{17,-3,11},  TEX_STREET2,0,  DEF_WEST},  {{17,-3,15},  TEX_STREET5,0,  DEF_NORTH},
+  {{13,-3,15},  TEX_STREET1,90, DEF_NORTH}, {{9,-3,15},   TEX_STREET1,90, DEF_NORTH},
+  {{5,-3,15},   TEX_STREET1,90, DEF_NORTH}, {{1,-3,15},   TEX_STREET1,90, DEF_NORTH},
+  {{-3,-3,15},  TEX_STREET6,270,DEF_EAST},  {{-3,-3,11},  TEX_STREET2,0,  DEF_EAST},
+  {{-3,-3,7},   TEX_STREET2,0,  DEF_EAST},  {{-3,-3,3},   TEX_STREET2,0,  DEF_EAST},
+  {{-3,-3,-1},  TEX_STREET2,0,  DEF_EAST},  {{-3,-3,-5},  TEX_STREET2,0,  DEF_EAST},
+  {{-3,-3,-9},  TEX_STREET2,0,  DEF_EAST},  {{-3,-3,-13}, TEX_STREET2,0,  DEF_EAST},
+  {{-3,-3,-17}, TEX_STREET4,90, DEF_NORTH}, {{-7,-3,-17}, TEX_STREET1,90, DEF_NORTH},
   {{-11,-3,-17},TEX_STREET3,180,DEF_WEST},  {{-11,-3,-13},TEX_STREET2,180,DEF_WEST},
   {{-11,-3,-9}, TEX_STREET2,180,DEF_WEST},  {{-11,-3,-5}, TEX_STREET2,180,DEF_WEST},
   {{-11,-3,-1}, TEX_STREET2,180,DEF_WEST},  {{-11,-3,3},  TEX_STREET2,180,DEF_WEST},
-  {{-11,-3,7},  TEX_STREET2,180,DEF_WEST},  {{-11,-3,11}, TEX_STREET5,0,DEF_NORTH},
-  {{-15,-3,11}, TEX_STREET1,90,DEF_NORTH},  {{-19,-3,11}, TEX_STREET1,90,DEF_NORTH}
+  {{-11,-3,7},  TEX_STREET2,180,DEF_WEST},  {{-11,-3,11}, TEX_STREET5,0,  DEF_NORTH},
+  {{-15,-3,11}, TEX_STREET1,90, DEF_NORTH}, {{-19,-3,11}, TEX_STREET1,90, DEF_NORTH}
 };
 
 pathCube fullPath[2200];
 
-/* default objects */
-GLfloat default_objects[4][8] = {
-  {OBJ_FIRE2, -2,0,-2, TEX_DEFAULT, 255,0,0},
-  {OBJ_ICE2,   2,0, 2, TEX_DEFAULT, 0,255,255},
-  {OBJ_EARTH2, 2,0,-2, TEX_DEFAULT, 139,69,19},
-  {OBJ_POISON2,-2,0,2, TEX_DEFAULT, 0,255,0}
+/*  default towers  */
+tower default_towers[6] = {
+  {0,OBJ_BASIC,1,{17,0,-17},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Basic",1,         5, 3,4,0,10,"Description"},
+  {0,OBJ_FIRE,1,{9,0,-13},{1,1,1},{0,0,0},TEX_FIRE,{10,5,5},
+   "Fire",1,          12,4,3,0,40,"Description"},
+  {0,OBJ_FIRE2,1,{9,0,-9},{1,1,1},{0,0,0},TEX_FIRE,{15,5,5},
+   "Advanced Fire",1, 12,6,3,0,45,"Description"},
+  {0,OBJ_ICE,1,{13,0,3},{1,1,1},{0,0,0},TEX_ICE,{20,5,5},
+   "Ice",1,           12,5,4,0,50,"Description"},
+  {0,OBJ_EARTH,1,{13,0,19},{1,1,1},{0,0,0},TEX_EARTH,{25,5,5},
+   "Earth",1,         10,8,6,0,60,"Description"},
+  {0,OBJ_POISON2,1,{17,0,-5},{1,1,1},{0,0,0},TEX_POISON,{30,5,5},
+   "Advanced Poison",1,12,8,3,0,75,"Description"}
 };

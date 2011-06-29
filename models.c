@@ -413,7 +413,8 @@ void keep(double x,double y,double z,
 	  double dx,double dy,double dz,
 	  double th)
 {
-  tower t = {0, OBJ_ADV_SQUARE,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_BRICK2,{1,1,1}};
+  tower t = {0, OBJ_ADV_SQUARE,1,{9,0,9},{1.5,2,1.5},{0,0,0},TEX_BRICK2,{1,1,1},
+	     "Advanced Tower",-1,-1,-1,-1,-1,-1,"Description"};
   glPushMatrix();
   glTranslated(x,y,z);
   glRotated(th,0,1,0);
@@ -472,17 +473,45 @@ void keep(double x,double y,double z,
 }
 
 /*
+ *  shot
+ *  ------
+ *  draws an individual shot
+ */
+void shotModel(shot s)
+{
+  glPushMatrix();
+  glTranslated(s.p.x, s.p.y, s.p.z);
+  currentTexture = textures[s.texture];
+  sphere(0,0,0, 0.5,towerTh);
+  currentTexture = textures[TEX_DEFAULT];
+  glPopMatrix();
+}
+
+/*
  *  minionModel
  *  ------
  *  A minionModel is just an obj at a particular location
  */
 void minionModel(minion m)
 {
+  /* draw the minion */
   glPushMatrix();
   glTranslated(m.translation.x,m.translation.y,m.translation.z);
   glRotated(m.rotation.y,0,1,0);
   glScaled(m.scale.x,m.scale.y,m.scale.z);
   glCallList(m.type);
+
+  /* sphere for reference with collision detection 
+     collision detection should probably be done via a box for the planes
+     but I'm using a sphere for ease of use/time
+  */
+  if (showCollisionDetection) {
+    glColor3f(1,1,0);
+    glTranslated(-2,4,-0.5);
+    glutSolidSphere(5,16,16);
+    glColor3fv(white);
+  }
+
   glPopMatrix();
 }
 

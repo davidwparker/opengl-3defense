@@ -17,23 +17,12 @@ void sidebarRow(int x, int y, int obj, char* text)
   glColor3fv(white);
 }
 
-/* 
- *  sidebarRowT
- *  ------
- *  Add a row of text with: x, y, text, with optional texture selected highlight
- */
-void sidebarRowT(int x, int y, int obj, char* text)
-{
-  glColor3fv(white);
-  if (currentTextureSelected == obj) glColor3f(1,0,1);
-  printAt(x,y,text);
-  glColor3fv(white);
-}
-
 /*
  *  sidebarDisplay
  *  ------
  *  The display for the sidebar
+ *  TODO: textures for tower selection
+ *  TODO: don't let user select tower unless they have enough money
  */
 void sidebarDisplay(void)
 {
@@ -42,7 +31,8 @@ void sidebarDisplay(void)
   glLoadIdentity();
 
   sidebarRow(80, windowHeight-DEF_TEXT_Y_OFFSET*line, -1, "3Defense");
-  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "WAVE: %d out of %d", wave, lastWave);
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "WAVE: %d out of %d", waveNumber, lastWave);
+  printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "SCORE: %d", score);
   printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "LIVES: %d", lives);
   printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "MONEY: %d", money);
   printAt(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, "SCROLLS: %d", scrolls);
@@ -70,8 +60,8 @@ void sidebarDisplay(void)
   ++line;
   setFont("helvetica",12);
   glColor3fv(white);
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "For best (accurate) results, ");
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "draw on the board");
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "INFO");
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "%s",info);
   printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Object Picked: %d", objectPicked);
   setFont("helvetica",18);
 
@@ -102,8 +92,8 @@ void sidebarReshape(int width, int height)
  */
 void sidebarMouse(int btn, int state, int x, int y)
 {
-  int lineUp   = 5;
-  int lineDown = 6;
+  int lineUp   = 6;
+  int lineDown = 7;
   /* only left mouse button */
   if (btn != GLUT_LEFT_BUTTON || state != GLUT_DOWN) return;
 

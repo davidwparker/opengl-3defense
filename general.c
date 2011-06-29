@@ -92,26 +92,6 @@ point findPreviewPosition(int x, int y)
   return returnP;
 }
 
-/*
- *  idle
- *  ------
- *  If we have movement on, then the light spins and the tower tops spin
- */
-void idle(void)
-{
-  static int lastTime = 0;
-  int time = glutGet(GLUT_ELAPSED_TIME);
-  double t = time/1000.0;
-  if (lastTime == 0 || time >= lastTime + 30) {
-    lastTime = time;
-    moveLight(t);
-    moveTowerTops(t);
-
-    moveMinions();
-    redisplayAll();
-  }
-}
-
 /* 
  *  incrementRGB
  *  ------
@@ -191,8 +171,47 @@ void redisplayAll(void)
  */
 void reset()
 {
-  /* reset the current objects with 0's and default objects */
   int i;
+
+  /* reset font styling */
+  fontStyle = DEF_FONT_STYLE;
+
+  /* reset projection */
+  asp  = DEF_ASP;
+  dim  = DEF_DIM;
+  th   = DEF_TH;
+  ph   = DEF_PH;
+  fov  = DEF_FOV;
+  ecX  = DEF_ECX;
+  ecY  = DEF_ECY;
+  ecZ  = DEF_ECZ;  
+
+  /* reset toggle draw */
+  axes = DEF_AXES;
+  grid = DEF_GRID;
+  vals = DEF_VALS;
+
+  /* reset collision detection */
+  showCollisionDetection = DEF_COLLISION;
+  lastShot               = DEF_LAST_SHOT;
+
+  /* reset animation */
+  gameStarted    = DEF_GAME_STARTED;
+  gamePaused     = DEF_GAME_PAUSED;
+  gameSpeed      = DEF_GAME_SPEED;
+  moveLightB     = DEF_MOVE_LIGHT;
+  lightPh        = DEF_L_PH;
+  moveTowerTopsB = DEF_MOVE_TOWER_TOPS;
+  towerTh        = DEF_TOWER_TH;
+
+  /* reset game data */
+  lives      = DEF_LIVES;
+  money      = DEF_MONEY;
+  scrolls    = DEF_SCROLLS;
+  waveNumber = DEF_WAVE;
+  lastWave   = DEF_LAST_WAVE;
+
+  /* reset object selection */
   for (i=0;i<DEF_CURRENT_OBJS_SIZE;i++) {
     towers[i].id = 0;
     towers[i].type = 0;
@@ -204,42 +223,28 @@ void reset()
     towers[i].rgb.g = 0;
     towers[i].rgb.b = 0;
   }
-  /*
-  if (drawDefaults)
-    for (i=0;i<Length(default_objects);i++)
-      towers[i] = default_objects[i];
+  preview_tower.id = 0;
+  preview_tower.type = 0;
+  preview_tower.translation.x = 0;
+  preview_tower.translation.y = 0;
+  preview_tower.translation.z = 0;
+  preview_tower.texture = 0;
+  preview_tower.name = "preview";
 
-  if (drawDefaults) lastCurrentObject = DEF_LAST_CURRENT_OBJECT+Length(default_objects);
-  else lastCurrentObject = DEF_LAST_CURRENT_OBJECT;*/
 
-  /* reset object selection */
-  objectSelected    = DEF_OBJ_SEL;
-  objectPicked      = DEF_OBJ_PICKED;
+  /* preview_points are okay */
   preview           = DEF_PREVIEW;
+  objectSelected    = DEF_OBJ_SEL;
+  lastCurrentObject = DEF_LAST_CURRENT_OBJECT;
+  renderMode        = DEF_RENDER;
+  objectPicked      = DEF_OBJ_PICKED;
   currentRed   = DEF_CURRENT_RED;
   currentGreen = DEF_CURRENT_GREEN;
   currentBlue  = DEF_CURRENT_BLUE;
 
-  /* reset the rest */
-  asp  = DEF_ASP;
-  dim  = DEF_DIM;
-  th   = DEF_TH;
-  ph   = DEF_PH;
-  fov  = DEF_FOV;
-  ecX  = DEF_ECX;
-  ecY  = DEF_ECY;
-  ecZ  = DEF_ECZ;  
-
-  axes = DEF_AXES;
-  vals = DEF_VALS;
-  fontStyle    = DEF_FONT_STYLE;
-
-  /* reset animation */
-  moveLightB     = DEF_MOVE_LIGHT;
-  lightPh        = DEF_L_PH;
-  moveMinionsB   = DEF_MOVE_MINIONS;
-  moveTowerTopsB = DEF_MOVE_TOWER_TOPS;
-  towerTh        = DEF_TOWER_TH;
+  /* reset minions */
+  /* minions are reset by the waves */
+  initWaves();
 
   /* reset lighting */
   light     = DEF_LIGHT;

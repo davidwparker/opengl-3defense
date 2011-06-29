@@ -26,7 +26,6 @@ int main(int argc,char* argv[])
   glutReshapeFunc(windowReshape);
   glutSpecialFunc(windowSpecial);
   glutKeyboardFunc(windowKey);
-  glutVisibilityFunc(windowVisible);
 
   reset();
   initialize();

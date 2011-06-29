@@ -100,6 +100,24 @@ void vertex(double th,double ph)
 }
 
 /*
+ *  circle
+ *  ------
+ *  Draw a circle of radius r
+ */
+void circle(int r)
+{
+  int th;
+  glRotated(90,1,0,0);
+  glScaled(r,r,r);
+  glBegin(GL_QUAD_STRIP);
+  for (th=0;th<=360;th+=2*DEF_D) {
+    vertex(th,0);
+    vertex(th,1);
+  }
+  glEnd();
+}
+
+/*
  *  Draw a sphere
  *     at (x,y,z)
  *     radius (r)

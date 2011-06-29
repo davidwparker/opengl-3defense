@@ -8,7 +8,7 @@ TODO:
 Top 4 issues are probably going to be priority, unless you say otherwise... 
 with #1 getting the majority of my focus.
 
-#1) FIX FRAMERATE ISSUE. This Ubuntu/Freeglut thing is haunting me. Since adding shadows and minions, 
+???? #1) FIX FRAMERATE ISSUE. This Ubuntu/Freeglut thing is haunting me. Since adding shadows and minions, 
 whenever I use gluUnProject, some of the times I get a bad Z value (and by some, I mean quite often if
 the framerate is higher). By adding a delay (currently ~80-100 ms), then it works, but if I drop down
 to ~30 then it doesn't work on my Ubuntu machine. It works perfectly on my Macbook Pro.
@@ -17,10 +17,10 @@ If you have time, I would like to meet with you if you have any knowledge of wha
 this issue.
 
 Gameplay:
-#2) Add 'waves' of minions, where a group of minions will go, then X time later, a second wave will go, 
+DONE #2) Add 'waves' of minions, where a group of minions will go, then X time later, a second wave will go, 
 and so on.
-#3) Add the ability for the towers to "attack" the minions by shooting things.
-#4) By way of #3, add collision detection for those attacks whene hitting the minions.
+DONE #3) Add the ability for the towers to "attack" the minions by shooting things.
+#4) By way of #3, add collision detection for those attacks when hitting the minions.
 #5) Ensure that the user earns money for kills, and is able to only buy certain towers.
 #6) Provide ability to upgrade towers (example: fire tower becomes advanced fire tower).
 
@@ -32,7 +32,7 @@ money, lives, etc.
 #9) Add pop-ups, etc, on hover-over for icons, etc. to show the statistics of the towers.
 #10) Show area of attack for the towers.
 
- (SOME OF THESE MAY BE WRONG...)
+(SOME OF THESE MAY BE WRONG...)
 The following interactions are provided:
 Keyboard interactions:
 Special Keys:

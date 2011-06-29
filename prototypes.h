@@ -18,6 +18,7 @@ void cube(double x,double y,double z,
 	  double dx,double dy,double dz,
 	  double th);
 void vertex(double th, double ph);
+void circle(int r);
 void sphere(double x,double y,double z,double r,double rot);
 void cone(double x,double y,double z, double r, double h,int deg);
 void cylinder(double x,double y,double z,
@@ -60,6 +61,7 @@ void wall(double x, double y, double z,
 void keep(double x, double y, double z,
 	  double dx,double dy,double dz,
 	  double th);
+void shotModel(shot s);
 void minionModel(minion m);
 
 /*  Towers (towers.c)  */
@@ -93,8 +95,11 @@ void initTextures(void);
 void initBackground(void);
 void initObjs(void);
 void initMinions(void);
+void initShots(void);
+void initWaves(void);
 void initPath(void);
 void initPreviewPoints(void);
+void initDefaultTowers(void);
 void screenInit(void);
 void sidebarInit(void);
 
@@ -108,14 +113,23 @@ void drawBoard(void);
 void drawPath(void);
 void drawForests(void);
 void drawKeep(void);
+void drawShots(void);
 void drawMinions(void);
 void drawObjects(void);
 void drawScene(void);
 
 /*  Animation (animate.c)  */
+void timer(int toggle);
+void slowAnimate(void);
+void moveLight(void);
+void moveMinion(int k, int i, int j);
 void moveMinions(void);
-void moveLight(double t);
-void moveTowerTops(double t);
+void moveShots(void);
+void moveTowerTops(void);
+
+/*  Collisions (collision.c)  */
+void checkCollisions(void);
+void checkTowerRange(void);
 
 /*  Shadows (shadow.c)  */
 void shadowProjection(float L[4], float E[4], float N[4]);
@@ -138,10 +152,14 @@ void screenPmotion(int x, int y);
 
 /*  Sidebar display (sidebar.c)  */
 void sidebarRow(int x, int y, int obj, char* text);
-void sidebarRowT(int x, int y, int obj, char* text);
 void sidebarDisplay(void);
 void sidebarReshape(int width, int height);
 void sidebarMouse(int btn, int state, int x, int y);
 
 /*  Gameplay (gameplay.c)  */
-void modifyLives(int die);
+int calculateDamageToMinion(int k, int j, int i);
+void modifyLives(int die, int damage);
+void modifyMoney(int what, int amount);
+void modifyScore(int k);
+void removeMinion(int k, int j);
+void removeShot(int i);

@@ -25,6 +25,11 @@ void basicTower(tower t)
   cylinder(0,4,0, 1.2,1);
 
   currentTexture = textures[TEX_DEFAULT];
+
+  /* everything has a hard-coded range of 10 at the moment*/
+  if (t.range > -1 && showAttackRadius) {
+    circle(t.range);
+  }
   glPopMatrix();
 }
 
@@ -35,12 +40,12 @@ void basicTower(tower t)
  */
 void advancedTower(tower t)
 {
-  tower t2 = {0, OBJ_BASIC,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
+  tower t2 = {0,OBJ_BASIC,1,{0,0,0},{1,1,1},{0,0,0},t.texture,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-  t2.texture = t.texture;
   basicTower(t2);
 
   /* 8x cones as spikes */
@@ -82,6 +87,11 @@ void coneTower(tower t)
   cylinder(0,4.0,0, 1.5,1.0);
 
   currentTexture = textures[TEX_DEFAULT];
+
+  /* everything has a hard-coded range of 10 at the moment*/
+  if (t.range > -1 && showAttackRadius) {
+    circle(t.range);
+  }
   glPopMatrix();
 }
 
@@ -92,12 +102,12 @@ void coneTower(tower t)
  */
 void advancedConeTower(tower t)
 {
-  tower t2 = {0, OBJ_CONE,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
+  tower t2 = {0,OBJ_CONE,1,{0,0,0},{1,1,1},{0,0,0},t.texture,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-  t2.texture = t.texture;
   coneTower(t2);
 
   /* 8x cones as spikes */
@@ -136,6 +146,12 @@ void squareTower(tower t)
   pyramid(0,4,0, 0.75,0.75,0.75, 0);
 
   currentTexture = textures[TEX_DEFAULT];
+
+  /**/
+  if (t.range > -1 && showAttackRadius) {
+    /* everything has a hard-coded range of 10 at the moment*/
+    circle(t.range);
+  }
   glPopMatrix();
 }
 
@@ -146,12 +162,12 @@ void squareTower(tower t)
  */
 void advancedSquareTower(tower t)
 {
-  tower t2 = {0, OBJ_SQUARE,{0,0,0},{1,1,1},{0,0,0},TEX_DEFAULT,{1,1,1}};
+  tower t2 = {0, OBJ_SQUARE,1,{0,0,0},{1,1,1},{0,0,0},t.texture,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
   glScaled(t.scale.x,t.scale.y,t.scale.z);
-  t2.texture = t.texture;
   /* base */
   squareTower(t2);
 
@@ -177,7 +193,8 @@ void advancedSquareTower(tower t)
  */
 void fireTower(tower t)
 {
-  tower t2 = {0, OBJ_FIRE,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1}};
+  tower t2 = {0, OBJ_FIRE,1,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -198,7 +215,8 @@ void fireTower(tower t)
  */
 void fireTower2(tower t)
 {
-  tower t2 = {0, OBJ_FIRE2,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1}};
+  tower t2 = {0, OBJ_FIRE2,1,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -219,7 +237,8 @@ void fireTower2(tower t)
  */
 void iceTower(tower t)
 {
-  tower t2 = {0, OBJ_ICE,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1}};
+  tower t2 = {0, OBJ_ICE,1,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -240,7 +259,8 @@ void iceTower(tower t)
  */
 void iceTower2(tower t)
 {
-  tower t2 = {0, OBJ_ICE2,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1}};
+  tower t2 = {0, OBJ_ICE2,1,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -261,7 +281,8 @@ void iceTower2(tower t)
  */
 void earthTower(tower t)
 {
-  tower t2 = {0, OBJ_EARTH,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1}};
+  tower t2 = {0, OBJ_EARTH,1,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -282,7 +303,8 @@ void earthTower(tower t)
  */
 void earthTower2(tower t)
 {
-  tower t2 = {0, OBJ_EARTH,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1}};
+  tower t2 = {0, OBJ_EARTH,1,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -303,7 +325,8 @@ void earthTower2(tower t)
  */
 void poisonTower(tower t)
 {
-  tower t2 = {0, OBJ_POISON,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1}};
+  tower t2 = {0, OBJ_POISON,1,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);
@@ -324,7 +347,8 @@ void poisonTower(tower t)
  */
 void poisonTower2(tower t)
 {
-  tower t2 = {0, OBJ_POISON,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1}};
+  tower t2 = {0, OBJ_POISON,1,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{1,1,1},
+	      t.name,1,t.range,t.damage,t.fireRate,0,t.cost,"Description"};
   glPushMatrix();
   glTranslated(t.translation.x,t.translation.y,t.translation.z);
   glRotated(t.rotation.y,0,1,0);

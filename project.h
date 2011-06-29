@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 /* OpenGL and friends */
 #ifdef USEGLEW
@@ -52,21 +53,30 @@ extern double ecZ;
 /*  Toggle draw displays  */
 extern int axes;
 extern int grid;
+extern int showAttackRadius;
 extern int vals;
-extern int drawDefaults;
+
+/*  Shots/Collision detection  */
+extern int showCollisionDetection;
+extern int lastShot;
+extern shot shots[200];
 
 /*  Animation  */
+extern int gameStarted;
+extern int gamePaused;
+extern int gameSpeed;
 extern int moveLightB;
 extern int lightPh;
-extern int moveMinionsB;
 extern int moveTowerTopsB;
 extern int towerTh;
 
 /*  Game Data  */
+extern char *info;
 extern int lives;
 extern int money;
 extern int scrolls;
-extern int wave;
+extern int score;
+extern int waveNumber;
 extern int lastWave;
 
 /*  User Interaction  */
@@ -86,7 +96,8 @@ extern int currentGreen;
 extern int currentBlue;
 
 /*  Minions  */
-extern minion minions[1];
+extern wave waves[DEF_LAST_WAVE];
+extern minion minions[DEF_MINION_PER_WAVE_SIZE];
 extern int minionObj;
 
 /*  Light  */
@@ -115,6 +126,6 @@ extern float E[];
 extern GLfloat cube_v[][3];
 extern pathCube pathCubes[];
 extern pathCube fullPath[];
-extern GLfloat default_objects[4][8];
+extern tower default_towers[6];
 
 #endif

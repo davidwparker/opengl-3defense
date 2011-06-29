@@ -18,8 +18,8 @@ all: $(TARGET)
 	gcc -Wall -O3 -o ./$@ $^ $(LIBS)
 
 #  Delete unwanted files - Linux or OS/X
-clean:;rm -f $(TARGET) *.o *.a
+clean:;rm -f $(TARGET) *.o *.a *~
 
 #  Create archive
-project.a:globals.o print.o loadTexBMP.o loadObj.o shapes.o models.o towers.o general.o initialize.o drawing.o animate.o shadow.o window.o screen.o sidebar.o gameplay.o
+project.a:globals.o print.o loadTexBMP.o loadObj.o shapes.o models.o towers.o general.o initialize.o drawing.o animate.o collision.o shadow.o window.o screen.o sidebar.o gameplay.o
 	ar -rcs project.a $^

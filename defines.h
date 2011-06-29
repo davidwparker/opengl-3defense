@@ -32,25 +32,34 @@
 #define DEF_ECZ 4
 
 /*  Draw defaults  */
-#define DEF_DRAW_DEFAULTS 0
-#define DEF_GRID 1
 #define DEF_AXES 0
-#define DEF_VALS 1
+#define DEF_GRID 0
+#define DEF_SHOW_ATTACK 0
+#define DEF_VALS 0
 #define DEF_D 5
 
+/*  Shots/Collision detection  */
+#define DEF_LAST_SHOT 0
+#define DEF_COLLISION 0
+
 /*  Animation  */
+#define DEF_INFO "Game information here"
+#define DEF_GAME_STARTED 0
+#define DEF_GAME_PAUSED 1
+#define DEF_GAME_SPEED 30
 #define DEF_MOVE_LIGHT 1
 #define DEF_L_PH 90
-#define DEF_MOVE_MINIONS 1
-#define DEF_MOVE_TOWER_TOPS 0
+#define DEF_MOVE_TOWER_TOPS 1
 #define DEF_TOWER_TH 0
 
 /*  Game Data  */
 #define DEF_LIVES 10
-#define DEF_MONEY 500
+#define DEF_MONEY 100
 #define DEF_SCROLLS 0
+#define DEF_SCORE 0
 #define DEF_WAVE 0
-#define DEF_LAST_WAVE 10
+#define DEF_LAST_WAVE 5
+#define DEF_MINION_PER_WAVE_SIZE 10
 
 /*  Object definitions  */
 #define OBJ_FIRE 1

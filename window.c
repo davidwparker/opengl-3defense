@@ -26,16 +26,34 @@ void windowKey(unsigned char key,int x,int y)
 {
   /*  Exit on ESC */
   if (key == 27) exit(0);
+  /*  Spacebar to begin game or send next wave */
+  else if (key == 32) { 
+    if (gameStarted == DEF_GAME_STARTED) {
+      gameStarted=1; 
+      gamePaused=0;
+      waveNumber=1;
+      timer(1);
+    } else {
+      /* right now, for performance reasons, only allow one wave at a time */
+      if (waveNumber < DEF_LAST_WAVE) {
+	int i,inPlay = 0;
+	for (i=0;i<Length(waves[waveNumber-1].m);i++){
+	  if (waves[waveNumber-1].m[i].inPlay == 1) inPlay = 1;
+	}
+	if (inPlay == 0) waveNumber++;
+      }
+    }
+  }
   /*  reset to default screen */
   else if (key == 'r' || key == 'R') reset();
   /*  toggle axes */
   else if (key == 'x' || key == 'X') axes = 1-axes;
-  /*  toggle draw defaults */
-  else if (key == 'f' || key == 'F') drawDefaults = 1-drawDefaults;
-  /*  toggle text values displayed at bottom */
-  else if (key == 'v' || key == 'V') vals = 1-vals;
   /*  toggle grid */
   else if (key == 'g' || key == 'G') grid = 1-grid;
+  /*  toggle show attack radius (circles) */
+  else if (key == 'c' || key == 'C') showAttackRadius = 1-showAttackRadius;
+  /*  toggle text values displayed at bottom */
+  else if (key == 'v' || key == 'V') vals = 1-vals;
   /*  change field of view angle */
   else if (key == '-' && key>1) fov--;
   else if (key == '+' && key<179) fov++;
@@ -43,10 +61,12 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == 'i' && dim>1) dim -= 0.2;
   else if (key == 'I') dim += 0.2;
   /*  BEGIN ANIMATION FUNCTIANALITY */
+  /*  Slow animate */
+  else if (key == 'z') slowAnimate();
   /*  Toggle light movement */
   else if (key == 'm') moveLightB = 1-moveLightB;
-  /*  Toggle minion movement */
-  else if (key == 'p') moveMinionsB = 1-moveMinionsB;
+  /*  Toggle game paused */
+  else if (key == 'p') gamePaused = 1-gamePaused;
   /*  Toggle tower tops moving */
   else if (key == 'M') moveTowerTopsB = 1-moveTowerTopsB;
   /*  BEGIN LIGHTING FUNCTIONALITY */
@@ -101,6 +121,7 @@ void windowKey(unsigned char key,int x,int y)
       towers[objectPicked].rgb.r = 0;
       towers[objectPicked].rgb.g = 0;
       towers[objectPicked].rgb.b = 0;
+      towers[objectPicked].inPlay = 0;
       objectPicked = DEF_OBJ_PICKED;
       if (debug) printf("Killed current object picked ID: %d\n", objectPicked);
     }
@@ -175,15 +196,5 @@ void windowReshape(int width,int height)
   glutSetWindow(sidebar);
   glutPositionWindow(windowWidth-DEF_SIDEBAR_WIDTH,0);
   glutReshapeWindow(DEF_SIDEBAR_WIDTH,windowHeight);
-}
-
-/*
- *  windowVisible
- *  ------
- *  If the program is visible, then do idle function
- */
-void windowVisible(int vis)
-{
-  glutIdleFunc(vis == GLUT_VISIBLE ? idle: NULL);
 }
 

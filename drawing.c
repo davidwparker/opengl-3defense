@@ -12,7 +12,7 @@
 void drawAxes(void)
 {
   /* axes length */
-  const double len=DEF_D_FLOOR;
+  const double len=5.0;
 
   /*  Draw axes - no lighting */
   if (axes) {
@@ -259,15 +259,31 @@ void drawKeep(void)
 }
 
 /*
+ *  drawShots
+ *  ------
+ *  Draws the shots from the towers
+ */
+void drawShots(void)
+{
+  int i;
+  for (i=0;i<Length(shots);i++) {
+    if (shots[i].inPlay == 1) shotModel(shots[i]);
+  }
+}
+
+/*
  *  drawMinions
  *  ------
- *  draw the minions
+ *  draw the minions that are in play
+ *  TODO: add object selection for minions
  */
 void drawMinions(void)
 {
-  int i;
-  for (i=0;i<Length(minions);i++) {
-    minionModel(minions[i]);
+  int i,k;
+  for (k=0;k<waveNumber;k++) {
+    for (i=0;i<Length(waves[k].m);i++) {
+      if (waves[k].m[i].inPlay == 1) minionModel(waves[k].m[i]);
+    }
   }
 }
 
@@ -282,39 +298,43 @@ void drawObjects(void)
 
   /* preview tower */
   if (preview_tower.id != DEF_OBJ_SEL) {
-    int oType = preview_tower.type;
-    tower t = {preview_tower.id, preview_tower.type,
+    tower t = {preview_tower.id,preview_tower.type,preview_tower.inPlay,
 	       {preview_tower.translation.x,preview_tower.translation.y,preview_tower.translation.z},
-	       {1,1,1},{0,0,0},preview_tower.texture,{1,1,1}};
+	       {1,1,1},{0,0,0},preview_tower.texture,{1,1,1},
+	       preview_tower.name,1,preview_tower.range,preview_tower.damage,
+	       preview_tower.fireRate,0,preview_tower.cost};
 
     /* awesome opacity for the preview */
+    showAttackRadius = 1;
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE,GL_ONE_MINUS_DST_COLOR);
-    if (oType == OBJ_BASIC) basicTower(t);
-    else if (oType == OBJ_ADV) advancedTower(t);
-    else if (oType == OBJ_CONE) coneTower(t);
-    else if (oType == OBJ_ADV_CONE) advancedConeTower(t);
-    else if (oType == OBJ_SQUARE) squareTower(t);
-    else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(t);
-    else if (oType == OBJ_FIRE) fireTower(t);
-    else if (oType == OBJ_FIRE2) fireTower2(t);
-    else if (oType == OBJ_ICE) iceTower(t);
-    else if (oType == OBJ_ICE2) iceTower2(t);
-    else if (oType == OBJ_EARTH) earthTower(t);
-    else if (oType == OBJ_EARTH2) earthTower2(t);
-    else if (oType == OBJ_POISON) poisonTower(t);
-    else if (oType == OBJ_POISON2) poisonTower2(t);
+    if (t.type == OBJ_BASIC) basicTower(t);
+    else if (t.type == OBJ_ADV) advancedTower(t);
+    else if (t.type == OBJ_CONE) coneTower(t);
+    else if (t.type == OBJ_ADV_CONE) advancedConeTower(t);
+    else if (t.type == OBJ_SQUARE) squareTower(t);
+    else if (t.type == OBJ_ADV_SQUARE) advancedSquareTower(t);
+    else if (t.type == OBJ_FIRE) fireTower(t);
+    else if (t.type == OBJ_FIRE2) fireTower2(t);
+    else if (t.type == OBJ_ICE) iceTower(t);
+    else if (t.type == OBJ_ICE2) iceTower2(t);
+    else if (t.type == OBJ_EARTH) earthTower(t);
+    else if (t.type == OBJ_EARTH2) earthTower2(t);
+    else if (t.type == OBJ_POISON) poisonTower(t);
+    else if (t.type == OBJ_POISON2) poisonTower2(t);
     glDisable(GL_BLEND);
+    showAttackRadius = 0;
   }
 
   /* towers */
-  if (Length(towers) > 0) {
-    for (i = 0; i < Length(towers); i++) {
-      int oType = towers[i].type;
-      tower t = {0, towers[i].type,
+  for (i = 0; i < Length(towers); i++) {
+    if (towers[i].inPlay) {
+      tower t = {0,towers[i].type,towers[i].inPlay,
 		 {towers[i].translation.x,towers[i].translation.y,towers[i].translation.z},
 		 {1,1,1},{0,0,0},towers[i].texture,
-		 {towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b}};
+		 {towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b},
+		 towers[i].name,towers[i].level,towers[i].range,towers[i].damage,
+		 towers[i].fireRate,towers[i].lastFired,towers[i].cost,towers[i].description};
 
       /* draw the objects */
       if (renderMode == DEF_SELECT) {
@@ -322,20 +342,20 @@ void drawObjects(void)
 	glDisable(GL_LIGHTING);
 	glColor3ub(towers[i].rgb.r,towers[i].rgb.g,towers[i].rgb.b);
       }
-      if (oType == OBJ_BASIC) basicTower(t);
-      else if (oType == OBJ_ADV) advancedTower(t);
-      else if (oType == OBJ_CONE) coneTower(t);
-      else if (oType == OBJ_ADV_CONE) advancedConeTower(t);
-      else if (oType == OBJ_SQUARE) squareTower(t);
-      else if (oType == OBJ_ADV_SQUARE) advancedSquareTower(t);
-      else if (oType == OBJ_FIRE) fireTower(t);
-      else if (oType == OBJ_FIRE2) fireTower2(t);
-      else if (oType == OBJ_ICE) iceTower(t);
-      else if (oType == OBJ_ICE2) iceTower2(t);
-      else if (oType == OBJ_EARTH) earthTower(t);
-      else if (oType == OBJ_EARTH2) earthTower2(t);
-      else if (oType == OBJ_POISON) poisonTower(t);
-      else if (oType == OBJ_POISON2) poisonTower2(t);
+      if (t.type == OBJ_BASIC) basicTower(t);
+      else if (t.type == OBJ_ADV) advancedTower(t);
+      else if (t.type == OBJ_CONE) coneTower(t);
+      else if (t.type == OBJ_ADV_CONE) advancedConeTower(t);
+      else if (t.type == OBJ_SQUARE) squareTower(t);
+      else if (t.type == OBJ_ADV_SQUARE) advancedSquareTower(t);
+      else if (t.type == OBJ_FIRE) fireTower(t);
+      else if (t.type == OBJ_FIRE2) fireTower2(t);
+      else if (t.type == OBJ_ICE) iceTower(t);
+      else if (t.type == OBJ_ICE2) iceTower2(t);
+      else if (t.type == OBJ_EARTH) earthTower(t);
+      else if (t.type == OBJ_EARTH2) earthTower2(t);
+      else if (t.type == OBJ_POISON) poisonTower(t);
+      else if (t.type == OBJ_POISON2) poisonTower2(t);
       
       if (renderMode == DEF_SELECT) {
 	glEnable(GL_DITHER);
@@ -410,19 +430,6 @@ void drawShadows()
   glPopAttrib();
 }
 
-void scene()
-{
-   int i;
-   //  Draw two teapots
-   for (i=-1;i<=1;i+=2)
-   {
-      glPushMatrix();
-      glTranslated(0.5*i,0.5*i,0);
-      glutSolidTeapot(0.5);
-      glPopMatrix();
-   }
-}
-
 /*
  *  drawScene
  *  ------
@@ -430,16 +437,19 @@ void scene()
  */
 void drawScene(void)
 {
-  drawAxes();
-  drawGrid();
-  drawParameters();
-  drawBackground(3.5*dim);
-  drawLight();
-  /* anything with lighting should be drawn after the light */
-  drawBoard();
-  drawPath();
-  drawForests();
-  drawKeep();
+  if (renderMode == DEF_RENDER) {
+    drawAxes();
+    drawGrid();
+    drawParameters();
+    drawBackground(3.5*dim);
+    drawLight();
+    /* anything with lighting should be drawn after the light */
+    drawBoard();
+    drawPath();
+    drawForests();
+    drawKeep();
+    drawShots();
+  }
   drawMinions();
   drawObjects();
   /* only draw shadows on rendering, not selection */

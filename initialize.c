@@ -18,8 +18,11 @@ void initialize(void)
   initBackground();
   initObjs();
   initMinions();
+  initWaves();
+  initShots();
   initPath();
   initPreviewPoints();
+  initDefaultTowers();
 }
 
 /*
@@ -116,6 +119,7 @@ void initMinions(void)
      int id;
      int type;
      point translation;
+
      point scale;
      point rotation;
      int texture;
@@ -126,13 +130,69 @@ void initMinions(void)
      int health;
      int money;
      int speed;
-     int wave;
+     int inPlay;
   */
+  /* make a few default minions for the various waves */
+  minion m0 = {0,minionObj,{26,0,-0.5},
+	       {1,1,1},{0,270,0},0,{1,1,1},
+	       "F16",1,5,5,1,1};
+  int i;
+  for (i=0;i<DEF_MINION_PER_WAVE_SIZE;i++) {
+    minions[i] = m0;
+  }
+}
 
-  minion m = {0,minionObj,{26,0,-0.5},
-	      {0.3,0.3,0.3,},{0,0,0},
-	      0,{1,1,1},"F16",0,0,0,5,0};
-  minions[0] = m;
+/*
+ *  initWaves
+ *  ------
+ *  initializes the waves which will be used
+ *  TODO: initialize minions with unique colors for object selection
+ */
+void initWaves()
+{
+  wave wave = {0,1};
+  int i,k;
+  /* fixed length of X minions per wave so we don't have to deal 
+     with flexible array variables in structs */
+  for (k=0;k<Length(waves);k++) {
+    for (i=0;i<Length(minions);i++) {
+      /* change stats for each wave */
+      minions[i].scale.x = (k+1)*0.1;
+      minions[i].scale.y = (k+1)*0.1;
+      minions[i].scale.z = (k+1)*0.1;
+      /* damage health money speed */
+      minions[i].damage += k;
+      minions[i].health += (2*k);
+      minions[i].money  += (5*k);
+      if (k < 3)
+	minions[i].speed = 5-k;
+      /* minimum speed of 2 */
+      else 
+	minions[i].speed = 2;
+
+      /* default wave length is 10, for each of 0-4 waves decrement by 2 */
+      if (i >= (DEF_MINION_PER_WAVE_SIZE-2*k)) {
+	minions[i].inPlay = 0;
+      }
+
+      wave.m[i] = minions[i];
+    }
+    waves[k] = wave;
+  }
+}
+
+/*
+ *  initShots
+ *  ------
+ *  initializes the shot data
+ */
+void initShots()
+{
+  shot s = {0,{0,0,0},TEX_DEFAULT,0};
+  int i;
+  for (i=0;i<200;i++) {
+    shots[i] = s;
+  }
 }
 
 /*
@@ -193,6 +253,22 @@ void initPreviewPoints(void)
     preview_points[i].y = valid_points[i].y;
     preview_points[i].z = valid_points[i].z;
   }
+}
+
+/*
+ *  initDefaultTowers
+ *  ------
+ *  initialize the default towers into the towers array
+ */
+void initDefaultTowers(void)
+{
+  int i;
+  for (i=0;i<Length(default_towers);i++) {
+    printf("default tower %d \n",i);
+    towers[i] = default_towers[i];
+  }
+  lastCurrentObject = 6;
+  currentRed = 35;
 }
 
 /*
