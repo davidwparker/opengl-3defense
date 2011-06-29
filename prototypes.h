@@ -81,6 +81,8 @@ void poisonTower(tower t);
 void poisonTower2(tower t);
 
 /*  General Convenience (general.c)- the catchall  */
+void changeObjectSelected(int newObjectSelected);
+void setCurrentTowerData(int type);
 point findMousePosition(int x, int y);
 point findPreviewPosition(int x, int y);
 void idle(void);

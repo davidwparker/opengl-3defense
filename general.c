@@ -5,6 +5,37 @@
  */
 
 /*
+ *  changeObjectSelected
+ *  ------
+ *  changes to the new object selected, the preview, and then current tower data
+ */
+void changeObjectSelected(int newObjectSelected)
+{
+  objectSelected = newObjectSelected;
+  preview_tower.id = objectSelected;
+  preview_tower.translation.x = -255;
+  preview_tower.translation.y = -255;
+  preview_tower.translation.z = -255;
+  setCurrentTowerData(objectSelected);
+}
+
+/*
+ *  setCurrentTowerData
+ *  ------
+ *  sets the current tower data for a new tower or selected tower
+ */
+void setCurrentTowerData(int type)
+{
+  currentTextureSelected = tower_data[type-1].texture;
+  currentTowerName = tower_data[type-1].name;
+  currentTowerRange = tower_data[type-1].range;
+  currentTowerDamage = tower_data[type-1].damage;
+  currentTowerFireRate = tower_data[type-1].fireRate;
+  currentTowerCost = tower_data[type-1].cost;
+  currentTowerDescription = tower_data[type-1].description;
+}
+
+/*
  *  findMousePosition
  *  ------
  *  Determines the OpenGL mouse position based on world coordinates 
@@ -136,6 +167,8 @@ void processPicks(void)
     /* Found the object we need, break out of loop */
     if (pixel[0] == red && pixel[1] == green && pixel[2] == blue) {
       objectPicked = i;
+      printf("tower type :%d\n",towers[i].type);
+      setCurrentTowerData(towers[i].type);
       break;
     }
     /* Object not found, set to default */

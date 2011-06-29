@@ -42,27 +42,37 @@ void sidebarDisplay(void)
   sidebarRow(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, -1, "Select a tower to build:");
   setFont("helvetica",18);
   sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, DEF_OBJ_SEL, "[0] none");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_BASIC, "basic");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV, "advanced");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_CONE, "cone");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_CONE, "advanced cone");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_SQUARE, "square");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_SQUARE, "advanced square");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE, "[1] fire");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE2, "[2] advanced fire");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE, "[3] ice");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE2, "[4] advanced ice");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH, "[5] earth");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH2, "[6] advanced earth");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON, "[7] poison");
-  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON2, "[8] advanced poison");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_BASIC, "[1] basic");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV, "[2] advanced");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_CONE, "[3] cone");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_CONE, "[4] advanced cone");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_SQUARE, "[5] square");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ADV_SQUARE, "[6] advanced square");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE, "[CTRL+1] fire");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_FIRE2, "[CTRL+2] advanced fire");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE, "[CTRL+3] ice");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_ICE2, "[CTRL+4] advanced ice");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH, "[CTRL+5] earth");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_EARTH2, "[CTRL+6] advanced earth");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON, "[CTRL+7] poison");
+  sidebarRow(10, windowHeight-DEF_TEXT_Y_OFFSET*++line, OBJ_POISON2, "[CTRL+8] advanced poison");
 
   ++line;
   setFont("helvetica",12);
   glColor3fv(white);
   printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "INFO");
   printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "%s",info);
-  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Object Picked: %d", objectPicked);
+  printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "TOWER INFO");
+  if (objectSelected != DEF_OBJ_SEL || objectPicked != DEF_OBJ_PICKED) {
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Name: %s", currentTowerName);
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Cost: %d", currentTowerCost);
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Damage: %d", currentTowerDamage);
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Range: %d", currentTowerRange);
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Fire Rate: %d", currentTowerFireRate);
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Description:");
+    printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "   %s", currentTowerDescription);
+  }
+  if (debug) printAt(5, windowHeight-DEF_TEXT_Y_OFFSET*++line, "Object Picked: %d", objectPicked);
   setFont("helvetica",18);
 
   glFlush();
@@ -99,21 +109,21 @@ void sidebarMouse(int btn, int state, int x, int y)
 
   /* mouse position starts at upper left */
   if (x < 180 && x>= 5) {
-    if (y >= DEF_TEXT_Y_OFFSET*++lineUp+5 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=DEF_OBJ_SEL;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_BASIC;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_CONE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV_CONE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_SQUARE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ADV_SQUARE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_FIRE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_FIRE2;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ICE;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_ICE2;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_EARTH;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_EARTH2;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON;
-    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) objectSelected=OBJ_POISON2;
+    if (y >= DEF_TEXT_Y_OFFSET*++lineUp+5 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(DEF_OBJ_SEL);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_BASIC);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_ADV);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_CONE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_ADV_CONE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_SQUARE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_ADV_SQUARE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_FIRE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_FIRE2);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_ICE);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_ICE2);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_EARTH);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_EARTH2);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_POISON);
+    else if (y >= DEF_TEXT_Y_OFFSET*++lineUp+9 && y < DEF_TEXT_Y_OFFSET*++lineDown+9) changeObjectSelected(OBJ_POISON2);
   }
   /* 
    * TODO: fix bug where if user clicks here instead of using keyboard that the preview

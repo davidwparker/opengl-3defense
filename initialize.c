@@ -162,8 +162,9 @@ void initWaves()
       minions[i].scale.z = (k+1)*0.1;
       /* damage health money speed */
       minions[i].damage += k;
-      minions[i].health += (2*k);
+      minions[i].health += (15*k);
       minions[i].money  += (5*k);
+
       if (k < 3)
 	minions[i].speed = 5-k;
       /* minimum speed of 2 */
@@ -264,7 +265,6 @@ void initDefaultTowers(void)
 {
   int i;
   for (i=0;i<Length(default_towers);i++) {
-    printf("default tower %d \n",i);
     towers[i] = default_towers[i];
   }
   lastCurrentObject = 6;

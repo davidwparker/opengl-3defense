@@ -70,10 +70,7 @@ void modifyScore(int k)
  */
 void removeMinion(int k, int j)
 {
-  minion m = {0,minionObj,{-255,-255,-255},
-	       {1,1,1},{0,270,0},0,{1,1,1},
-	       "F16",1,5,5,1,0};
-  waves[k].m[j] = m;
+  waves[k].m[j].inPlay = 0;
   modifyScore(k+1);
   modifyMoney(1,waves[k].m[j].money);
 }

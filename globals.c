@@ -68,6 +68,12 @@ int objectPicked=DEF_OBJ_PICKED;               /* the object that we have picked
 int currentRed=DEF_CURRENT_RED;
 int currentGreen=DEF_CURRENT_GREEN;
 int currentBlue=DEF_CURRENT_BLUE;
+char *currentTowerName=DEF_CURRENT_TOWER_NAME;
+int currentTowerRange=DEF_CURRENT_TOWER_RANGE;
+int currentTowerDamage=DEF_CURRENT_TOWER_DAMAGE;
+int currentTowerFireRate=DEF_CURRENT_TOWER_FIRE_RATE;
+int currentTowerCost=DEF_CURRENT_TOWER_COST;
+char *currentTowerDescription=DEF_CURRENT_TOWER_DESCRIPTION;
 
 /*  MINIONS  */
 wave waves[DEF_LAST_WAVE];                   /* holds the waves of minions */
@@ -147,4 +153,51 @@ tower default_towers[6] = {
    "Earth",1,         10,8,6,0,60,"Description"},
   {0,OBJ_POISON2,1,{17,0,-5},{1,1,1},{0,0,0},TEX_POISON,{30,5,5},
    "Advanced Poison",1,12,8,3,0,75,"Description"}
+};
+
+/*  tower data  */
+tower tower_data[16] = {
+  /*
+    id, type, inPlay, translation, scale, rotation, texture, rgb,
+    name, leel, range, damage, fireRate, lastFired, cost, description
+   */
+  {0,OBJ_FIRE,1,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{5,5,5},
+   "Fire",1,          10,4,3,0,40,"Just your typical fire tower"},
+  {0,OBJ_FIRE2,1,{0,0,0},{1,1,1},{0,0,0},TEX_FIRE,{5,5,5},
+   "Advanced Fire",1, 12,6,3,0,45,"Just your typical fire tower - with spikes!"},
+
+  {0,OBJ_ICE,1,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{5,5,5},
+   "Ice",1,           10,5,4,0,50,"Just your typical ice tower"},
+  {0,OBJ_ICE2,1,{0,0,0},{1,1,1},{0,0,0},TEX_ICE,{5,5,5},
+   "Advanced Ice",1,  12,7,4,0,55,"Just your typical ice tower - with spikes!"},
+
+  {0,OBJ_EARTH,1,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{5,5,5},
+   "Earth",1,         10,8,6,0,60,"Just your typical earth tower"},
+  {0,OBJ_EARTH2,1,{0,0,0},{1,1,1},{0,0,0},TEX_EARTH,{5,5,5},
+   "Advanced Earth",1,12,8,6,0,60,"Just your typical earth tower - with spikes!"},
+
+  {0,OBJ_POISON,1,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{5,5,5},
+   "Poison",1,         10,6,3,0,70,"Just your typical poison tower"},
+  {0,OBJ_POISON2,1,{0,0,0},{1,1,1},{0,0,0},TEX_POISON,{5,5,5},
+   "Advanced Poison",1,12,8,3,0,75,"Just your typical poison tower - with spikes!"},
+
+  {0,OBJ_BASIC,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Basic",1,           5,3,4,0,10,"A basic tower"},
+  {0,OBJ_ADV,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Advanced",1,        7,4,4,0,15,"A basic tower - with spikes!"},
+
+  {0,OBJ_CONE,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Cone",1,            7,6,4,0,20,"A cone tower"},
+  {0,OBJ_ADV_CONE,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Advanced Cone",1,   9,6,4,0,25,"A cone tower - with spikes!"},
+
+  {0,OBJ_SQUARE,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Square",1,          9,6,3,0,30,"A square tower"},
+  {0,OBJ_ADV_SQUARE,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Advanced Square",1, 10,6,3,0,35,"A square tower - with spikes!"},
+  /* Pyramid not implemented yet */
+  {0,OBJ_PYRAMID,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Pyramid",1,         1,1,1,0,1,"A pyramid tower"},
+  {0,OBJ_ADV_PYRAMID,1,{0,0,0},{1,1,1},{0,0,0},TEX_BRICK,{5,5,5},
+   "Advanced Pyramid",1,1,1,1,0,1,"A pyramid tower - with spikes!"}
 };

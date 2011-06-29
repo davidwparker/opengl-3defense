@@ -24,6 +24,7 @@ void windowDisplay(void)
  */
 void windowKey(unsigned char key,int x,int y)
 {
+  int modifiers = glutGetModifiers();
   /*  Exit on ESC */
   if (key == 27) exit(0);
   /*  Spacebar to begin game or send next wave */
@@ -95,15 +96,21 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == 'N' && shininess<7) shininess += 1;
   /*  BEGIN OPTION SELECTION FUNCTIONALITY */
   /*  Select object */
-  else if (key == '0') objectSelected = DEF_OBJ_SEL;
-  else if (key == '1') objectSelected = OBJ_FIRE;
-  else if (key == '2') objectSelected = OBJ_FIRE2;
-  else if (key == '3') objectSelected = OBJ_ICE;
-  else if (key == '4') objectSelected = OBJ_ICE2;
-  else if (key == '5') objectSelected = OBJ_EARTH;
-  else if (key == '6') objectSelected = OBJ_EARTH2;
-  else if (key == '7') objectSelected = OBJ_POISON;
-  else if (key == '8') objectSelected = OBJ_POISON2;
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '1') changeObjectSelected(OBJ_FIRE);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '2') changeObjectSelected(OBJ_FIRE2);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '3') changeObjectSelected(OBJ_ICE);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '4') changeObjectSelected(OBJ_ICE2);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '5') changeObjectSelected(OBJ_EARTH);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '6') changeObjectSelected(OBJ_EARTH2);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '7') changeObjectSelected(OBJ_POISON);
+  else if (modifiers == GLUT_ACTIVE_CTRL && key == '8') changeObjectSelected(OBJ_POISON2);
+  else if (key == '0') changeObjectSelected(DEF_OBJ_SEL);
+  else if (key == '1') changeObjectSelected(OBJ_BASIC);
+  else if (key == '2') changeObjectSelected(OBJ_ADV);
+  else if (key == '3') changeObjectSelected(OBJ_CONE);
+  else if (key == '4') changeObjectSelected(OBJ_ADV_CONE);
+  else if (key == '5') changeObjectSelected(OBJ_SQUARE);
+  else if (key == '6') changeObjectSelected(OBJ_ADV_SQUARE);
   /*  Toggle preview mode (slightly buggy) */
   else if (key == 'w' || key == 'W') {
     preview = 1-preview;

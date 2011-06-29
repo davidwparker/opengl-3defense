@@ -94,6 +94,12 @@ extern int objectPicked;
 extern int currentRed;
 extern int currentGreen;
 extern int currentBlue;
+extern char *currentTowerName;
+extern int currentTowerRange;
+extern int currentTowerDamage;
+extern int currentTowerFireRate;
+extern int currentTowerCost;
+extern char *currentTowerDescription;
 
 /*  Minions  */
 extern wave waves[DEF_LAST_WAVE];
@@ -127,5 +133,6 @@ extern GLfloat cube_v[][3];
 extern pathCube pathCubes[];
 extern pathCube fullPath[];
 extern tower default_towers[6];
+extern tower tower_data[16];
 
 #endif
