@@ -10,10 +10,6 @@
 Project - 3Defense
 David Parker
 
-Total time spent on code: 40+ hours
-(not exactly sure how I broke down time spent, I just know it was a lot)
-don't worry, I didn't spend very much time on the ASCII art above.
-
 GETTING RIGHT TO IT:
 Spacebar         => Begin the game. Once a wave of enemies is completely killed, then press spacebar
                     to send the next wave.
