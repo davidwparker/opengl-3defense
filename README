@@ -1,38 +1,76 @@
+333333 DDD            ffff
+    3  D  D           f
+   3   D   D   ee    ffff   ee   n nnn   sss    ee
+  333  D   D  e  e    f    e  e  nn   n s      e  e
+     3 D   D eeeeee   f   eeeeee n    n  sss  eeeeee
+     3 D  D   e       f    e     n    n     s  e
+ 3333  DDD     eee    f     eee  n    n ssss    eee
+
+
 Project - 3Defense
 David Parker
 
-Total time spent on code: 10 hours
--X hours - research
+Total time spent on code: 40+ hours
+(not exactly sure how I broke down time spent, I just know it was a lot)
+don't worry, I didn't spend very much time on the ASCII art above.
+
+GETTING RIGHT TO IT:
+Spacebar         => Begin the game. Once a wave of enemies is completely killed, then press spacebar
+                    to send the next wave.
+1-6, shift+(1-8) => Select a tower. Then place the tower on the map by find a location and left-clicking.
+Escape           => Exit the program
+
+-----------------------
+THINGS:
+REALLY COOL:
+1) Not so sure about this... I finally fixed the framerate issues with Ubuntu. It had to deal with how 
+   glutIdle was working and how often it was getting called. By getting rid of it altogether and using
+   glutTimerFunc after the game begun and it seemed to clear things all up.
+
+COOL:
+1) I like the fact that my code is organized. I think well organized and refactored code is key.
+2) (collision.c): My collision detection and checking the tower range functions were okay. For 
+   collision detection I'm  only checking the x/z origins vs. the scale of the object, and not 
+   really doing real normal vs object detection.
+3) (drawing.c > drawObjects): I like the way I set up my structs to draw specific types of objects. I 
+   liked using the blend func to set up a decent looking "preview" tower that will be placed. I also
+   made sure to render differently based on whether the user was clicking on the board so that they could
+   select objects using color coding, giving each object a unique color code.
+4) (general.c > findPreviewPostion): I made sure to set up a grid of viable positions around the map.
+   I wanted the user to be able to place a tower in a specific location and to make sure that they couldn't
+   place it otherwise. I also liked using gluUnProject and glReadPixels to figure out the mouse position
+   in findMousePosition.
+5) (general.c > processPicks): this method used the color coding before and actually processed which tower
+   we selected.
+6) (shapes.c, models.c, towers.c): again, I just like the way I organized things.
+
+-----------------------
+Really, I have a lot of things I think were cool, but in reality, I don't think anything here is 
+extraordinary. I do think it could be cleaned up a lot more. I also have a good sized TODO list, and 
+known bugs:
 
 TODO:
-Top 4 issues are probably going to be priority, unless you say otherwise... 
-with #1 getting the majority of my focus.
+1) Dynamic paths would be cool. I'd have to change how the pathing is set up completely (as well as the 
+   preview points), but that would be neat to be able to have random maps.
+2) Don't allow users to buy every tower. All of the "advanced" towers should be upgrade only.
+3) Adding shadow maps would be really cool.
+4) Clean up the sidebar to add textures/icons for the towers, money, lives, scrolls, etc.
+5) Add pop-ups (hover-overs) to show statistics for each tower, rather than text in lower right.
+6) Object selection for minions with specific stats
+7) Variety of minions. textures, colors, objs, etc
+8) GAME OVER. There is no way to lose the game right now.
+9) Short game. There is only 5 waves of enemies.
 
-???? #1) FIX FRAMERATE ISSUE. This Ubuntu/Freeglut thing is haunting me. Since adding shadows and minions, 
-whenever I use gluUnProject, some of the times I get a bad Z value (and by some, I mean quite often if
-the framerate is higher). By adding a delay (currently ~80-100 ms), then it works, but if I drop down
-to ~30 then it doesn't work on my Ubuntu machine. It works perfectly on my Macbook Pro.
+KNOWN BUGS:
+1) Fix bug where user clicks on sidebar instead of using keyboard, they won't get the preview
+2) If a minion is killed and is the last one in the wave, then extra shots will stick around until the
+   next wave.
+3) I'm using straight arrays and no-where am I re-sorting those arrays if we "sell" a tower, etc. so
+   it's possible to lose towers after the array loops back to the beginning.
+4) If the game is paused, the timers don't pause, so it is possible to pause the game and have several
+   shots created when they shouldn't be.
 
-If you have time, I would like to meet with you if you have any knowledge of what I could do to fix
-this issue.
-
-Gameplay:
-DONE #2) Add 'waves' of minions, where a group of minions will go, then X time later, a second wave will go, 
-and so on.
-DONE #3) Add the ability for the towers to "attack" the minions by shooting things.
-#4) By way of #3, add collision detection for those attacks when hitting the minions.
-#5) Ensure that the user earns money for kills, and is able to only buy certain towers.
-#6) Provide ability to upgrade towers (example: fire tower becomes advanced fire tower).
-
-Graphics (These would be nice, but probably won't happen considering my timing):
-#7) It would be "cool" to have realistic shadows (towers shading each other), but I DON'T think I'll 
-be able to get to that.
-#8) Clean up the sidebar to add textures, icons for towers (I would have to draw these), icons for
-money, lives, etc.
-#9) Add pop-ups, etc, on hover-over for icons, etc. to show the statistics of the towers.
-#10) Show area of attack for the towers.
-
-(SOME OF THESE MAY BE WRONG...)
+-----------------------
 The following interactions are provided:
 Keyboard interactions:
 Special Keys:
@@ -45,20 +83,26 @@ Shift+Left       => -5 th angle
 Shift+Up         => +5 ph angle
 Shift+Down       => -5 ph angle
 
-
 Regular Keys:
 Escape     => close the program
+Spacebar   => begin the game. Once a wave of enemies is completely killed, press spacebar to send
+              the next wave.
 r or R     => reset to original parameters
+q          => money cheat (money += 100)
 x or X     => toggle axes on/off (default off)
-f or F     => toggle draw default objects (must reset "r" after toggling)
-v or V     => toggle draw values on bottom of screen
--          => decrease the field of view (for perspective) by 1
-+          => increase the field of view (for perspective) by 1
+g or G     => toggle grid on/off (default off)
+c or C     => toggle show attack radius (default off)
+v or V     => toggle draw values on bottom of screen (default off)
+-          => decrease the field of view by 1
++          => increase the field of view by 1
 i          => decrease the dimensions by 0.2
 I          => increase the dimensions by 0.2
-l or L     => toggle light on/off (default on)
+// ANIMATION:
+z          => increment the animation by 1 (used when game paused for debugging)
 m          => toggle light movement (default on)
-M          => toggle tops rotate movement (default on)
+p          => toggle game paused
+M          => toggle tower tops moving (default on) 
+// LIGHTING:
 <          => decrease the light th by 1
 >          => increase the light th by 1
 [          => decrease the light Y by 0.1
@@ -73,17 +117,23 @@ e          => decrease the emission by 5
 E          => increase the emission by 5
 n          => decrease the shininess by 5
 N          => increase the shininess by 5
-select tower to draw:
-0          => none
-1          => fire
-2          => advanced fire
-3          => ice
-4          => advanced ice
-5          => earth
-6          => advanced earth
-7          => poison
-8          => advanced poison
-w or W     => toggle preview mode (slightly buggy)
+// OBJECT SELECTION
+0           => none
+1           => basic
+2           => advanced
+3           => cone
+4           => advanced cone
+5           => square
+6           => advanced square
+shift+1 (!) => fire
+shift+2 (@) => advanced fire
+shift+3 (#) => ice
+shift+4 ($) => advanced ice
+shift+5 (%) => earth
+shift+6 (^) => advanced earth
+shift+7 (&) => poison
+shift+8 (*) => advanced poison
+w or W      => toggle preview mode
 delete or backspace  => if a tower is selected on screen, then delete it
 
 Mouse interactions:
@@ -92,20 +142,21 @@ Mouse interactions:
 --left-click:
 find the x,y,z position of the mouse and place the object in that position
 the object will be reset to 'none' after placing the object
-NOTE: only 20 objects may be placed. If you place more than 20, then it starts to 
+NOTE: only 57 objects may be placed. If you place more than 57, then it starts to 
       replace item 1, 2, etc
 --shift+left-click:
 same as left click, but object will not be reset to 'none' after click
 
 -if tower selected is 'none', then select a tower on the left side:
 --left-click a tower
+---able to view the statistics of the tower in lower right corner
 ---press 'delete' or 'backspace' and the tower should be deleted
 
 "Sidebar" side (right side):
 -left-click:
 --click on a tower name to select it.
-if selecting a non-elemental tower, also select a texture to apply:
-click on a texture name to select it
+---able to view the statistics of the selected tower in the lower right corner
+---able to place the tower on the screen side if you have enough money
 
 NOTE: there are two ways to select a shape: 
  1) keyboard shortcuts

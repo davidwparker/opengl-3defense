@@ -15,7 +15,7 @@ all: $(TARGET)
 
 #  Generic compile and link
 %: %.c project.a
-	gcc -Wall -O3 -o ./$@ $^ $(LIBS)
+	gcc -Wall -O3 -o ./hw6 $^ $(LIBS)
 
 #  Delete unwanted files - Linux or OS/X
 clean:;rm -f $(TARGET) *.o *.a *~

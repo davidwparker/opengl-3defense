@@ -62,7 +62,6 @@ void drawParameters(void)
  *  drawGrid
  *  ------
  *  Draws the grid if desired
- *  TODO: polygon offset grid with the path
  */
 void drawGrid(void)
 {

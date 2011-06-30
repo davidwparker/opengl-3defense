@@ -499,6 +499,7 @@ void minionModel(minion m)
   glTranslated(m.translation.x,m.translation.y,m.translation.z);
   glRotated(m.rotation.y,0,1,0);
   glScaled(m.scale.x,m.scale.y,m.scale.z);
+  glColor3f((double)m.rgb.r/100,(double)m.rgb.g/100,(double)m.rgb.b/100);
   glCallList(m.type);
 
   /* sphere for reference with collision detection 
@@ -509,8 +510,8 @@ void minionModel(minion m)
     glColor3f(1,1,0);
     glTranslated(-2,4,-0.5);
     glutSolidSphere(5,16,16);
-    glColor3fv(white);
   }
+  glColor3fv(white);
 
   glPopMatrix();
 }

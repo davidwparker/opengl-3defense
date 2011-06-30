@@ -175,7 +175,6 @@ void moveShot(int i, int j, int k)
  */
 void moveShots(void)
 {
-  /* TODO: stub for moving the shots */
   int i,j;
   for (i=0;i<lastShot;i++){
     //    shot s = shots[i];

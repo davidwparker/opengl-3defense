@@ -167,7 +167,6 @@ void processPicks(void)
     /* Found the object we need, break out of loop */
     if (pixel[0] == red && pixel[1] == green && pixel[2] == blue) {
       objectPicked = i;
-      printf("tower type :%d\n",towers[i].type);
       setCurrentTowerData(towers[i].type);
       break;
     }

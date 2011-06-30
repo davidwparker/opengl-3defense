@@ -164,6 +164,10 @@ void initWaves()
       minions[i].damage += k;
       minions[i].health += (15*k);
       minions[i].money  += (5*k);
+      /* this should be a factor 0-100 */
+      minions[i].rgb.r = 27+k*10+i*02;
+      minions[i].rgb.g = 27+k*10+i*02;
+      minions[i].rgb.b = 27+k*10+i*02;
 
       if (k < 3)
 	minions[i].speed = 5-k;

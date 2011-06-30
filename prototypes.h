@@ -160,6 +160,7 @@ void sidebarMouse(int btn, int state, int x, int y);
 
 /*  Gameplay (gameplay.c)  */
 int calculateDamageToMinion(int k, int j, int i);
+void canUserBuyTower(int newObjectSelected);
 void modifyLives(int die, int damage);
 void modifyMoney(int what, int amount);
 void modifyScore(int k);

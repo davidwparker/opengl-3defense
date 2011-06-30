@@ -16,6 +16,23 @@ int calculateDamageToMinion(int k, int j, int i)
 }
 
 /*
+ *  canUserBuyTower
+ *  ------
+ *  determines if user can buy the selected tower and sets the appropriate variables
+ */
+void canUserBuyTower(int newObjectSelected)
+{
+  if (money >= tower_data[objectSelected-1].cost) {
+    info = "cha-ching$ thanks buddy.";
+    setCurrentTowerData(objectSelected);
+  } else {
+    info = "Not enough $$$.";
+    objectSelected = DEF_OBJ_SEL;
+    preview_tower.id = DEF_OBJ_SEL;
+  }
+}
+
+/*
  *  modifyLives
  *  ------
  *  changes life +/- depending on buying or dying

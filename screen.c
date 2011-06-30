@@ -120,12 +120,7 @@ void screenMouse(int btn, int state, int x, int y)
     /* game data */
     if (money >= tower_data[objectSelected-1].cost) {
       info = "cha-ching$ thanks buddy.";
-      currentTextureSelected = tower_data[objectSelected-1].texture;
-      currentTowerName = tower_data[objectSelected-1].name;
-      currentTowerRange = tower_data[objectSelected-1].range;
-      currentTowerDamage = tower_data[objectSelected-1].damage;
-      currentTowerFireRate = tower_data[objectSelected-1].fireRate;
-      currentTowerCost = tower_data[objectSelected-1].cost;
+      setCurrentTowerData(objectSelected);
     } else {
       info = "Not enough $$$.";
       objectSelected = DEF_OBJ_SEL;

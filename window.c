@@ -24,7 +24,6 @@ void windowDisplay(void)
  */
 void windowKey(unsigned char key,int x,int y)
 {
-  int modifiers = glutGetModifiers();
   /*  Exit on ESC */
   if (key == 27) exit(0);
   /*  Spacebar to begin game or send next wave */
@@ -47,6 +46,8 @@ void windowKey(unsigned char key,int x,int y)
   }
   /*  reset to default screen */
   else if (key == 'r' || key == 'R') reset();
+  /*  money cheat */
+  else if (key == 'q') money += 100;
   /*  toggle axes */
   else if (key == 'x' || key == 'X') axes = 1-axes;
   /*  toggle grid */
@@ -61,7 +62,7 @@ void windowKey(unsigned char key,int x,int y)
   /*  change dim */
   else if (key == 'i' && dim>1) dim -= 0.2;
   else if (key == 'I') dim += 0.2;
-  /*  BEGIN ANIMATION FUNCTIANALITY */
+  /*  BEGIN ANIMATION FUNCTIONALITY */
   /*  Slow animate */
   else if (key == 'z') slowAnimate();
   /*  Toggle light movement */
@@ -96,14 +97,14 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == 'N' && shininess<7) shininess += 1;
   /*  BEGIN OPTION SELECTION FUNCTIONALITY */
   /*  Select object */
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '1') changeObjectSelected(OBJ_FIRE);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '2') changeObjectSelected(OBJ_FIRE2);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '3') changeObjectSelected(OBJ_ICE);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '4') changeObjectSelected(OBJ_ICE2);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '5') changeObjectSelected(OBJ_EARTH);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '6') changeObjectSelected(OBJ_EARTH2);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '7') changeObjectSelected(OBJ_POISON);
-  else if (modifiers == GLUT_ACTIVE_CTRL && key == '8') changeObjectSelected(OBJ_POISON2);
+  else if (key == '!') changeObjectSelected(OBJ_FIRE);
+  else if (key == '@') changeObjectSelected(OBJ_FIRE2);
+  else if (key == '#') changeObjectSelected(OBJ_ICE);
+  else if (key == '$') changeObjectSelected(OBJ_ICE2);
+  else if (key == '%') changeObjectSelected(OBJ_EARTH);
+  else if (key == '^') changeObjectSelected(OBJ_EARTH2);
+  else if (key == '&') changeObjectSelected(OBJ_POISON);
+  else if (key == '*') changeObjectSelected(OBJ_POISON2);
   else if (key == '0') changeObjectSelected(DEF_OBJ_SEL);
   else if (key == '1') changeObjectSelected(OBJ_BASIC);
   else if (key == '2') changeObjectSelected(OBJ_ADV);
@@ -111,7 +112,7 @@ void windowKey(unsigned char key,int x,int y)
   else if (key == '4') changeObjectSelected(OBJ_ADV_CONE);
   else if (key == '5') changeObjectSelected(OBJ_SQUARE);
   else if (key == '6') changeObjectSelected(OBJ_ADV_SQUARE);
-  /*  Toggle preview mode (slightly buggy) */
+  /*  Toggle preview mode */
   else if (key == 'w' || key == 'W') {
     preview = 1-preview;
     /* Reset preview object if preview is turned off */
